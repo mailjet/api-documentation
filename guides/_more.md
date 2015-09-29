@@ -8,4 +8,6 @@ In addition to this API documentation, we have a more general FAQ available at <
 
 For issues with your account, please contact our support at <a href="https://www.mailjet.com/support/ticket" target="_blank">https://www.mailjet.com/support/ticket</a>
 
+You can contribute to this documentation on Github at <a href='https://github.com/mailjet/api-documentation' target="_blank">https://github.com/mailjet/api-documentation</a>
+
 Feel free to reach out to share your feedback!

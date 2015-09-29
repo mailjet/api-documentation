@@ -506,6 +506,30 @@ If you don't specify any filter on the above resources, the current day messages
 
 ###Message Statistics
 
+```php
+<?php
+// View : API key Campaign/Message statistics.
+$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
+$params = array(
+	"method" => "GET",
+);
+$result = $mj->messagestatistics($params);
+if ($mj->_response_code == 200){
+   echo "success";
+   var_dump($result);
+} else {
+   echo "error - ".$mj->_response_code;
+   var_dump($mj->_response);
+}
+?>
+```
+```bash
+# View : API key Campaign/Message statistics.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/messagestatistics 
+```
 ```javascript
 /**
  *
@@ -525,12 +549,14 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
-```bash
+```ruby
 # View : API key Campaign/Message statistics.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/messagestatistics 
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Messagestatistics.all()
 ```
 ```python
 """
@@ -542,32 +568,6 @@ api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
 result = mailjet.messagestatistics.get()
-```
-```ruby
-# View : API key Campaign/Message statistics.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Messagestatistics.all()
-```
-```php
-<?php
-// View : API key Campaign/Message statistics.
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "GET",
-);
-$result = $mj->messagestatistics($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
-?>
 ```
 
 

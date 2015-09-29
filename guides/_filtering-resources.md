@@ -696,13 +696,6 @@ Example : <code>Name</code> filter on <code>[/contact/liststatistics](/email-api
 
 ##The Count Filter
 
-```bash
-# View : Total number of contact
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact?countOnly=1 
-```
 ```php
 <?php
 // View : Total number of contact
@@ -720,6 +713,13 @@ if ($mj->_response_code == 200){
    var_dump($mj->_response);
 }
 ?>
+```
+```bash
+# View : Total number of contact
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact?countOnly=1 
 ```
 ```javascript
 /**

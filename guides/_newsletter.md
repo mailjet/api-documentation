@@ -833,103 +833,6 @@ You can specify one or more list to add this contact to. The <code>action</code>
 
 ```php
 <?php
-// Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "POST",
-	"ID" => "$ID",
-	"Address" => "",
-	"CreatedAt" => "",
-	"ID" => "",
-	"IsDeleted" => "false",
-	"Name" => "myList",
-	"SubscriberCount" => ""
-);
-$result = $mj->contactslistManageContact($params);
-if ($mj->_response_code == 201){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
-?>
-```
-```bash
-# Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contactslist/$ID/ManageContact \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Address":"",
-		"CreatedAt":"",
-		"ID":"",
-		"IsDeleted":"false",
-		"Name":"myList",
-		"SubscriberCount":""
-	}'
-```
-```javascript
-/**
- *
- * Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.post("contactslist")
-	.id($ID)
-	.action("ManageContact")
-	.request({
-		"Address":"",
-		"CreatedAt":"",
-		"ID":"",
-		"IsDeleted":"false",
-		"Name":"myList",
-		"SubscriberCount":""
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-```ruby
-# Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Contactslist_ManageContact.create(id: $ID,address: "",created_at: "",id: "",is_deleted: "false",name: "myList",subscriber_count: "")
-```
-```python
-"""
-Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$ID'
-data = {
-  'Address': '',
-  'CreatedAt': '',
-  'ID': '',
-  'IsDeleted': 'false',
-  'Name': 'myList',
-  'SubscriberCount': ''
-}
-result = mailjet.contactslist_ManageContact.create(id=id, data=data)
-```
-```php
-<?php
 // Add a contact to the list
 $mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
 $params = array(
@@ -2048,7 +1951,7 @@ When a campaign is created from the processing of a newsletter, its <code>Custom
 
 
 <div></div>
-### Statistics
+### Campaign statistics
 
 ```php
 <?php
