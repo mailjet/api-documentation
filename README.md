@@ -15,9 +15,11 @@ This repository contains the <a href="http://dev.mailjet.com/guides/">Mailjet AP
 
 ### Contribute
 
-Whether you need help on an example or found an error you want to report,
+Whether you need help on an example, found an error you want to report, or would like to suggest another guide to be added
 follow these easy steps:
   - Create an issue with an explicit name.
-  - Refer to the corresponding file in the description.
-  - Please do not post an issue that isn't related to an documentation example.
+  - Make sure to check closed issues
+  - Refer to the corresponding file and line in the description.
   - Make sure you close the issue once you consider it solved.
+  - Don’t hesitate to open Pull Request, we would love to review them!
+  - Please include any code you might have used and who led to your issue, if any
