@@ -8,6 +8,12 @@ The Mailjet API provides a set of general filters that can be applied to a <code
 
 To use a filter in a <code>GET</code>, you can amend the resource URL with a standard query string (<code>?filter1=this&filter2=that&filter3=it</code>).
 
+Mailjet API supports filter combination following these rules: 
+
+ - Only the first occurrence of a filter is taken in account: "?Name=foo&Name=bar&Name=foobar" will only filter on  Name=foo. No error will be returned, all additional occurrences will be skipped. 
+ - Combining filter using the query string syntax, "&" results in an AND operator behavior.
+ - Some filters support OR and use a "," syntax. Example: MessageStatus on <code>[/messagesentstatistics](/email-api/v3/messagesentstatistics/)</code> resource accepts MessageStatus=3,4 format. 
+
 
 ##The Limit Filter
 
@@ -64,8 +70,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contact.all(
-		limit: "150")
+variable = Mailjet::Contact.all(limit: "150")
 ```
 ```python
 """
@@ -141,8 +146,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contact.all(
-		offset: "25000")
+variable = Mailjet::Contact.all(offset: "25000")
 ```
 ```python
 """
@@ -217,9 +221,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contact.all(
-		limit: "150",
-		offset: "25000")
+variable = Mailjet::Contact.all(limit: "150",offset: "25000")
 ```
 ```python
 """
@@ -295,8 +297,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contact.all(
-		sort: "email")
+variable = Mailjet::Contact.all(sort: "email")
 ```
 ```python
 """
@@ -372,8 +373,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contact.all(
-		sort: "email+DESC")
+variable = Mailjet::Contact.all(sort: "email+DESC")
 ```
 ```python
 """
@@ -448,8 +448,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contact.all(
-		contacts_list: "$ContactsListID")
+variable = Mailjet::Contact.all(contacts_list: "$ContactsListID")
 ```
 ```python
 """
@@ -612,6 +611,89 @@ result = mailjet.eventcallbackurl.get(id=id)
 
 In some case the unique key consist of several informations, you can call this unique key combinaison by using the seperator <code>|</code>.
 
+## Like and Case Sensitive Filters
+
+```php
+<?php
+// View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
+$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
+$params = array(
+	"method" => "GET",
+	"NameLike" => "$Name"
+);
+$result = $mj->liststatistics($params);
+if ($mj->_response_code == 200){
+   echo "success";
+   var_dump($result);
+} else {
+   echo "error - ".$mj->_response_code;
+   var_dump($mj->_response);
+}
+?>
+```
+```bash
+# View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/liststatistics?NameLike=$Name 
+```
+```javascript
+/**
+ *
+ * View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
+ *
+ */
+var mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+var request = mailjet
+	.get("liststatistics")
+	.request({
+		"NameLike":"$Name"
+	});
+request
+	.on('success', function (response, body) {
+		console.log (response.statusCode, body);
+	})
+	.on('error', function (err, response) {
+		console.log (response.statusCode, err);
+	});
+```
+```ruby
+# View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Liststatistics.all(name_like: "$Name")
+```
+```python
+"""
+View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
+"""
+from mailjet import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'NameLike': '$Name'
+}
+result = mailjet.liststatistics.get(filters=filters)
+```
+
+
+The Mailjet API allows Like and Case Sensitive filtering on selected properties. Visit the [reference](/email-api/v3/) to see if a filter allows this functionality. 
+
+This fonctionality works by adding predefined keywords at the end of a filter: 
+
+ - <code>CI</code> : case insensitive filter
+ - <code>Like</code> : like filter similar to a <code>%String%</code> 
+ - <code>LikeCI</code> : case insensitive like filter  
+
+Example : <code>Name</code> filter on <code>[/contact/liststatistics](/email-api/v3/liststatistics/)</code> resource. You can use <code>Name</code>, <code>NameCI</code>, <code>NameLike</code> and <code>NameLikeCI</code>.
+
 ##The Count Filter
 
 ```php
@@ -667,8 +749,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contact.all(
-		count_only: "1")
+variable = Mailjet::Contact.all(count_only: "1")
 ```
 ```python
 """

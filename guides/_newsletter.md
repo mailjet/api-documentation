@@ -64,8 +64,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contactslist.create(
-		name: "myList")
+variable = Mailjet::Contactslist.create(name: "myList")
 ```
 ```python
 """
@@ -170,8 +169,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contact.create(
-		email: "Mister@mailjet.com")
+variable = Mailjet::Contact.create(email: "Mister@mailjet.com")
 ```
 ```python
 """
@@ -291,10 +289,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contactmetadata.create(
-		datatype: "str",
-		name: "Age",
-		name_space: "static")
+variable = Mailjet::Contactmetadata.create(datatype: "str",name: "Age",name_space: "static")
 ```
 ```python
 """
@@ -350,34 +345,6 @@ The contact datas will be available for personalisation of your message content 
 <div></div>
 #### Adding custom static Contact data
 
-```php
-<?php
-// Modify : Modify the static custom contact data
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "PUT",
-	"ID" => "$CONTACT_ID",
-	"Data" => json_decode('[
-				{
-						"Name": "Age",
-						"value": 30
-				},
-				{
-						"Name": "Country",
-						"value": "US"
-				}
-		]', true)
-);
-$result = $mj->contactdata($params);
-if ($mj->_response_code == 201){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
-?>
-```
 ```bash
 # Modify : Modify the static custom contact data
 curl -s \
@@ -437,8 +404,7 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 target = Mailjet::Contactdata.find($CONTACT_ID)
-target.update_attributes(
-		data: [{ 'Name'=> 'Age', 'value'=> 30}, { 'Name'=> 'Country', 'value'=> 'US'}])
+target.update_attributes(data: [{ 'Name'=> 'Age', 'value'=> 30}, { 'Name'=> 'Country', 'value'=> 'US'}])
 ```
 ```python
 """
@@ -463,6 +429,34 @@ data = {
 		]
 }
 result = mailjet.contactdata.update(id=id, data=data)
+```
+```php
+<?php
+// Modify : Modify the static custom contact data
+$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
+$params = array(
+	"method" => "PUT",
+	"ID" => "$CONTACT_ID",
+	"Data" => json_decode('[
+				{
+						"Name": "Age",
+						"value": 30
+				},
+				{
+						"Name": "Country",
+						"value": "US"
+				}
+		]', true)
+);
+$result = $mj->contactdata($params);
+if ($mj->_response_code == 201){
+   echo "success";
+   var_dump($result);
+} else {
+   echo "error - ".$mj->_response_code;
+   var_dump($mj->_response);
+}
+?>
 ```
 
 
@@ -534,10 +528,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contacthistorydata.create(
-		contact_id: "$CONTACT_ID",
-		data: "10",
-		name: "Purchase")
+variable = Mailjet::Contacthistorydata.create(contact_id: "$CONTACT_ID",data: "10",name: "Purchase")
 ```
 ```python
 """
@@ -673,8 +664,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contact_managemanycontacts.create(
-		contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
+variable = Mailjet::Contact_managemanycontacts.create(contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
 ```
 ```python
 """
@@ -803,8 +793,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contact_managecontactslists.create(id: $ID,
-		contacts_lists: [{ 'ListID'=> '$ListID_1', 'Action'=> 'addnoforce'}, { 'ListID'=> '$ListID_2', 'Action'=> 'addforce'}])
+variable = Mailjet::Contact_managecontactslists.create(id: $ID,contacts_lists: [{ 'ListID'=> '$ListID_1', 'Action'=> 'addnoforce'}, { 'ListID'=> '$ListID_2', 'Action'=> 'addforce'}])
 ```
 ```python
 """
@@ -920,11 +909,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contactslist_managecontact.create(id: $LIST_ID,
-		email: "mrsmith@mailjet.com",
-		name: "MrSmith",
-		action: "addnoforce",
-		properties: { 'property1'=> 'value', 'propertyN'=> 'valueN'})
+variable = Mailjet::Contactslist_managecontact.create(id: $LIST_ID,email: "mrsmith@mailjet.com",name: "MrSmith",action: "addnoforce",properties: { 'property1'=> 'value', 'propertyN'=> 'valueN'})
 ```
 ```python
 """
@@ -1078,13 +1063,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Newsletter.create(
-		locale: "en_US",
-		sender: "MisterMailjet",
-		sender_email: "Mister@mailjet.com",
-		subject: "Greetings from Mailjet",
-		contacts_list_id: "$ID_CONTACTSLIST",
-		title: "Friday newsletter")
+variable = Mailjet::Newsletter.create(locale: "en_US",sender: "MisterMailjet",sender_email: "Mister@mailjet.com",subject: "Greetings from Mailjet",contacts_list_id: "$ID_CONTACTSLIST",title: "Friday newsletter")
 ```
 ```python
 """
@@ -1231,9 +1210,7 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 target = Mailjet::Newsletter_detailcontent.find($ID)
-target.update_attributes(
-		html_part: "Hello <strong>world</strong>!",
-		text_part: "Hello world!")
+target.update_attributes(html_part: "Hello <strong>world</strong>!",text_part: "Hello world!")
 ```
 ```python
 """
@@ -1351,8 +1328,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Newsletter_test.create(id: $ID,
-		recipients: [{ 'Email'=> 'mailjet@example.org', 'Name'=> 'Mailjet'}])
+variable = Mailjet::Newsletter_test.create(id: $ID,recipients: [{ 'Email'=> 'mailjet@example.org', 'Name'=> 'Mailjet'}])
 ```
 ```python
 """
@@ -1567,8 +1543,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Newsletter_schedule.create(id: $ID,
-		date: "2015-04-22T09:00:00+01:00")
+variable = Mailjet::Newsletter_schedule.create(id: $ID,date: "2015-04-22T09:00:00+01:00")
 ```
 ```python
 """
@@ -1623,7 +1598,7 @@ Our <code>[/contactfilter](/email-api/v3/contactfilter/)</code> resource allows 
 
 ###Prerequisites
 
-In order to use a contact filter, you must add additional data to your contacts. Please refer to the [personalisation](#personalisation--add-contact-properties) to see how this is done. You also have to create a contact list, because contact filters are applied to a contact list via the <code>/newsletter</code> resource.
+In order to use a contact filter, you must add additional data to your contacts. Please refer to the [personalisation](#personalisation-add-contact-properties) to see how this is done. You also have to create a contact list, because contact filters are applied to a contact list via the <code>/newsletter</code> resource.
 
 ###How does it work?
 
@@ -1715,10 +1690,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contactfilter.create(
-		description: "Only contacts aged 40",
-		expression: "age=40",
-		name: "40 year olds")
+variable = Mailjet::Contactfilter.create(description: "Only contacts aged 40",expression: "age=40",name: "40 year olds")
 ```
 ```python
 """
@@ -1838,14 +1810,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Newsletter.create(
-		title: "Mailjet greets every contact over 40",
-		locale: "en_US",
-		sender: "MisterMailjet",
-		sender_email: "Mister@mailjet.com",
-		subject: "Greetings from Mailjet",
-		contacts_list_id: "$ID_CONTACTLIST",
-		segmentation_id: "$ID_CONTACT_FILTER")
+variable = Mailjet::Newsletter.create(title: "Mailjet greets every contact over 40",locale: "en_US",sender: "MisterMailjet",sender_email: "Mister@mailjet.com",subject: "Greetings from Mailjet",contacts_list_id: "$ID_CONTACTLIST",segmentation_id: "$ID_CONTACT_FILTER")
 ```
 ```python
 """

@@ -65,9 +65,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Eventcallbackurl.create(
-		event_type: "open",
-		url: "https://mydomain.com/event_handler")
+variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler")
 ```
 ```python
 """
@@ -368,10 +366,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Eventcallbackurl.create(
-		event_type: "open",
-		url: "https://mydomain.com/event_handler",
-		version: "2")
+variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler",version: "2")
 ```
 ```python
 """

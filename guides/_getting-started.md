@@ -203,4 +203,4 @@ You can also discover our [real time notification API](#event-api-real-time-noti
 
 Mailjet also offers an [inbound emails parsing](#receive-emails) solution that allows to easily manage your contacts replies.
  
-
+<aside class="notice">The examples in this documentation are using Mailjet libraries. Find the list and where to download them <a href="#the-libraries">here</a></aside>

@@ -480,8 +480,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Message.all(
-		campaign: "$CAMPAIGN_ID")
+variable = Mailjet::Message.all(campaign: "$CAMPAIGN_ID")
 ```
 ```python
 """
