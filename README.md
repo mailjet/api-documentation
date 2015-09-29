@@ -22,4 +22,4 @@ follow these easy steps:
   - Refer to the corresponding file and line in the description.
   - Make sure you close the issue once you consider it solved.
   - Don’t hesitate to open Pull Request, we would love to review them!
-  - Please include any code you might have used and who led to your issue, if any
+  - Please include any code you might have used and which led to your issue, if any
