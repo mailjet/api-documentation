@@ -8,6 +8,12 @@ The Mailjet API provides a set of general filters that can be applied to a <code
 
 To use a filter in a <code>GET</code>, you can amend the resource URL with a standard query string (<code>?filter1=this&filter2=that&filter3=it</code>).
 
+Mailjet API supports filter combination following these rules: 
+
+ - Only the first occurrence of a filter is taken in account: "?Name=foo&Name=bar&Name=foobar" will only filter on  Name=foo. No error will be returned, all additional occurrences will be skipped. 
+ - Combining filter using the query string syntax, "&" results in an AND operator behavior.
+ - Some filters support OR and use a "," syntax. Example: MessageStatus on <code>[/messagesentstatistics](/email-api/v3/messagesentstatistics/)</code> resource accepts MessageStatus=3,4 format. 
+
 
 ##The Limit Filter
 
@@ -55,6 +61,20 @@ You can access each unique element using unique key filter. Visit the [reference
 {{eventcallbackurlfilter_GET}}
 
 In some case the unique key consist of several informations, you can call this unique key combinaison by using the seperator <code>|</code>.
+
+## Like and Case Sensitive Filters
+
+{{liststatisticsFilteringLike_GET}}
+
+The Mailjet API allows Like and Case Sensitive filtering on selected properties. Visit the [reference](/email-api/v3/) to see if a filter allows this functionality. 
+
+This fonctionality works by adding predefined keywords at the end of a filter: 
+
+ - <code>CI</code> : case insensitive filter
+ - <code>Like</code> : like filter similar to a <code>%String%</code> 
+ - <code>LikeCI</code> : case insensitive like filter  
+
+Example : <code>Name</code> filter on <code>[/contact/liststatistics](/email-api/v3/liststatistics/)</code> resource. You can use <code>Name</code>, <code>NameCI</code>, <code>NameLike</code> and <code>NameLikeCI</code>.
 
 ##The Count Filter
 

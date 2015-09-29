@@ -251,7 +251,7 @@ Our <code>[/contactfilter](/email-api/v3/contactfilter/)</code> resource allows 
 
 ###Prerequisites
 
-In order to use a contact filter, you must add additional data to your contacts. Please refer to the [personalisation](#personalisation--add-contact-properties) to see how this is done. You also have to create a contact list, because contact filters are applied to a contact list via the <code>/newsletter</code> resource.
+In order to use a contact filter, you must add additional data to your contacts. Please refer to the [personalisation](#personalisation-add-contact-properties) to see how this is done. You also have to create a contact list, because contact filters are applied to a contact list via the <code>/newsletter</code> resource.
 
 ###How does it work?
 
