@@ -5,7 +5,84 @@ The Event API offer a real-time notification through http request on any events 
 The Event API is a very efficient way to do specific actions on your website (log the marketing messages sent to your customers, generate your own statistics, update the unsubscribed contacts on a CRM...). Instead of polling our API a few times a day, we push new data just as the events happen, almost instantly.
 
 ##Endpoint URL
-{{eventcallbackurl_POST}}
+```php
+<?php
+// Create an handler for the open event
+$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
+$params = array(
+	"method" => "POST",
+	"EventType" => "open",
+	"Url" => "https://mydomain.com/event_handler"
+);
+$result = $mj->eventcallbackurl($params);
+if ($mj->_response_code == 201){
+   echo "success";
+   var_dump($result);
+} else {
+   echo "error - ".$mj->_response_code;
+   var_dump($mj->_response);
+}
+?>
+```
+```bash
+# Create an handler for the open event
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/eventcallbackurl \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"EventType":"open",
+		"Url":"https://mydomain.com/event_handler"
+	}'
+```
+```javascript
+/**
+ *
+ * Create an handler for the open event
+ *
+ */
+var mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+var request = mailjet
+	.post("eventcallbackurl")
+	.request({
+		"EventType":"open",
+		"Url":"https://mydomain.com/event_handler"
+	});
+request
+	.on('success', function (response, body) {
+		console.log (response.statusCode, body);
+	})
+	.on('error', function (err, response) {
+		console.log (response.statusCode, err);
+	});
+```
+```ruby
+# Create an handler for the open event
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler")
+```
+```python
+"""
+Create an handler for the open event
+"""
+from mailjet import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'EventType': 'open',
+  'Url': 'https://mydomain.com/event_handler'
+}
+result = mailjet.eventcallbackurl.create(data=data)
+```
+
 
 The endpoint is an URL our server will call for each event (it can lead to a lot of hits !). You can use the API to setup a new endpoint using the <code>[/eventcallbackurl](/email-api/v3/eventcallbackurl/)</code> resource. Alternatively, you can configure this in your account preferences, in the <a href="https://app.mailjet.com/account/triggers" target="_blank">Event Tracking</a> section.
 
@@ -226,7 +303,88 @@ Unsub event additional properties:
 
 ##Grouping events
 
-{{eventcallbackurlgroup_POST}}
+```php
+<?php
+// Create an grouped handler for the open event
+$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
+$params = array(
+	"method" => "POST",
+	"EventType" => "open",
+	"Url" => "https://mydomain.com/event_handler",
+	"Version" => "2"
+);
+$result = $mj->eventcallbackurl($params);
+if ($mj->_response_code == 201){
+   echo "success";
+   var_dump($result);
+} else {
+   echo "error - ".$mj->_response_code;
+   var_dump($mj->_response);
+}
+?>
+```
+```bash
+# Create an grouped handler for the open event
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/eventcallbackurl \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"EventType":"open",
+		"Url":"https://mydomain.com/event_handler",
+		"Version":"2"
+	}'
+```
+```javascript
+/**
+ *
+ * Create an grouped handler for the open event
+ *
+ */
+var mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+var request = mailjet
+	.post("eventcallbackurl")
+	.request({
+		"EventType":"open",
+		"Url":"https://mydomain.com/event_handler",
+		"Version":"2"
+	});
+request
+	.on('success', function (response, body) {
+		console.log (response.statusCode, body);
+	})
+	.on('error', function (err, response) {
+		console.log (response.statusCode, err);
+	});
+```
+```ruby
+# Create an grouped handler for the open event
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler",version: "2")
+```
+```python
+"""
+Create an grouped handler for the open event
+"""
+from mailjet import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'EventType': 'open',
+  'Url': 'https://mydomain.com/event_handler',
+  'Version': '2'
+}
+result = mailjet.eventcallbackurl.create(data=data)
+```
+
 
 When you create an handler (see above), the default behaviour is to send one event at the time. 
 

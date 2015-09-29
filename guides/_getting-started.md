@@ -87,7 +87,28 @@ curl --user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" https://api.mailjet.com/v3/RE
 
 >The server should respond with the following data:
 
-{{user_response}}
+```json
+{
+	"Count": 1,
+	"Data": [
+		{
+			"ACL": "",
+			"CreatedAt": "",
+			"Email": "miss@mailjet.com",
+			"ID": "",
+			"LastIp": "",
+			"LastLoginAt": "",
+			"Locale": "",
+			"MaxAllowedAPIKeys": "5",
+			"Timezone": "",
+			"Username": "",
+			"WarnedRatelimitAt": ""
+		}
+	],
+	"Total": 1
+}
+```
+
 
 Most developers use one of our API libraries for their production systems and the respective library documentation tells you where to place your API Keys. However for testing purposes it can be nice to query the API directly from the shell.
 
