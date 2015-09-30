@@ -878,12 +878,8 @@ var fs = require ('fs');
 var mailjet = require ('./mailjet-client')
     .connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
 fs.readFile('./data.csv', function (err, data) {
-<<<<<<< HEAD
   if (err)
     return console.error(err);
-=======
-  if (err) return console.error(err);
->>>>>>> master
   var request = mailjet.post('contactslist')
       .id(36)
       .action('csvdata')
@@ -918,7 +914,7 @@ You need to specify the wanted <code>contactslist</code> ID and, of course, the 
 $mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
 $params = array(
 	"method" => "POST",
-	"ContactsList" => "$ID_CONTACTLIST",
+	"ContactsListID" => "$ID_CONTACTLIST",
 	"DataID" => "$ID_DATA",
 	"Method" => "addnoforce"
 );
@@ -940,7 +936,7 @@ curl -s \
 	https://api.mailjet.com/v3/REST/csvimport \
 	-H 'Content-Type: application/json' \
 	-d '{
-		"ContactsList":"$ID_CONTACTLIST",
+		"ContactsListID":"$ID_CONTACTLIST",
 		"DataID":"$ID_DATA",
 		"Method":"addnoforce"
 	}'
@@ -956,7 +952,7 @@ var mailjet = require ('node-mailjet')
 var request = mailjet
 	.post("csvimport")
 	.request({
-		"ContactsList":"$ID_CONTACTLIST",
+		"ContactsListID":"$ID_CONTACTLIST",
 		"DataID":"$ID_DATA",
 		"Method":"addnoforce"
 	});
@@ -975,7 +971,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Csvimport.create(contacts_list: "$ID_CONTACTLIST",data_id: "$ID_DATA",method: "addnoforce")
+variable = Mailjet::Csvimport.create(contacts_list_id: "$ID_CONTACTLIST",data_id: "$ID_DATA",method: "addnoforce")
 ```
 ```python
 """
@@ -987,7 +983,7 @@ api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
 data = {
-  'ContactsList': '$ID_CONTACTLIST',
+  'ContactsListID': '$ID_CONTACTLIST',
   'DataID': '$ID_DATA',
   'Method': 'addnoforce'
 }
