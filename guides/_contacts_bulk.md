@@ -5,7 +5,7 @@
 
 ###Managing list subscriptions for a single contact ( /contact/$ID/managecontactslists )
 
-This resource allows to add a single contact in several list at once.
+This resource allows to add a single contact in several lists at once.
 [More information](#managecontactslists)
 
 ###Managing and uploading multiple contacts ( /contact/managemanycontacts ) 
@@ -13,7 +13,7 @@ This resource allows to add a single contact in several list at once.
 This resource allows to add contacts in bulk in a json format. Optionally, these contacts can be added to existing lists. 
 [More information](#contact_managemanycontacts)
 
-###Managing multiple Contacts subscriptions to a List ( /contactslist/$ID/managemanycontacts ) 
+###Managing multiple Contacts subscriptions to a list ( /contactslist/$ID/managemanycontacts ) 
 
 This resource allows to add contacts directly to a list. This resource will create new contacts if the contacts are not already in the Mailjet system. 
 [More information](#contactslist_managemanycontacts)
@@ -166,7 +166,7 @@ result = mailjet.contact_managecontactslists.create(id=id, data=data)
 ```
 
 
-To manage a Contact subscription for one or multiple Lists, we can do a <code>POST</code> on <code>[/contact/$ID/managecontactslists](/email-api/v3/contact-managecontactslists/)</code>, specifiying the contact ID in the URL and add JSON to the body of the request with the List subscriptions to be modified.
+To manage a Contact subscription for one or multiple Lists, we can do a <code>POST</code> on <code>[/contact/$ID/managecontactslists](/email-api/v3/contact-managecontactslists/)</code>, specifying the contact ID in the URL and add JSON to the body of the request with the list subscriptions to be modified.
 
 
   'Action' is mandatory and can be one of the following values:
@@ -175,8 +175,8 @@ To manage a Contact subscription for one or multiple Lists, we can do a <code>PO
   ----------|------------
   addforce | **string** <br /> adds the contact and resets the unsub status to false
   addnoforce | **string** <br /> adds the contact and does not change the subscription status of the contact
-  remove | **string** <br /> removes the contact from the List
-  unsub | **string** <br /> unsubscribes a contact from the List
+  remove | **string** <br /> removes the contact from the list
+  unsub | **string** <br /> unsubscribes a contact from the list
 
 <div></div>
 ```json
@@ -413,8 +413,8 @@ Actions | |
   ----------|------------
   addforce | **string** <br /> adds the contact and re-subscribes the contact to the list
   addnoforce | **string** <br /> adds the contact and does not change the subscription status of the contact
-  remove | **string** <br /> removes the contact from the List
-  unsub | **string** <br /> unsubscribes the contact from the List
+  remove | **string** <br /> removes the contact from the list
+  unsub | **string** <br /> unsubscribes the contact from the list
 
 <div></div>
 
@@ -440,7 +440,7 @@ A successful call will return JSON in the following format, containing the <code
 
 ```php
 <?php
-// View : Job information
+// View: Job information
 $mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
 $params = array(
     "method" => "VIEW",
@@ -456,6 +456,14 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
+``` python
+from mailjet import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+result = mailjet.contact_managemanycontacts.get(actionid='$JOBID')
+```
 ``` ruby
 # View : Job information
 Mailjet.configure do |config|
@@ -465,7 +473,7 @@ end
 variable = Mailjet::Contact_managemanycontacts.find($JOBID)
 ```
 ```bash
-# View : Job information
+# View: Job information
 curl -s \
 	-X GET \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
@@ -474,7 +482,7 @@ curl -s \
 ```javascript
 /**
  *
- * This calls sends an email to one recipient.
+ * View: Job information
  *
  */
 var mailjet = require ('node-mailjet')
@@ -520,7 +528,7 @@ This provides the following information:
  - Status: This can be one of the following:
   - Allocated: the job is in the queue
   - Upload: The data is in the upload phase
-  - Prepare: The data is being formatted for addition the list
+  - Prepare: The data is being formatted to be added to the list
   - Importing: Data is being added to the Contact List
   - Completed: Addition to the Contact List complete
   - Error: Declares an error
@@ -701,7 +709,7 @@ result = mailjet.contactslist_ManageManyContacts.create(id=id, data=data)
 
 Multiple contacts, in JSON format, can be uploaded with a <code>POST</code> using the <code>[/contactslist/$ID/managemanycontacts](/email-api/v3/contactslist-managemanycontacts/)</code> action. This resource is asynchronous and will return a <code>JobID</code> allowing you to monitor the process. This is the perfect method to easily add large quantity of contacts in a list.
 
-The field <code>Email</code> in Contacts is the key for the contact and is a mandatory, as is <code>Action</code>. <code>Action</code> can have one of the following values :
+The field <code>Email</code> in Contacts is the key for the contact and is mandatory, as is <code>Action</code>. <code>Action</code> can have one of the following values:
 
 Actions | |
   ----------|------------
@@ -719,7 +727,7 @@ If a contact (uniquely identified by the email) has already been added to your c
 
 ```php
 <?php
-// View : Job information
+// View: Job information
 $mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
 $params = array(
     "method" => "VIEW",
@@ -736,8 +744,16 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
+``` python
+from mailjet import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+result = mailjet.contactslist_managemanycontacts.get(id='$ID', actionid='$JOBID')
+```
 ```bash
-# View : Job information
+# View: Job information
 curl -s \
 	-X GET \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
@@ -753,7 +769,7 @@ variable = Mailjet::Contactslist_managemanycontacts.find($ID, $JOBID)
 ```javascript
 /**
  *
- * This calls sends an email to one recipient.
+ * View: Job information
  *
  */
 var mailjet = require ('node-mailjet')
@@ -801,7 +817,7 @@ This provides the following information:
  - Status: This can be one of the following:
   - Allocated: the job is in the queue
   - Upload: The data is in the upload phase
-  - Prepare: The data is being formatted for addition the list
+  - Prepare: The data is being formatted to be added to the list
   - Importing: Data is being added to the Contact List
   - Completed: Addition to the Contact List complete
   - Error: Declares an error
@@ -819,7 +835,7 @@ In some cases you might need to manage large quantities of contacts stored into 
 
 With the following process, you will be able to fully manage your contacts and their relationship with a contact list (ie: adding, removing or unsubscribing)
 
-Please note that these steps represent a single process. Don't execute each step independently but, rather, as a whole.
+Please note that these steps represent a single process. Don't execute each step independently but rather as a whole.
 
 ###CSV file structure
 
@@ -841,11 +857,17 @@ The email should be unique in the file and will be the key to reconcile this lis
 ###Uploading of the data
 
 ``` python
-print 'Needs to be implemented'
+from mailjet import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+f = open('./data.csv')
+result = mailjet.contactslist_csvdata.create(id='$listid', data=f.read())
 ```
 ```php
 <?php
-// View : CSV upload
+// View: CSV upload
 $CSVContent = file_get_contents('test.csv');
 $mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
 $params = array(
@@ -902,7 +924,7 @@ fs.readFile('./data.csv', function (err, data) {
 }
 ```
 
-The first step is to upload the csv data to the server
+The first step is to upload the csv data to the server.
 You need to specify the wanted <code>contactslist</code> ID and, of course, the csv_content.
 
 <div></div>
@@ -910,7 +932,7 @@ You need to specify the wanted <code>contactslist</code> ID and, of course, the 
 
 ```php
 <?php
-// Create : A wrapper for the CSV importer
+// Create: A wrapper for the CSV importer
 $mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
 $params = array(
 	"method" => "POST",
@@ -929,7 +951,7 @@ if ($mj->_response_code == 201){
 ?>
 ```
 ```bash
-# Create : A wrapper for the CSV importer
+# Create: A wrapper for the CSV importer
 curl -s \
 	-X POST \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
@@ -944,7 +966,7 @@ curl -s \
 ```javascript
 /**
  *
- * Create : A wrapper for the CSV importer
+ * Create: A wrapper for the CSV importer
  *
  */
 var mailjet = require ('node-mailjet')
@@ -965,7 +987,7 @@ request
 	});
 ```
 ```ruby
-# Create : A wrapper for the CSV importer
+# Create: A wrapper for the CSV importer
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
@@ -975,7 +997,7 @@ variable = Mailjet::Csvimport.create(contacts_list_id: "$ID_CONTACTLIST",data_id
 ```
 ```python
 """
-Create : A wrapper for the CSV importer
+Create: A wrapper for the CSV importer
 """
 from mailjet import Client
 import os
@@ -1019,9 +1041,9 @@ result = mailjet.csvimport.create(data=data)
 ```
 
 
-Now, the uploaded data need to be assign to the given <code>contactslist</code> resource.
+Now, the uploaded data needs to be assigned to the given <code>contactslist</code> resource.
 
-Method's possible values are : 
+Method's possible values are: 
 
   Actions | |
   ----------|------------
@@ -1035,7 +1057,7 @@ Method's possible values are :
 
 ```php
 <?php
-// View : CSV upload Batch job running on the Mailjet infrastructure.
+// View: CSV upload Batch job running on the Mailjet infrastructure.
 $mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
 $params = array(
 	"method" => "VIEW",
@@ -1052,7 +1074,7 @@ if ($mj->_response_code == 200){
 ?>
 ```
 ```bash
-# View : CSV upload Batch job running on the Mailjet infrastructure.
+# View: CSV upload Batch job running on the Mailjet infrastructure.
 curl -s \
 	-X GET \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
@@ -1061,7 +1083,7 @@ curl -s \
 ```javascript
 /**
  *
- * View : CSV upload Batch job running on the Mailjet infrastructure.
+ * View: CSV upload Batch job running on the Mailjet infrastructure.
  *
  */
 var mailjet = require ('node-mailjet')
@@ -1079,7 +1101,7 @@ request
 	});
 ```
 ```ruby
-# View : CSV upload Batch job running on the Mailjet infrastructure.
+# View: CSV upload Batch job running on the Mailjet infrastructure.
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
@@ -1089,7 +1111,7 @@ variable = Mailjet::Csvimport.find($ID_JOB)
 ```
 ```python
 """
-View : CSV upload Batch job running on the Mailjet infrastructure.
+View: CSV upload Batch job running on the Mailjet infrastructure.
 """
 from mailjet import Client
 import os
@@ -1129,14 +1151,14 @@ result = mailjet.csvimport.get(id=id)
 ```
 
 
-You can now make sure the task complete successfully. You might need multiple checks as a huge amount of data may take some time to be processed (several hours are not uncommon).
+You can now make sure the task completed successfully. You might need multiple checks as a huge amount of data may take some time to be processed (several hours are not uncommon).
 Using the job <code>ID</code> returned in the previous step, you can retrieve the job status
 
 	This provides the following information:
 	<ul>
 		<li>Status: This can be one of the following:
 			<ul>
-			    <li>Prepare: The data is being formatted for addition the list</li>
+			    <li>Prepare: The data is being formatted to be added to the list</li>
 			    <li>Importing: Data is being added to the Contact List</li>
 			    <li>Completed: Addition to the Contact List complete</li>
 			    <li>Error: Declares an error</li>
@@ -1145,14 +1167,14 @@ Using the job <code>ID</code> returned in the previous step, you can retrieve th
 		<li>JobStart: Time of job start</li>
 		<li>JobEnd: Time of job end</li>
 		<li>Count: Represents the number of contacts already processed by the background job</li>
-		<li>Errcount: contains the number of error detected during the processus, the Status can be "Completed" and have errors</li>
+		<li>Errcount: contains the number of errors detected during the processus, the Status can be "Completed" and have errors</li>
 	</ul>
 
 <div></div>
 ###Error handling
 
 ```bash
-curl --user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" /
+curl --user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 https://api.mailjet.com/v3/DATA/BatchJob/$job_id/CSVError/text:csv
 ```
 

@@ -24,6 +24,31 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
+```ruby
+# Create : ParseRoute description
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Parseroute.create(apikey_id: "",email: "miss@mailjet.com",url: "")
+```
+```python
+"""
+Create : ParseRoute description
+"""
+from mailjet import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'APIKeyID': '',
+  'Email': 'miss@mailjet.com',
+  'Url': ''
+}
+result = mailjet.parseroute.create(data=data)
+```
 ```bash
 # Create : ParseRoute description
 curl -s \
@@ -59,31 +84,6 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
-```
-```ruby
-# Create : ParseRoute description
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Parseroute.create(apikey_id: "",email: "miss@mailjet.com",url: "")
-```
-```python
-"""
-Create : ParseRoute description
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'APIKeyID': '',
-  'Email': 'miss@mailjet.com',
-  'Url': ''
-}
-result = mailjet.parseroute.create(data=data)
 ```
 
 

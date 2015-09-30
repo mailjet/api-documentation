@@ -185,13 +185,6 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
-```bash
-# View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact?Limit=150\&Offset=25000 
-```
 ```javascript
 /**
  *
@@ -213,6 +206,13 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
+```
+```bash
+# View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact?Limit=150\&Offset=25000 
 ```
 ```ruby
 # View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact

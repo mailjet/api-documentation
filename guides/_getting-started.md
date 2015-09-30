@@ -124,11 +124,11 @@ The usual json payload response will have the following structure : <code>{"Coun
 <div></div>
 ###Status Codes
 
-These statuses code will be sent back by the API to notify of the success or failure of your calls.
+These status codes will be sent back by the API to notify of the success or failure of your calls.
 
 Code|  | Description 
 -------------- | -------------- | --------------
-200 | OK | All gone well. Congrats!
+200 | OK | All went well. Congrats!
 201 | Created | The <code>POST</code> request was successfully executed.
 204 | No Content | No content found or expected to return. Returned when <code>DELETE</code> was successful.
 304 | Not Modified | The <code>PUT</code> request didn't affect any record. 

@@ -1046,7 +1046,20 @@ To go further in personalisation <code>Vars</code> is also available for each re
 ###Using contact properties
 
 ``` python
-print 'Needs to be implemented'
+from mailjet import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+	"FromEmail":"pilot@mailjet.com",
+	"FromName":"Mailjet Pilot",
+	"Subject":"Your email flight plan!",
+	"Text-part":"Dear [[data:firstname:\"passenger\"]], welcome to Mailjet! May the delivery force be with you!",
+	"Html-part":"<h3>Dear [[data:firstname:\"passenger\"]], welcome to Mailjet!</h3><br /> May the delivery force be with you!",
+	"Recipients":[{"Email":"passenger1@mailjet.com","Name":"passenger 1"},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]
+}
+result = mailjet.send.create(data=data)
 ```
 ```php
 <?php
@@ -1140,7 +1153,21 @@ Use <code>[[data:METADATA_NAME:DEFAULT_VALUE]]</code> to insert datas in your co
 ##Adding Email Headers 
 
 ``` python
-print 'Needs to be implemented'
+from mailjet import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+	"FromEmail":"pilot@mailjet.com",
+	"FromName":"Mailjet Pilot",
+	"Subject":"Your email flight plan!",
+	"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+	"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+	"Recipients":[{"Email":"passenger@mailjet.com"}],
+	"Headers":  {"Reply-To":"copilot@mailjet.com"}
+}
+result = mailjet.send.create(data=data)
 ```
 ```php
 <?php
@@ -1239,7 +1266,21 @@ These custom pieces of information are returned back in the events you registere
 ###Sending an email with a custom ID
 
 ``` python
-print 'Needs to be implemented'
+from mailjet import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+	"FromEmail":"pilot@mailjet.com",
+	"FromName":"Mailjet Pilot",
+	"Subject":"Your email flight plan!",
+	"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+	"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+	"Recipients":[{"Email":"passenger@mailjet.com"}],
+	"Mj-CustomID":"PassengerEticket1234"
+}
+result = mailjet.send.create(data=data)
 ```
 ```php
 <?php
@@ -1406,7 +1447,21 @@ From then, your <code>CustomID</code> is linked to our own Message ID. You can a
 ###Sending an email with a payload
 
 ``` python
-print 'Needs to be implemented'
+from mailjet import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+	"FromEmail":"pilot@mailjet.com",
+	"FromName":"Mailjet Pilot",
+	"Subject":"Your email flight plan!",
+	"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+	"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+	"Recipients":[{"Email":"passenger@mailjet.com"}],
+	"Mj-EventPayLoad":"Eticket,1234,row,15,seat,B"
+}
+result = mailjet.send.create(data=data)
 ```
 ```php
 <?php
