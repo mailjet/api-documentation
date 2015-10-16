@@ -24,6 +24,52 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
+```python
+"""
+Create an handler for the open event
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'EventType': 'open',
+  'Url': 'https://mydomain.com/event_handler'
+}
+result = mailjet.eventcallbackurl.create(data=data)
+```
+``` go
+/*
+Create an handler for the open event
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Eventcallbackurl
+	mr := &MailjetRequest{
+	  Resource: "eventcallbackurl",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Eventcallbackurl {
+      EventType: "open",
+      Url: "https://mydomain.com/event_handler",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 ```bash
 # Create an handler for the open event
 curl -s \
@@ -66,21 +112,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler")
-```
-```python
-"""
-Create an handler for the open event
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'EventType': 'open',
-  'Url': 'https://mydomain.com/event_handler'
-}
-result = mailjet.eventcallbackurl.create(data=data)
 ```
 
 
@@ -372,7 +403,7 @@ variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://myd
 """
 Create an grouped handler for the open event
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -383,6 +414,38 @@ data = {
   'Version': '2'
 }
 result = mailjet.eventcallbackurl.create(data=data)
+```
+``` go
+/*
+Create an grouped handler for the open event
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Eventcallbackurl
+	mr := &MailjetRequest{
+	  Resource: "eventcallbackurl",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Eventcallbackurl {
+      EventType: "open",
+      Url: "https://mydomain.com/event_handler",
+      Version: 2,
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 

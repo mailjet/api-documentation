@@ -120,7 +120,7 @@ variable = Mailjet::Contact_managecontactslists.create(id: $ID,contacts_lists: [
 """
 Create : Manage a contact subscription to a list
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -139,6 +139,47 @@ data = {
 		]
 }
 result = mailjet.contact_managecontactslists.create(id=id, data=data)
+```
+``` go
+/*
+Create : Manage a contact subscription to a list
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	mr := &MailjetRequest{
+	  Resource: "contact",
+	  ID: RESOURCE_ID,
+	  Action: "managecontactslists",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Contact {
+      ContactsLists: []MailjetContactsList {
+        MailjetContactsList {
+          ListID: "$ListID_1",
+          Action: "addnoforce",
+        },
+        MailjetContactsList {
+          ListID: "$ListID_2",
+          Action: "addforce",
+        },
+      },
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -260,6 +301,105 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
+```python
+"""
+Create : Manage the details of a Contact.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'ContactsLists': [
+				{
+						"ListID": 1,
+						"action": "addnoforce"
+				},
+				{
+						"ListID": 2,
+						"action": "addforce"
+				}
+		],
+  'Contacts': [
+				{
+						"Email": "jimsmith@example.com",
+						"Name": "Jim",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				},
+				{
+						"Email": "janetdoe@example.com",
+						"Name": "Janet",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				}
+		]
+}
+result = mailjet.contact_managemanycontacts.create(data=data)
+```
+``` go
+/*
+Create : Manage the details of a Contact.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	mr := &MailjetRequest{
+	  Resource: "contact",
+	  Action: "managemanycontacts",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Contact {
+      ContactsLists: []MailjetContactsList {
+        MailjetContactsList {
+          ListID: 1,
+          Action: "addnoforce",
+        },
+        MailjetContactsList {
+          ListID: 2,
+          Action: "addforce",
+        },
+      },
+      Contacts: []MailjetContact {
+        MailjetContact {
+          Email: "jimsmith@example.com",
+          Name: "Jim",
+          Properties: MyPropertiesStruct {
+            Property1: "value",
+            Property2: "value2",
+          },
+        },
+        MailjetContact {
+          Email: "janetdoe@example.com",
+          Name: "Janet",
+          Properties: MyPropertiesStruct {
+            Property1: "value",
+            Property2: "value2",
+          },
+        },
+      },
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 ```bash
 # Create : Manage the details of a Contact.
 curl -s \
@@ -356,47 +496,6 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Contact_managemanycontacts.create(contacts_lists: [{ 'ListID'=> 1, 'action'=> 'addnoforce'}, { 'ListID'=> 2, 'action'=> 'addforce'}],contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
 ```
-```python
-"""
-Create : Manage the details of a Contact.
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'ContactsLists': [
-				{
-						"ListID": 1,
-						"action": "addnoforce"
-				},
-				{
-						"ListID": 2,
-						"action": "addforce"
-				}
-		],
-  'Contacts': [
-				{
-						"Email": "jimsmith@example.com",
-						"Name": "Jim",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				},
-				{
-						"Email": "janetdoe@example.com",
-						"Name": "Janet",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				}
-		]
-}
-result = mailjet.contact_managemanycontacts.create(data=data)
-```
 
 
 Uploading multiple contacts, with the option to manage their subscription to a Contact List or multiple lists, if required, can be done with a <code>POST</code> on the <code>[/contact/managemanycontacts](/email-api/v3/contact-managemanycontacts/)</code> resource. This resource is asynchronous and will return a <code>JobID</code> allowing you to monitor the process.
@@ -457,7 +556,7 @@ if ($mj->_response_code == 200){
 ?>
 ```
 ``` python
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -578,6 +677,89 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
+```python
+"""
+Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$ID'
+data = {
+  'Action': 'addnoforce',
+  'Contacts': [
+				{
+						"Email": "jimsmith@example.com",
+						"Name": "Jim",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				},
+				{
+						"Email": "janetdoe@example.com",
+						"Name": "Janet",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				}
+		]
+}
+result = mailjet.contactslist_ManageManyContacts.create(id=id, data=data)
+```
+``` go
+/*
+Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contactslist
+	mr := &MailjetRequest{
+	  Resource: "contactslist",
+	  ID: RESOURCE_ID,
+	  Action: "ManageManyContacts",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Contactslist {
+      Action: "addnoforce",
+      Contacts: []MailjetContact {
+        MailjetContact {
+          Email: "jimsmith@example.com",
+          Name: "Jim",
+          Properties: MyPropertiesStruct {
+            Property1: "value",
+            Property2: "value2",
+          },
+        },
+        MailjetContact {
+          Email: "janetdoe@example.com",
+          Name: "Janet",
+          Properties: MyPropertiesStruct {
+            Property1: "value",
+            Property2: "value2",
+          },
+        },
+      },
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 ```bash
 # Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
 curl -s \
@@ -657,39 +839,6 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Contactslist_ManageManyContacts.create(id: $ID,action: "addnoforce",contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
 ```
-```python
-"""
-Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$ID'
-data = {
-  'Action': 'addnoforce',
-  'Contacts': [
-				{
-						"Email": "jimsmith@example.com",
-						"Name": "Jim",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				},
-				{
-						"Email": "janetdoe@example.com",
-						"Name": "Janet",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				}
-		]
-}
-result = mailjet.contactslist_ManageManyContacts.create(id=id, data=data)
-```
 
 
 > API response:
@@ -745,7 +894,7 @@ if ($mj->_response_code == 200){
 ?>
 ```
 ``` python
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -857,7 +1006,7 @@ The email should be unique in the file and will be the key to reconcile this lis
 ###Uploading of the data
 
 ``` python
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -999,7 +1148,7 @@ variable = Mailjet::Csvimport.create(contacts_list_id: "$ID_CONTACTLIST",data_id
 """
 Create: A wrapper for the CSV importer
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1010,6 +1159,38 @@ data = {
   'Method': 'addnoforce'
 }
 result = mailjet.csvimport.create(data=data)
+```
+``` go
+/*
+Create: A wrapper for the CSV importer
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Csvimport
+	mr := &MailjetRequest{
+	  Resource: "csvimport",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Csvimport {
+      ContactsListID: "$ID_CONTACTLIST",
+      DataID: "$ID_DATA",
+      Method: "addnoforce",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -1073,6 +1254,43 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
+```python
+"""
+View: CSV upload Batch job running on the Mailjet infrastructure.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$ID_JOB'
+result = mailjet.csvimport.get(id=id)
+```
+``` go
+/*
+View: CSV upload Batch job running on the Mailjet infrastructure.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Csvimport
+	mr := &MailjetRequest{
+	  Resource: "csvimport",
+	  ID: RESOURCE_ID,
+	}
+	err := mailjetClient.Get(mr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 ```bash
 # View: CSV upload Batch job running on the Mailjet infrastructure.
 curl -s \
@@ -1108,18 +1326,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Csvimport.find($ID_JOB)
-```
-```python
-"""
-View: CSV upload Batch job running on the Mailjet infrastructure.
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$ID_JOB'
-result = mailjet.csvimport.get(id=id)
 ```
 
 

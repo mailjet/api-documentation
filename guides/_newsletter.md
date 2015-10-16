@@ -25,6 +25,50 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
+```python
+"""
+Create : only need a Name
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Name': 'myList'
+}
+result = mailjet.contactslist.create(data=data)
+```
+``` go
+/*
+Create : only need a Name
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contactslist
+	mr := &MailjetRequest{
+	  Resource: "contactslist",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Contactslist {
+      Name: "myList",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 ```bash
 # Create : only need a Name
 curl -s \
@@ -65,20 +109,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Contactslist.create(name: "myList")
-```
-```python
-"""
-Create : only need a Name
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Name': 'myList'
-}
-result = mailjet.contactslist.create(data=data)
 ```
 
 
@@ -130,6 +160,50 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
+```python
+"""
+Create : Manage the details of a Contact.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Email': 'Mister@mailjet.com'
+}
+result = mailjet.contact.create(data=data)
+```
+``` go
+/*
+Create : Manage the details of a Contact.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	mr := &MailjetRequest{
+	  Resource: "contact",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Contact {
+      Email: "Mister@mailjet.com",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 ```bash
 # Create : Manage the details of a Contact.
 curl -s \
@@ -170,20 +244,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Contact.create(email: "Mister@mailjet.com")
-```
-```python
-"""
-Create : Manage the details of a Contact.
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Email': 'Mister@mailjet.com'
-}
-result = mailjet.contact.create(data=data)
 ```
  
 
@@ -246,6 +306,54 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
+```python
+"""
+Create : Definition of available extra data items for contacts.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Datatype': 'str',
+  'Name': 'Age',
+  'NameSpace': 'static'
+}
+result = mailjet.contactmetadata.create(data=data)
+```
+``` go
+/*
+Create : Definition of available extra data items for contacts.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contactmetadata
+	mr := &MailjetRequest{
+	  Resource: "contactmetadata",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Contactmetadata {
+      Datatype: "str",
+      Name: "Age",
+      NameSpace: "static",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 ```bash
 # Create : Definition of available extra data items for contacts.
 curl -s \
@@ -290,22 +398,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Contactmetadata.create(datatype: "str",name: "Age",name_space: "static")
-```
-```python
-"""
-Create : Definition of available extra data items for contacts.
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Datatype': 'str',
-  'Name': 'Age',
-  'NameSpace': 'static'
-}
-result = mailjet.contactmetadata.create(data=data)
 ```
 
 
@@ -373,6 +465,68 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
+```python
+"""
+Modify : Modify the static custom contact data
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$CONTACT_ID'
+data = {
+  'Data': [
+				{
+						"Name": "Age",
+						"value": 30
+				},
+				{
+						"Name": "Country",
+						"value": "US"
+				}
+		]
+}
+result = mailjet.contactdata.update(id=id, data=data)
+```
+``` go
+/*
+Modify : Modify the static custom contact data
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	mr := &MailjetRequest{
+	  Resource: "contactdata",
+	  ID: RESOURCE_ID,
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Contactdata {
+      Data: []MailjetDat {
+        MailjetDat {
+          Name: "Age",
+          Value: 30,
+        },
+        MailjetDat {
+          Name: "Country",
+          Value: "US",
+        },
+      },
+    },
+	}
+	err := mailjetClient.Put(fmr)
+	if err != nil {
+	  fmt.Println(err)
+	}
+}
+```
 ```bash
 # Modify : Modify the static custom contact data
 curl -s \
@@ -434,30 +588,6 @@ end
 target = Mailjet::Contactdata.find($CONTACT_ID)
 target.update_attributes(data: [{ 'Name'=> 'Age', 'value'=> 30}, { 'Name'=> 'Country', 'value'=> 'US'}])
 ```
-```python
-"""
-Modify : Modify the static custom contact data
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$CONTACT_ID'
-data = {
-  'Data': [
-				{
-						"Name": "Age",
-						"value": 30
-				},
-				{
-						"Name": "Country",
-						"value": "US"
-				}
-		]
-}
-result = mailjet.contactdata.update(id=id, data=data)
-```
 
 
 By Performing a <code>PUT</code> (acting like a PATCH, your other static datas will not be lost) on <code>[/contactdata](/email-api/v3/contactdata/)</code>, you can add values for several metadata at once.
@@ -484,6 +614,54 @@ if ($mj->_response_code == 201){
    var_dump($mj->_response);
 }
 ?>
+```
+```python
+"""
+Create : This resource can be used to add historical data to contact.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'ContactID': '$CONTACT_ID',
+  'Data': '10',
+  'Name': 'Purchase'
+}
+result = mailjet.contacthistorydata.create(data=data)
+```
+``` go
+/*
+Create : This resource can be used to add historical data to contact.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contacthistorydata
+	mr := &MailjetRequest{
+	  Resource: "contacthistorydata",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Contacthistorydata {
+      ContactID: "$CONTACT_ID",
+      Data: 10,
+      Name: "Purchase",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```bash
 # Create : This resource can be used to add historical data to contact.
@@ -530,22 +708,6 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Contacthistorydata.create(contact_id: "$CONTACT_ID",data: "10",name: "Purchase")
 ```
-```python
-"""
-Create : This resource can be used to add historical data to contact.
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'ContactID': '$CONTACT_ID',
-  'Data': '10',
-  'Name': 'Purchase'
-}
-result = mailjet.contacthistorydata.create(data=data)
-```
 
 
 By Performing a <code>POST</code> on <code>[/contacthistorydata](/email-api/v3/contacthistorydata/)</code>, you can add a new value for a historic metadata.
@@ -589,6 +751,85 @@ if ($mj->_response_code == 201){
    var_dump($mj->_response);
 }
 ?>
+```
+```python
+"""
+Create : Manage the details of a Contact.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Contacts': [
+				{
+						"Email": "jimsmith@example.com",
+						"Name": "Jim",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				},
+				{
+						"Email": "janetdoe@example.com",
+						"Name": "Janet",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				}
+		]
+}
+result = mailjet.contact_managemanycontacts.create(data=data)
+```
+``` go
+/*
+Create : Manage the details of a Contact.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	mr := &MailjetRequest{
+	  Resource: "contact",
+	  Action: "managemanycontacts",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Contact {
+      Contacts: []MailjetContact {
+        MailjetContact {
+          Email: "jimsmith@example.com",
+          Name: "Jim",
+          Properties: MyPropertiesStruct {
+            Property1: "value",
+            Property2: "value2",
+          },
+        },
+        MailjetContact {
+          Email: "janetdoe@example.com",
+          Name: "Janet",
+          Properties: MyPropertiesStruct {
+            Property1: "value",
+            Property2: "value2",
+          },
+        },
+      },
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```bash
 # Create : Manage the details of a Contact.
@@ -665,37 +906,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Contact_managemanycontacts.create(contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
-```
-```python
-"""
-Create : Manage the details of a Contact.
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Contacts': [
-				{
-						"Email": "jimsmith@example.com",
-						"Name": "Jim",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				},
-				{
-						"Email": "janetdoe@example.com",
-						"Name": "Janet",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				}
-		]
-}
-result = mailjet.contact_managemanycontacts.create(data=data)
 ```
 
 
@@ -799,7 +1009,7 @@ variable = Mailjet::Contact_managecontactslists.create(id: $ID,contacts_lists: [
 """
 Create : Manage a contact subscription to a list
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -818,6 +1028,47 @@ data = {
 		]
 }
 result = mailjet.contact_managecontactslists.create(id=id, data=data)
+```
+``` go
+/*
+Create : Manage a contact subscription to a list
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	mr := &MailjetRequest{
+	  Resource: "contact",
+	  ID: RESOURCE_ID,
+	  Action: "managecontactslists",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Contact {
+      ContactsLists: []MailjetContactsList {
+        MailjetContactsList {
+          ListID: "$ListID_1",
+          Action: "addnoforce",
+        },
+        MailjetContactsList {
+          ListID: "$ListID_2",
+          Action: "addforce",
+        },
+      },
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -855,6 +1106,69 @@ if ($mj->_response_code == 201){
    var_dump($mj->_response);
 }
 ?>
+```
+```python
+"""
+Add a contact to the list
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$LIST_ID'
+data = {
+  'Email': 'mrsmith@mailjet.com',
+  'Name': 'MrSmith',
+  'Action': 'addnoforce',
+  'Properties': {
+				"property1": "value",
+				"propertyN": "valueN"
+		}
+}
+result = mailjet.contactslist_managecontact.create(id=id, data=data)
+```
+``` go
+/*
+Add a contact to the list
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+type  MyPropertiesStruct  struct {
+  Property1  string
+  PropertyN  string
+}
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contactslist
+	mr := &MailjetRequest{
+	  Resource: "contactslist",
+	  ID: RESOURCE_ID,
+	  Action: "managecontact",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Contactslist {
+      Email: "mrsmith@mailjet.com",
+      Name: "MrSmith",
+      Action: "addnoforce",
+      Properties: MyPropertiesStruct {
+        Property1: "value",
+        PropertyN: "valueN",
+      },
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```bash
 # Add a contact to the list
@@ -910,27 +1224,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Contactslist_managecontact.create(id: $LIST_ID,email: "mrsmith@mailjet.com",name: "MrSmith",action: "addnoforce",properties: { 'property1'=> 'value', 'propertyN'=> 'valueN'})
-```
-```python
-"""
-Add a contact to the list
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$LIST_ID'
-data = {
-  'Email': 'mrsmith@mailjet.com',
-  'Name': 'MrSmith',
-  'Action': 'addnoforce',
-  'Properties': {
-				"property1": "value",
-				"propertyN": "valueN"
-		}
-}
-result = mailjet.contactslist_managecontact.create(id=id, data=data)
 ```
 
 
@@ -1069,7 +1362,7 @@ variable = Mailjet::Newsletter.create(locale: "en_US",sender: "MisterMailjet",se
 """
 Create : Newsletter data.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1083,6 +1376,41 @@ data = {
   'Title': 'Friday newsletter'
 }
 result = mailjet.newsletter.create(data=data)
+```
+``` go
+/*
+Create : Newsletter data.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Newsletter
+	mr := &MailjetRequest{
+	  Resource: "newsletter",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Newsletter {
+      Locale: "en_US",
+      Sender: "MisterMailjet",
+      SenderEmail: "Mister@mailjet.com",
+      Subject: "Greetings from Mailjet",
+      ContactsListID: "$ID_CONTACTSLIST",
+      Title: "Friday newsletter",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -1216,7 +1544,7 @@ target.update_attributes(html_part: "Hello <strong>world</strong>!",text_part: "
 """
 Modify : Newsletter data.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1227,6 +1555,37 @@ data = {
   'Text-part': 'Hello world!'
 }
 result = mailjet.newsletter_detailcontent.update(id=id, data=data)
+```
+``` go
+/*
+Modify : Newsletter data.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	mr := &MailjetRequest{
+	  Resource: "newsletter",
+	  ID: RESOURCE_ID,
+	  Action: "detailcontent",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Newsletter {
+      HtmlPart: "Hello <strong>world</strong>!",
+      TextPart: "Hello world!",
+    },
+	}
+	err := mailjetClient.Put(fmr)
+	if err != nil {
+	  fmt.Println(err)
+	}
+}
 ```
 
 
@@ -1334,7 +1693,7 @@ variable = Mailjet::Newsletter_test.create(id: $ID,recipients: [{ 'Email'=> 'mai
 """
 Create : Newsletter data.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1349,6 +1708,43 @@ data = {
 		]
 }
 result = mailjet.newsletter_test.create(id=id, data=data)
+```
+``` go
+/*
+Create : Newsletter data.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Newsletter
+	mr := &MailjetRequest{
+	  Resource: "newsletter",
+	  ID: RESOURCE_ID,
+	  Action: "test",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Newsletter {
+      Recipients: []MailjetRecipient {
+        MailjetRecipient {
+          Email: "mailjet@example.org",
+          Name: "Mailjet",
+        },
+      },
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -1405,6 +1801,15 @@ curl -s \
 	-d '{
 	}'
 ```
+```ruby
+# Create : Newsletter data.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Newsletter_send.create(id: $ID,)
+```
 ```javascript
 /**
  *
@@ -1426,26 +1831,48 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
-```ruby
-# Create : Newsletter data.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Newsletter_send.create(id: $ID,)
-```
 ```python
 """
 Create : Newsletter data.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
 id = '$ID'
 result = mailjet.newsletter_send.create(id=id)
+```
+``` go
+/*
+Create : Newsletter data.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Newsletter
+	mr := &MailjetRequest{
+	  Resource: "newsletter",
+	  ID: RESOURCE_ID,
+	  Action: "send",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Newsletter {
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -1549,7 +1976,7 @@ variable = Mailjet::Newsletter_schedule.create(id: $ID,date: "2015-04-22T09:00:0
 """
 Create : Newsletter data.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1559,6 +1986,38 @@ data = {
   'date': '2015-04-22T09:00:00+01:00'
 }
 result = mailjet.newsletter_schedule.create(id=id, data=data)
+```
+``` go
+/*
+Create : Newsletter data.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Newsletter
+	mr := &MailjetRequest{
+	  Resource: "newsletter",
+	  ID: RESOURCE_ID,
+	  Action: "schedule",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Newsletter {
+      Date: "2015-04-22T09:00:00+01:00",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -1696,7 +2155,7 @@ variable = Mailjet::Contactfilter.create(description: "Only contacts aged 40",ex
 """
 Create : A filter expressions for use in newsletters.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1707,6 +2166,38 @@ data = {
   'Name': '40 year olds'
 }
 result = mailjet.contactfilter.create(data=data)
+```
+``` go
+/*
+Create : A filter expressions for use in newsletters.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contactfilter
+	mr := &MailjetRequest{
+	  Resource: "contactfilter",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Contactfilter {
+      Description: "Only contacts aged 40",
+      Expression: "age=40",
+      Name: "40 year olds",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -1816,7 +2307,7 @@ variable = Mailjet::Newsletter.create(title: "Mailjet greets every contact over 
 """
 Create : Newsletter data with segmentation.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1831,6 +2322,42 @@ data = {
   'SegmentationID': '$ID_CONTACT_FILTER'
 }
 result = mailjet.newsletter.create(data=data)
+```
+``` go
+/*
+Create : Newsletter data with segmentation.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Newsletter
+	mr := &MailjetRequest{
+	  Resource: "newsletter",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Newsletter {
+      Title: "Mailjet greets every contact over 40",
+      Locale: "en_US",
+      Sender: "MisterMailjet",
+      SenderEmail: "Mister@mailjet.com",
+      Subject: "Greetings from Mailjet",
+      ContactsListID: "$ID_CONTACTLIST",
+      SegmentationID: "$ID_CONTACT_FILTER",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -1900,13 +2427,38 @@ variable = Mailjet::Campaign.find(mj.nl=$NEWSLETTER_ID)
 """
 View : Campaign linked to the Newsletter :NEWSLETTER_ID
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
 id = 'mj.nl=$NEWSLETTER_ID'
 result = mailjet.campaign.get(id=id)
+```
+``` go
+/*
+View : Campaign linked to the Newsletter :NEWSLETTER_ID
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Campaign
+	mr := &MailjetRequest{
+	  Resource: "campaign",
+	  ID: RESOURCE_ID,
+	}
+	err := mailjetClient.Get(mr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -1970,6 +2522,38 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
+```python
+"""
+View : Statistics related to emails processed by Mailjet, grouped in a Campaign.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+result = mailjet.campaignstatistics.get()
+```
+``` go
+/*
+View : Statistics related to emails processed by Mailjet, grouped in a Campaign.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Campaignstatistics
+	_, _, err := mailjetClient.List("campaignstatistics", &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 ```bash
 # View : Statistics related to emails processed by Mailjet, grouped in a Campaign.
 curl -s \
@@ -2004,17 +2588,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Campaignstatistics.all()
-```
-```python
-"""
-View : Statistics related to emails processed by Mailjet, grouped in a Campaign.
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.campaignstatistics.get()
 ```
 
 

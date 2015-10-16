@@ -93,7 +93,7 @@ variable = Mailjet::Sender.create(email: "anothersender@mailjet.com")
 """
 Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -102,6 +102,36 @@ data = {
   'Email': 'anothersender@mailjet.com'
 }
 result = mailjet.sender.create(data=data)
+```
+``` go
+/*
+Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Sender
+	mr := &MailjetRequest{
+	  Resource: "sender",
+	}
+	fmr := &FullMailjetRequest{
+	  Info: mr,
+	  Payload: &resources.Sender {
+      Email: "anothersender@mailjet.com",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -118,7 +148,7 @@ To increase the deliverability of your emails, dont forget to setup properly you
 ##Sending a basic email
 
 ``` python
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -132,6 +162,40 @@ data = {
 	'Recipients': [{'Email':'passenger@mailjet.com'}]
 }
 result = mailjet.send.create(data=data)
+```
+``` go
+/*
+This calls sends an email to one recipient.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &MailjetSendMail {
+      FromEmail: "pilot@mailjet.com",
+      FromName: "Mailjet Pilot",
+      Subject: "Your email flight plan!",
+      TextPart: "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+      Recipients: []MailjetRecipient {
+        MailjetRecipient {
+          Email: "passenger@mailjet.com",
+        },
+      },
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
 ```
 ```php
 <?php
@@ -252,7 +316,7 @@ NOTICE: If a recipient does not exist in any of your contacts list it will be cr
 """
 This calls sends an email to 2 recipients.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -262,7 +326,7 @@ data = {
   'FromName': 'Mailjet Pilot',
   'Subject': 'Your email flight plan!',
   'Text-part': 'Dear passenger, welcome to Mailjet! May the delivery force be with you!',
-  'Html-part': <h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!',
+  'Html-part': '<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!',
   'Recipients': [
 		{
 			"Email": "passenger1@mailjet.com",
@@ -329,6 +393,45 @@ curl -s \
 		"Recipients":[{"Email":"passenger1@mailjet.com","Name":"passenger 1"},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]
 	}'
 ```
+``` go
+/*
+This calls sends an email to 2 recipients.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &MailjetSendMail {
+      FromEmail: "pilot@mailjet.com",
+      FromName: "Mailjet Pilot",
+      Subject: "Your email flight plan!",
+      TextPart: "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+      Recipients: []MailjetRecipient {
+        MailjetRecipient {
+          Email: "passenger1@mailjet.com",
+          Name: "passenger 1",
+        },
+        MailjetRecipient {
+          Email: "passenger2@mailjet.com",
+          Name: "passenger 2",
+        },
+      },
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
+```
 ```javascript
 /**
  *
@@ -384,7 +487,7 @@ Each recipient will receive a dedicated message.
 """
 This calls sends an email to the given recipient.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -394,7 +497,7 @@ data = {
   'FromName': 'Mailjet Pilot',
   'Subject': 'Your email flight plan!',
   'Text-part': 'Dear passenger, welcome to Mailjet! May the delivery force be with you!',
-  'Html-part': <h3>Dear passenger, welcome to Mailjet!</h3>May the delivery force be with you!',
+  'Html-part': '<h3>Dear passenger, welcome to Mailjet!</h3>May the delivery force be with you!',
   'Recipients': [{ "Email": "passenger@mailjet.com"}],
   'Attachments':
 		[{
@@ -404,6 +507,47 @@ data = {
 		}]
 }
 result = mailjet.send.create(data=data)
+```
+``` go
+/*
+This calls sends an email to the given recipient.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &MailjetSendMail {
+      FromEmail: "pilot@mailjet.com",
+      FromName: "Mailjet Pilot",
+      Subject: "Your email flight plan!",
+      TextPart: "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+      Recipients: []MailjetRecipient {
+        MailjetRecipient {
+          Email: "passenger@mailjet.com",
+        },
+      },
+      Attachments: []MailjetAttachment {
+        MailjetAttachment {
+          ContentType: "text/plain",
+          Filename: "test.txt",
+          Content: "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK",
+        },
+      },
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
 ```
 ```php
 <?php
@@ -502,7 +646,7 @@ In both call, the content will need to be Base64 encoded. You will need to speci
 """
 This calls sends an email to the given recipient.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -607,6 +751,47 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
+``` go
+/*
+This calls sends an email to the given recipient.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &MailjetSendMail {
+      FromEmail: "pilot@mailjet.com",
+      FromName: "Mailjet Pilot",
+      Subject: "Your email flight plan!",
+      TextPart: "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+      HtmlPart: "<h3>Dear passenger, welcome to <img src=\"cid:logo.gif\">Mailjet!</h3><br />May the delivery force be with you!",
+      Recipients: []MailjetRecipient {
+        MailjetRecipient {
+          Email: "passenger@mailjet.com",
+        },
+      },
+      InlineAttachments: []MailjetAttachment {
+        MailjetAttachment {
+          ContentType: "image/gif",
+          Filename: "logo.gif",
+          Content: "R0lGODlhEAAQAOYAAP////748v39/Pvq1vr6+lJSVeqlK/zqyv7+/unKjJ+emv78+fb29pucnfrlwvTCi9ra2vTCa6urrWdoaurr6/Pz8uHh4vn49PO7QqGfmumaN+2uS1ZWWfr27uyuLnBxd/z8+0pLTvHAWvjar/zr2Z6cl+jal+2kKmhqcEJETvHQbPb07lBRVPv6+cjJycXFxn1+f//+/f337nF0efO/Mf306NfW0fjHSJOTk/TKlfTp0Prlx/XNj83HuPfEL+/v8PbJgueXJOzp4MG8qUNES9fQqN3d3vTJa/vq1f317P769f/8+gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjY5ODYxMzYzMkJCMTFFMDkzQkFFMkFENzVGN0JGRkYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MjY5ODYxMzczMkJCMTFFMDkzQkFFMkFENzVGN0JGRkYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyNjk4NjEzNDMyQkIxMUUwOTNCQUUyQUQ3NUY3QkZGRiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyNjk4NjEzNTMyQkIxMUUwOTNCQUUyQUQ3NUY3QkZGRiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAEAAAAALAAAAAAQABAAAAdUgACCg4SFhoeIiYRGLhaKhA0TMDgSLxAUiEIZHAUsIUQpKAo9Og6FNh8zJUNFJioYQIgJRzc+NBEkiAcnBh4iO4o8QRsjj0gaOY+CDwPKzs/Q0YSBADs=",
+        },
+      },
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
+```
 
 
 When using a inline Attachment, it's possible to insert the file inside the HTML code of the email by using <code>cid:FILENAME.EXT</code> where FILENAME.EXT is the <code>Filename</code> specified in the declaration of the Attachment.
@@ -622,7 +807,7 @@ Remember to keep the size of your attachements low and not to exceed 15 MB.
 """
 This calls sends an email to the given recipient.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -693,16 +878,16 @@ end
 variable = Mailjet::Send.create(
   messages: [
     {
-      'FromEmail' => 'gbadi@student.42.fr',
+      'FromEmail' => 'pilot@mailjet.com',
       'FromName' => 'Mailjet Pilot',
-      'Recipients' => [{'Email' => 'gbadi@mailjet.com', 'Name' => 'passenger 1'}],
+      'Recipients' => [{'Email' => 'passenger1@mailjet.com', 'Name' => 'passenger 1'}],
       'subject' => 'email 1',
       'text-part' => 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
     },
     {
-      'fromEmail' => 'gbadi@student.42.fr',
+      'fromEmail' => 'pilot@mailjet.com',
       'fromName' => 'Mailjet Pilot',
-      'Recipients' => [{'Email' => 'gbadi@mailjet.com', 'Name' => 'passenger 2'}],
+      'Recipients' => [{'Email' => 'passenger2@mailjet.com', 'Name' => 'passenger 2'}],
       'subject' => 'email 2',
       'text-part' => 'Dear passenger 2, welcome to Mailjet! May the delivery force be with you!',
     }])
@@ -773,6 +958,58 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
+``` go
+/*
+This calls sends an email to the given recipient.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &MailjetSendMail {
+      Messages: []MailjetSendMail {
+        MailjetSendMail {
+          FromEmail: "pilot@mailjet.com",
+          FromName: "Mailjet Pilot",
+          Recipients: []MailjetRecipient {
+            MailjetRecipient {
+              Email: "passenger1@mailjet.com",
+              Name: "passenger 1",
+            },
+          },
+          Subject: "Your email flight plan!",
+          TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+          HtmlPart: "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        },
+        MailjetSendMail {
+          FromEmail: "pilot@mailjet.com",
+          FromName: "Mailjet Pilot",
+          Recipients: []MailjetRecipient {
+            MailjetRecipient {
+              Email: "passenger2@mailjet.com",
+              Name: "passenger 2",
+            },
+          },
+          Subject: "Your email flight plan!",
+          TextPart: "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!",
+          HtmlPart: "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        },
+      },
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
+```
 
 
 To send messages in bulk, package the multiple messages inside a <code>Messages</code> property. Each message inside this list of message will enjoy the same properties described above. 
@@ -796,7 +1033,7 @@ To do so, use <code>[[DATA_TYPE:DATA_NAME:DEFAULT_VALUE]]</code> where:
 """
 This calls sends an email to the given recipient.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -910,6 +1147,51 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
+``` go
+/*
+This calls sends an email to the given recipient.
+*/
+package main
+type  MyVarsStruct  struct {
+  Day  string
+}
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &MailjetSendMail {
+      FromEmail: "pilot@mailjet.com",
+      FromName: "Mailjet Pilot",
+      Subject: "Your email flight plan!",
+      TextPart: "Dear passenger, welcome to Mailjet! On this [[var:day:\"monday\"]], may the delivery force be with you!",
+      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:\"monday\"]], may the delivery force be with you!",
+      Vars: MyVarsStruct {
+        Day: "Monday",
+      },
+      Recipients: []MailjetRecipient {
+        MailjetRecipient {
+          Email: "passenger1@mailjet.com",
+          Name: "passenger 1",
+        },
+        MailjetRecipient {
+          Email: "passenger2@mailjet.com",
+          Name: "passenger 2",
+        },
+      },
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
+```
 
 
 By using <code>Vars</code> in conjunction with the <code>[[var:VAR_NAME:DEFAULT_VALUE]]</code>, you can modify the content of you email.
@@ -920,7 +1202,7 @@ By using <code>Vars</code> in conjunction with the <code>[[var:VAR_NAME:DEFAULT_
 """
 This calls sends an email to the given recipient.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1037,6 +1319,59 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
+``` go
+/*
+This calls sends an email to the given recipient.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+type  MyVarsStruct  struct {
+  Day  string
+}
+type MyRecipientsVarsStruct struct {
+  Day               string
+  Personalmessage   string
+}
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &MailjetSendMail {
+      FromEmail: "pilot@mailjet.com",
+      FromName: "Mailjet Pilot",
+      Subject: "Your email flight plan!",
+      TextPart: "Dear passenger, welcome to Mailjet! On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
+      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
+      Vars: MyVarsStruct {
+        Day: "Monday",
+      },
+      Recipients: []MailjetRecipient {
+        MailjetRecipient {
+          Email: "passenger1@mailjet.com",
+          Name: "passenger 1",
+          Vars: MyRecipientsVarsStruct {
+            Day: "Tuesday",
+            Personalmessage: "Happy birthday!",
+          },
+        },
+        MailjetRecipient {
+          Email: "passenger2@mailjet.com",
+          Name: "passenger 2",
+        },
+      },
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
+```
 
 
 To go further in personalisation <code>Vars</code> is also available for each recipient. The main <code>Vars</code> will be overidden by the recipient <code>Vars</code>
@@ -1046,7 +1381,7 @@ To go further in personalisation <code>Vars</code> is also available for each re
 ###Using contact properties
 
 ``` python
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1142,6 +1477,45 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
+``` go
+/*
+This calls sends an email to the given recipient.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &MailjetSendMail {
+      FromEmail: "pilot@mailjet.com",
+      FromName: "Mailjet Pilot",
+      Subject: "Your email flight plan!",
+      TextPart: "Dear [[data:firstname:\"passenger\"]], welcome to Mailjet! May the delivery force be with you!",
+      HtmlPart: "<h3>Dear [[data:firstname:\"passenger\"]], welcome to Mailjet!</h3><br /> May the delivery force be with you!",
+      Recipients: []MailjetRecipient {
+        MailjetRecipient {
+          Email: "passenger1@mailjet.com",
+          Name: "passenger 1",
+        },
+        MailjetRecipient {
+          Email: "passenger2@mailjet.com",
+          Name: "passenger 2",
+        },
+      },
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
+```
 
 
 If the contact you are sending an email to is already in Mailjet system with some contact datas, you can leverage this information to personalise your email.
@@ -1153,7 +1527,7 @@ Use <code>[[data:METADATA_NAME:DEFAULT_VALUE]]</code> to insert datas in your co
 ##Adding Email Headers 
 
 ``` python
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1252,6 +1626,46 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
+``` go
+/*
+This calls sends an email to one recipient.
+*/
+package main
+type  MyHeadersStruct  struct {
+  ReplyTo  string
+}
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &MailjetSendMail {
+      FromEmail: "pilot@mailjet.com",
+      FromName: "Mailjet Pilot",
+      Subject: "Your email flight plan!",
+      TextPart: "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+      Recipients: []MailjetRecipient {
+        MailjetRecipient {
+          Email: "passenger@mailjet.com",
+        },
+      },
+      Headers: MyHeadersStruct {
+        ReplyTo: "copilot@mailjet.com",
+      },
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
+```
 
 
 In every message, you can specify your own Email headers using the <code>Headers</code> property. For example, it is possible to specify a <code>Reply-To</code> email address.  
@@ -1266,7 +1680,7 @@ These custom pieces of information are returned back in the events you registere
 ###Sending an email with a custom ID
 
 ``` python
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1365,6 +1779,41 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
+``` go
+/*
+This calls sends an email to one recipient.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &MailjetSendMail {
+      FromEmail: "pilot@mailjet.com",
+      FromName: "Mailjet Pilot",
+      Subject: "Your email flight plan!",
+      TextPart: "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+      Recipients: []MailjetRecipient {
+        MailjetRecipient {
+          Email: "passenger@mailjet.com",
+        },
+      },
+      MjCustomID: "PassengerEticket1234",
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
+```
 
 
 Sometimes you need to use your own ID in addition to ours to be able to trace back the message in our system easily. For this purpose we let you insert your own ID in the message. To achieve this, just pass the ID you want to use in the <code>Mj-CustomID</code> property.
@@ -1429,7 +1878,7 @@ variable = Mailjet::Messagesentstatistics.all(custom_id: "PassengerEticket1234")
 """
 View : API Key Statistical campaign/message data.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1439,6 +1888,27 @@ filters = {
 }
 result = mailjet.messagesentstatistics.get(filters=filters)
 ```
+``` go
+/*
+View : API Key Statistical campaign/message data.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Messagesentstatistics
+	_, _, err := mailjetClient.List("messagesentstatistics", &data, Filter("CustomID", "PassengerEticket1234"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 
 
 From then, your <code>CustomID</code> is linked to our own Message ID. You can also retrieve the message later by providing it to the <code>/messagesentstatistics</code> resource <code>CustomID</code> filter.
@@ -1447,7 +1917,7 @@ From then, your <code>CustomID</code> is linked to our own Message ID. You can a
 ###Sending an email with a payload
 
 ``` python
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1546,6 +2016,41 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
+``` go
+/*
+This calls sends an email to one recipient.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &MailjetSendMail {
+      FromEmail: "pilot@mailjet.com",
+      FromName: "Mailjet Pilot",
+      Subject: "Your email flight plan!",
+      TextPart: "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+      Recipients: []MailjetRecipient {
+        MailjetRecipient {
+          Email: "passenger@mailjet.com",
+        },
+      },
+      MjEventPayLoad: "Eticket,1234,row,15,seat,B",
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
+```
 
 
 Sometimes, you need more than just an ID to represent the context to what a specific message is attached to. For this purpose, we let you insert a payload in the message which can be of any format (XML, JSON, CSV, etc). To take advantage of this, just pass the payload you want in the <code>Mj-EventPayLoad</code> property.
@@ -1557,7 +2062,7 @@ Sometimes, you need more than just an ID to represent the context to what a spec
 """
 This calls sends an email to one recipient within a campaign blocking multiple email to same recipient
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1567,7 +2072,7 @@ data = {
   'FromName': 'Mailjet Pilot',
   'Subject': 'Your email flight plan!',
   'Text-part': 'Dear passenger, welcome to Mailjet! May the delivery force be with you!',
-  'Html-part': <h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!',
+  'Html-part': '<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!',
   'Recipients': [{ Email": "passenger@mailjet.com" }],
   'Mj-campaign': 'SendAPI_campaign',
   'Mj-deduplicatecampaign': '1'
@@ -1669,6 +2174,42 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
+```
+``` go
+/*
+This calls sends an email to one recipient within a campaign blocking multiple email to same recipient
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &MailjetSendMail {
+      FromEmail: "pilot@mailjet.com",
+      FromName: "Mailjet Pilot",
+      Subject: "Your email flight plan!",
+      TextPart: "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+      Recipients: []MailjetRecipient {
+        MailjetRecipient {
+          Email: "passenger@mailjet.com",
+        },
+      },
+      MjCampaign: "SendAPI_campaign",
+      MjDeduplicatecampaign: 1,
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
 ```
 
 

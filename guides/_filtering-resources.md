@@ -76,7 +76,7 @@ variable = Mailjet::Contact.all(limit: "150")
 """
 View : List of 150 contacts
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -85,6 +85,27 @@ filters = {
   'Limit': '150'
 }
 result = mailjet.contact.get(filters=filters)
+```
+``` go
+/*
+View : List of 150 contacts
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	_, _, err := mailjetClient.List("contact", &data, Filter("Limit", "150"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -152,7 +173,7 @@ variable = Mailjet::Contact.all(offset: "25000")
 """
 View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -161,6 +182,27 @@ filters = {
   'Offset': '25000'
 }
 result = mailjet.contact.get(filters=filters)
+```
+``` go
+/*
+View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	_, _, err := mailjetClient.List("contact", &data, Filter("Offset", "25000"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 You can use the <code>Offset</code> filter to retrieve a list starting from a certain offset.
@@ -185,6 +227,13 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
+```bash
+# View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact?Limit=150\&Offset=25000 
+```
 ```javascript
 /**
  *
@@ -207,13 +256,6 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
-```bash
-# View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact?Limit=150\&Offset=25000 
-```
 ```ruby
 # View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
 Mailjet.configure do |config|
@@ -227,7 +269,7 @@ variable = Mailjet::Contact.all(limit: "150",offset: "25000")
 """
 View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -237,6 +279,27 @@ filters = {
   'Offset': '25000'
 }
 result = mailjet.contact.get(filters=filters)
+```
+``` go
+/*
+View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	_, _, err := mailjetClient.List("contact", &data, Filter("Limit", "150"), Filter("Offset", "25000"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 The <code>Offset</code> filter can be combined with the <code>Limit</code> filter. 
@@ -303,7 +366,7 @@ variable = Mailjet::Contact.all(sort: "email")
 """
 View : List of contact ordered by email in an ascending order
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -312,6 +375,27 @@ filters = {
   'Sort': 'email'
 }
 result = mailjet.contact.get(filters=filters)
+```
+``` go
+/*
+View : List of contact ordered by email in an ascending order
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	_, _, err := mailjetClient.List("contact", &data, Filter("Sort", "email"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -337,6 +421,41 @@ if ($mj->_response_code == 200){
    var_dump($mj->_response);
 }
 ?>
+```
+```python
+"""
+View : List of contact ordered by email in reverse order
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'Sort': 'email+DESC'
+}
+result = mailjet.contact.get(filters=filters)
+```
+``` go
+/*
+View : List of contact ordered by email in reverse order
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	_, _, err := mailjetClient.List("contact", &data, Filter("Sort", "email+DESC"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```bash
 # View : List of contact ordered by email in reverse order
@@ -375,20 +494,6 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Contact.all(sort: "email+DESC")
 ```
-```python
-"""
-View : List of contact ordered by email in reverse order
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-filters = {
-  'Sort': 'email+DESC'
-}
-result = mailjet.contact.get(filters=filters)
-```
 
 
 To retrieve the same query only in descending order, amend the URL with <code>+DESC</code>:
@@ -412,6 +517,41 @@ if ($mj->_response_code == 200){
    var_dump($mj->_response);
 }
 ?>
+```
+```python
+"""
+View : Contacts in ContactsList
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'ContactsList': '$ContactsListID'
+}
+result = mailjet.contact.get(filters=filters)
+```
+``` go
+/*
+View : Contacts in ContactsList
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	_, _, err := mailjetClient.List("contact", &data, Filter("ContactsList", "$ContactsListID"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```bash
 # View : Contacts in ContactsList
@@ -450,20 +590,6 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Contact.all(contacts_list: "$ContactsListID")
 ```
-```python
-"""
-View : Contacts in ContactsList
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-filters = {
-  'ContactsList': '$ContactsListID'
-}
-result = mailjet.contact.get(filters=filters)
-```
 
 
 On each resource, the API provide specific filters. Visit the [reference](/email-api/v3/) to see what is available.
@@ -487,6 +613,43 @@ if ($mj->_response_code == 200){
    var_dump($mj->_response);
 }
 ?>
+```
+```python
+"""
+View : Contact from email address
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$EMAIL_ADDRESS_OR_CONTACT_ID'
+result = mailjet.contact.get(id=id)
+```
+``` go
+/*
+View : Contact from email address
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	mr := &MailjetRequest{
+	  Resource: "contact",
+	  ID: RESOURCE_ID,
+	}
+	err := mailjetClient.Get(mr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```bash
 # View : Contact from email address
@@ -524,18 +687,6 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Contact.find($EMAIL_ADDRESS_OR_CONTACT_ID)
 ```
-```python
-"""
-View : Contact from email address
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$EMAIL_ADDRESS_OR_CONTACT_ID'
-result = mailjet.contact.get(id=id)
-```
 
 
 You can access each unique element using unique key filter. Visit the [reference](/email-api/v3/) to see the keys available for each resource.
@@ -558,6 +709,43 @@ if ($mj->_response_code == 200){
    var_dump($mj->_response);
 }
 ?>
+```
+```python
+"""
+View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$EventType|$isBackup'
+result = mailjet.eventcallbackurl.get(id=id)
+```
+``` go
+/*
+View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Eventcallbackurl
+	mr := &MailjetRequest{
+	  Resource: "eventcallbackurl",
+	  ID: RESOURCE_ID,
+	}
+	err := mailjetClient.Get(mr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```bash
 # View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
@@ -594,18 +782,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Eventcallbackurl.find($EventType|$isBackup)
-```
-```python
-"""
-View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$EventType|$isBackup'
-result = mailjet.eventcallbackurl.get(id=id)
 ```
 
 
@@ -672,7 +848,7 @@ variable = Mailjet::Liststatistics.all(name_like: "$Name")
 """
 View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -681,6 +857,27 @@ filters = {
   'NameLike': '$Name'
 }
 result = mailjet.liststatistics.get(filters=filters)
+```
+``` go
+/*
+View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Liststatistics
+	_, _, err := mailjetClient.List("liststatistics", &data, Filter("NameLike", "$Name"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -713,6 +910,41 @@ if ($mj->_response_code == 200){
    var_dump($mj->_response);
 }
 ?>
+```
+```python
+"""
+View : Total number of contact
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'countOnly': '1'
+}
+result = mailjet.contact.get(filters=filters)
+```
+``` go
+/*
+View : Total number of contact
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	_, _, err := mailjetClient.List("contact", &data, Filter("countOnly", "1"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```bash
 # View : Total number of contact
@@ -750,20 +982,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Contact.all(count_only: "1")
-```
-```python
-"""
-View : Total number of contact
-"""
-from mailjet import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-filters = {
-  'countOnly': '1'
-}
-result = mailjet.contact.get(filters=filters)
 ```
 
 
