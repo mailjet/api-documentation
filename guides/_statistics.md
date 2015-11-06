@@ -26,6 +26,33 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
+```bash
+# View : Details of a specific Message (e-mail) processed by Mailjet
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/message/$ID_MESSAGE 
+```
+```javascript
+/**
+ *
+ * View : Details of a specific Message (e-mail) processed by Mailjet
+ *
+ */
+var mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+var request = mailjet
+	.get("message")
+	.id($ID_MESSAGE)
+	.request();
+request
+	.on('success', function (response, body) {
+		console.log (response.statusCode, body);
+	})
+	.on('error', function (err, response) {
+		console.log (response.statusCode, err);
+	});
+```
 ```python
 """
 View : Details of a specific Message (e-mail) processed by Mailjet
@@ -62,33 +89,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```bash
-# View : Details of a specific Message (e-mail) processed by Mailjet
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/message/$ID_MESSAGE 
-```
-```javascript
-/**
- *
- * View : Details of a specific Message (e-mail) processed by Mailjet
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("message")
-	.id($ID_MESSAGE)
-	.request();
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
 ```
 ```ruby
 # View : Details of a specific Message (e-mail) processed by Mailjet
@@ -286,6 +286,35 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
+```javascript
+/**
+ *
+ * View : Event history of a message.
+ *
+ */
+var mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+var request = mailjet
+	.get("messagehistory")
+	.id($ID_MESSAGE)
+	.request();
+request
+	.on('success', function (response, body) {
+		console.log (response.statusCode, body);
+	})
+	.on('error', function (err, response) {
+		console.log (response.statusCode, err);
+	});
+```
+```ruby
+# View : Event history of a message.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Messagehistory.find($ID_MESSAGE)
+```
 ```python
 """
 View : Event history of a message.
@@ -329,35 +358,6 @@ curl -s \
 	-X GET \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/messagehistory/$ID_MESSAGE 
-```
-```javascript
-/**
- *
- * View : Event history of a message.
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("messagehistory")
-	.id($ID_MESSAGE)
-	.request();
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-```ruby
-# View : Event history of a message.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Messagehistory.find($ID_MESSAGE)
 ```
 
 
@@ -410,6 +410,42 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
+```bash
+# View : statuses and events summary for a specific message
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/messagesentstatistics/$ID_MESSAGE 
+```
+```javascript
+/**
+ *
+ * View : statuses and events summary for a specific message
+ *
+ */
+var mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+var request = mailjet
+	.get("messagesentstatistics")
+	.id($ID_MESSAGE)
+	.request();
+request
+	.on('success', function (response, body) {
+		console.log (response.statusCode, body);
+	})
+	.on('error', function (err, response) {
+		console.log (response.statusCode, err);
+	});
+```
+```ruby
+# View : statuses and events summary for a specific message
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Messagesentstatistics.find($ID_MESSAGE)
+```
 ```python
 """
 View : statuses and events summary for a specific message
@@ -446,42 +482,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```bash
-# View : statuses and events summary for a specific message
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/messagesentstatistics/$ID_MESSAGE 
-```
-```javascript
-/**
- *
- * View : statuses and events summary for a specific message
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("messagesentstatistics")
-	.id($ID_MESSAGE)
-	.request();
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-```ruby
-# View : statuses and events summary for a specific message
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Messagesentstatistics.find($ID_MESSAGE)
 ```
 
 
@@ -545,41 +545,6 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
-```python
-"""
-View : Details of Messages in a campaign
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-filters = {
-  'Campaign': '$CAMPAIGN_ID'
-}
-result = mailjet.message.get(filters=filters)
-```
-``` go
-/*
-View : Details of Messages in a campaign
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Message
-	_, _, err := mailjetClient.List("message", &data, Filter("Campaign", "$CAMPAIGN_ID"))
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
 ```bash
 # View : Details of Messages in a campaign
 curl -s \
@@ -617,6 +582,41 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Message.all(campaign: "$CAMPAIGN_ID")
 ```
+```python
+"""
+View : Details of Messages in a campaign
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'Campaign': '$CAMPAIGN_ID'
+}
+result = mailjet.message.get(filters=filters)
+```
+``` go
+/*
+View : Details of Messages in a campaign
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Message
+	_, _, err := mailjetClient.List("message", &data, Filter("Campaign", "$CAMPAIGN_ID"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 
 
 When working with campaigns, you can list your messages by using the filter <code>Campaign</code> on <code>[/message](/email-api/v3/message/)</code> resource or <code>CampaignID</code> on <code>[/messagesentstatistics](/email-api/v3/messagesentstatistics/)</code> and <code>[/messageinformation](/email-api/v3/messageinformation/)</code> resources.
@@ -643,6 +643,13 @@ if ($mj->_response_code == 200){
    var_dump($mj->_response);
 }
 ?>
+```
+```bash
+# View : API key Campaign/Message statistics.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/messagestatistics 
 ```
 ```javascript
 /**
@@ -703,13 +710,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```bash
-# View : API key Campaign/Message statistics.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/messagestatistics 
 ```
 
 
@@ -777,13 +777,6 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
-```bash
-# View : Retrieve informations about messages opened at least once by their recipients.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/openinformation 
-```
 ```javascript
 /**
  *
@@ -802,6 +795,13 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
+```
+```bash
+# View : Retrieve informations about messages opened at least once by their recipients.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/openinformation 
 ```
 ```ruby
 # View : Retrieve informations about messages opened at least once by their recipients.
@@ -1459,38 +1459,6 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
-```python
-"""
-View : Global counts for an API Key, since its creation.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.apikeytotals.get()
-```
-``` go
-/*
-View : Global counts for an API Key, since its creation.
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Apikeytotals
-	_, _, err := mailjetClient.List("apikeytotals", &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
 ```bash
 # View : Global counts for an API Key, since its creation.
 curl -s \
@@ -1525,6 +1493,38 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Apikeytotals.all()
+```
+```python
+"""
+View : Global counts for an API Key, since its creation.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+result = mailjet.apikeytotals.get()
+```
+``` go
+/*
+View : Global counts for an API Key, since its creation.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Apikeytotals
+	_, _, err := mailjetClient.List("apikeytotals", &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 

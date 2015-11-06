@@ -114,7 +114,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contact_managecontactslists.create(id: $ID,contacts_lists: [{ 'ListID'=> '$ListID_1', 'Action'=> 'addnoforce'}, { 'ListID'=> '$ListID_2', 'Action'=> 'addforce'}])
+variable = Mailjet::Contact_managecontactslists.create(id: $ID, contacts_lists: [{ 'ListID'=> '$ListID_1', 'Action'=> 'addnoforce'}, { 'ListID'=> '$ListID_2', 'Action'=> 'addforce'}])
 ```
 ```python
 """
@@ -301,6 +301,102 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
+```bash
+# Create : Manage the details of a Contact.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact/managemanycontacts \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"ContactsLists":[
+				{
+						"ListID": 1,
+						"action": "addnoforce"
+				},
+				{
+						"ListID": 2,
+						"action": "addforce"
+				}
+		],
+		"Contacts":[
+				{
+						"Email": "jimsmith@example.com",
+						"Name": "Jim",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				},
+				{
+						"Email": "janetdoe@example.com",
+						"Name": "Janet",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				}
+		]
+	}'
+```
+```javascript
+/**
+ *
+ * Create : Manage the details of a Contact.
+ *
+ */
+var mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+var request = mailjet
+	.post("contact")
+	.action("managemanycontacts")
+	.request({
+		"ContactsLists":[
+				{
+						"ListID": 1,
+						"action": "addnoforce"
+				},
+				{
+						"ListID": 2,
+						"action": "addforce"
+				}
+		],
+		"Contacts":[
+				{
+						"Email": "jimsmith@example.com",
+						"Name": "Jim",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				},
+				{
+						"Email": "janetdoe@example.com",
+						"Name": "Janet",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				}
+		]
+	});
+request
+	.on('success', function (response, body) {
+		console.log (response.statusCode, body);
+	})
+	.on('error', function (err, response) {
+		console.log (response.statusCode, err);
+	});
+```
+```ruby
+# Create : Manage the details of a Contact.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Contact_managemanycontacts.create(contacts_lists: [{ 'ListID'=> 1, 'action'=> 'addnoforce'}, { 'ListID'=> 2, 'action'=> 'addforce'}],contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
+```
 ```python
 """
 Create : Manage the details of a Contact.
@@ -399,102 +495,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```bash
-# Create : Manage the details of a Contact.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact/managemanycontacts \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"ContactsLists":[
-				{
-						"ListID": 1,
-						"action": "addnoforce"
-				},
-				{
-						"ListID": 2,
-						"action": "addforce"
-				}
-		],
-		"Contacts":[
-				{
-						"Email": "jimsmith@example.com",
-						"Name": "Jim",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				},
-				{
-						"Email": "janetdoe@example.com",
-						"Name": "Janet",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				}
-		]
-	}'
-```
-```javascript
-/**
- *
- * Create : Manage the details of a Contact.
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.post("contact")
-	.action("managemanycontacts")
-	.request({
-		"ContactsLists":[
-				{
-						"ListID": 1,
-						"action": "addnoforce"
-				},
-				{
-						"ListID": 2,
-						"action": "addforce"
-				}
-		],
-		"Contacts":[
-				{
-						"Email": "jimsmith@example.com",
-						"Name": "Jim",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				},
-				{
-						"Email": "janetdoe@example.com",
-						"Name": "Janet",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				}
-		]
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-```ruby
-# Create : Manage the details of a Contact.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Contact_managemanycontacts.create(contacts_lists: [{ 'ListID'=> 1, 'action'=> 'addnoforce'}, { 'ListID'=> 2, 'action'=> 'addforce'}],contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
 ```
 
 
@@ -677,6 +677,85 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
+```bash
+# Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contactslist/$ID/ManageManyContacts \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Action":"addnoforce",
+		"Contacts":[
+				{
+						"Email": "jimsmith@example.com",
+						"Name": "Jim",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				},
+				{
+						"Email": "janetdoe@example.com",
+						"Name": "Janet",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				}
+		]
+	}'
+```
+```javascript
+/**
+ *
+ * Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
+ *
+ */
+var mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+var request = mailjet
+	.post("contactslist")
+	.id($ID)
+	.action("ManageManyContacts")
+	.request({
+		"Action":"addnoforce",
+		"Contacts":[
+				{
+						"Email": "jimsmith@example.com",
+						"Name": "Jim",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				},
+				{
+						"Email": "janetdoe@example.com",
+						"Name": "Janet",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				}
+		]
+	});
+request
+	.on('success', function (response, body) {
+		console.log (response.statusCode, body);
+	})
+	.on('error', function (err, response) {
+		console.log (response.statusCode, err);
+	});
+```
+```ruby
+# Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Contactslist_ManageManyContacts.create(id: $ID, , action: "addnoforce",contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
+```
 ```python
 """
 Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
@@ -759,85 +838,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```bash
-# Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contactslist/$ID/ManageManyContacts \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Action":"addnoforce",
-		"Contacts":[
-				{
-						"Email": "jimsmith@example.com",
-						"Name": "Jim",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				},
-				{
-						"Email": "janetdoe@example.com",
-						"Name": "Janet",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				}
-		]
-	}'
-```
-```javascript
-/**
- *
- * Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.post("contactslist")
-	.id($ID)
-	.action("ManageManyContacts")
-	.request({
-		"Action":"addnoforce",
-		"Contacts":[
-				{
-						"Email": "jimsmith@example.com",
-						"Name": "Jim",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				},
-				{
-						"Email": "janetdoe@example.com",
-						"Name": "Janet",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				}
-		]
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-```ruby
-# Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Contactslist_ManageManyContacts.create(id: $ID,action: "addnoforce",contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
 ```
 
 
@@ -1254,6 +1254,42 @@ if ($mj->_response_code == 200){
 }
 ?>
 ```
+```bash
+# View: CSV upload Batch job running on the Mailjet infrastructure.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/csvimport/$ID_JOB 
+```
+```javascript
+/**
+ *
+ * View: CSV upload Batch job running on the Mailjet infrastructure.
+ *
+ */
+var mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+var request = mailjet
+	.get("csvimport")
+	.id($ID_JOB)
+	.request();
+request
+	.on('success', function (response, body) {
+		console.log (response.statusCode, body);
+	})
+	.on('error', function (err, response) {
+		console.log (response.statusCode, err);
+	});
+```
+```ruby
+# View: CSV upload Batch job running on the Mailjet infrastructure.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Csvimport.find($ID_JOB)
+```
 ```python
 """
 View: CSV upload Batch job running on the Mailjet infrastructure.
@@ -1290,42 +1326,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```bash
-# View: CSV upload Batch job running on the Mailjet infrastructure.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/csvimport/$ID_JOB 
-```
-```javascript
-/**
- *
- * View: CSV upload Batch job running on the Mailjet infrastructure.
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("csvimport")
-	.id($ID_JOB)
-	.request();
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-```ruby
-# View: CSV upload Batch job running on the Mailjet infrastructure.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Csvimport.find($ID_JOB)
 ```
 
 

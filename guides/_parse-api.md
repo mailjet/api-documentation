@@ -1,4 +1,5 @@
-#Receive emails
+<div id="receive-emails"></div>
+#Parse API: Process inbound emails
 
 The Parse API allows you to have emails parsed and its contents delivered to a webhook of your choice.
 

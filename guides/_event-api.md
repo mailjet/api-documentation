@@ -70,18 +70,6 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```bash
-# Create an handler for the open event
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/eventcallbackurl \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"EventType":"open",
-		"Url":"https://mydomain.com/event_handler"
-	}'
-```
 ```javascript
 /**
  *
@@ -103,6 +91,18 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
+```
+```bash
+# Create an handler for the open event
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/eventcallbackurl \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"EventType":"open",
+		"Url":"https://mydomain.com/event_handler"
+	}'
 ```
 ```ruby
 # Create an handler for the open event

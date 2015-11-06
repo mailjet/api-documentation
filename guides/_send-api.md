@@ -1020,11 +1020,10 @@ To send messages in bulk, package the multiple messages inside a <code>Messages<
 
 Mailjet system allows to insert datas in your text or html parts. 
 
-To do so, use <code>[[DATA_TYPE:DATA_NAME:DEFAULT_VALUE]]</code> where: 
+To do so, use <code>[[DATA_TYPE:DATA_NAME]]</code> where: 
 
 - <code>DATA_TYPE</code>: <code>var</code> for Vars specified in the API call or <code>data</code> for contact datas already available on Mailjet system 
 - <code>DATA_NAME</code>: name of the data you want to insert
-- <code>DEFAULT_VALUE</code>: default value that will be used if no data found 
 
 <div></div>
 ###Using vars and custom vars 
@@ -1042,8 +1041,8 @@ data = {
   'FromEmail': 'pilot@mailjet.com',
   'FromName': 'Mailjet Pilot',
   'Subject': 'Your email flight plan!',
-  'Text-part': 'Dear passenger, welcome to Mailjet! On this [[var:day:"monday"]], may the delivery force be with you!',
-  'Html-part': '<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:"monday"]], may the delivery force be with you!',
+  'Text-part': 'Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you!',
+  'Html-part': '<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you!',
   'Vars': {
 			"day": "Monday"
 		},
@@ -1069,8 +1068,8 @@ $params = array(
     "FromEmail" => "pilot@mailjet.com",
     "FromName" => "Mailjet Pilot",
     "Subject" => "Your email flight plan!",
-    "Text-part" => "Dear passenger, welcome to Mailjet! On this [[var:day:&#92;&#34;monday&#92;&#34;]], may the delivery force be with you!",
-    "Html-part" => "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:&#92;&#34;monday&#92;&#34;]], may the delivery force be with you!",
+    "Text-part" => "Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you!",
+    "Html-part" => "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you!",
     "Vars" => json_decode('{"day":"Monday"}', true),
     "Recipients" => json_decode('[{"Email":"passenger1@mailjet.com","Name":"passenger 1"},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]', true)
 );
@@ -1094,8 +1093,8 @@ variable = Mailjet::Send.create(
   'FromEmail' => 'pilot@mailjet.com',
   'FromName' => 'Mailjet Pilot',
   'Subject' => 'Your email flight plan!',
-  'Text-part' => 'Dear passenger, welcome to Mailjet! On this [[var:day:&#92;&#34;monday&#92;&#34;]], may the delivery force be with you!',
-  'Html-part' => '<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:&#92;&#34;monday&#92;&#34;]], may the delivery force be with you!',
+  'Text-part' => 'Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you!',
+  'Html-part' => '<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you!',
   'Vars' => {'day' => 'Monday'},
   'Recipients' => [
       {'Email' => 'passenger1@mailjet.com','Name' => 'passenger 1'},
@@ -1114,8 +1113,8 @@ curl -s \
 		"FromEmail":"pilot@mailjet.com",
 		"FromName":"Mailjet Pilot",
 		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! On this [[var:day:\"monday\"]], may the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:\"monday\"]], may the delivery force be with you!",
+		"Text-part":"Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you!",
+		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you!",
 		"Vars":{"day":"Monday"},
 		"Recipients":[{"Email":"passenger1@mailjet.com","Name":"passenger 1"},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]
 	}'
@@ -1134,8 +1133,8 @@ var request = mailjet
 		"FromEmail":"pilot@mailjet.com",
 		"FromName":"Mailjet Pilot",
 		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! On this [[var:day:\"monday\"]], may the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:\"monday\"]], may the delivery force be with you!",
+		"Text-part":"Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you!",
+		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you!",
 		"Vars":{"day":"Monday"},
 		"Recipients":[{"Email":"passenger1@mailjet.com","Name":"passenger 1"},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]
 	});
@@ -1167,8 +1166,8 @@ func main () {
       FromEmail: "pilot@mailjet.com",
       FromName: "Mailjet Pilot",
       Subject: "Your email flight plan!",
-      TextPart: "Dear passenger, welcome to Mailjet! On this [[var:day:\"monday\"]], may the delivery force be with you!",
-      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:\"monday\"]], may the delivery force be with you!",
+      TextPart: "Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you!",
+      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you!",
       Vars: MyVarsStruct {
         Day: "Monday",
       },
@@ -1194,7 +1193,7 @@ func main () {
 ```
 
 
-By using <code>Vars</code> in conjunction with the <code>[[var:VAR_NAME:DEFAULT_VALUE]]</code>, you can modify the content of you email.
+By using <code>Vars</code> in conjunction with the <code>[[var:VAR_NAME]]</code>, you can modify the content of you email.
 
 <div></div>
 
@@ -1211,8 +1210,8 @@ data = {
   'FromEmail': 'pilot@mailjet.com',
   'FromName': 'Mailjet Pilot',
   'Subject': 'Your email flight plan!',
-  'Text-part': 'Dear passenger, welcome to Mailjet! On this [[var:day:"monday"]], may the delivery force be with you! [[var:personalmessage:""]]',
-  'Html-part': '<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:"monday"]], may the delivery force be with you! [[var:personalmessage:""]]',
+  'Text-part': 'Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]',
+  'Html-part': '<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]',
   'Vars': {
 		"day": "Monday"
   },
@@ -1242,8 +1241,8 @@ $params = array(
     "FromEmail" => "pilot@mailjet.com",
     "FromName" => "Mailjet Pilot",
     "Subject" => "Your email flight plan!",
-    "Text-part" => "Dear passenger, welcome to Mailjet! On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
-    "Html-part" => "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
+    "Text-part" => "Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
+    "Html-part" => "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
     "Vars" => json_decode('{"day":"Monday"}', true),
     "Recipients" => json_decode('[{"Email":"passenger1@mailjet.com","Name":"passenger 1","Vars":{"day":"Tuesday","personalmessage":"Happy birthday!"}},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]', true)
 );
@@ -1267,8 +1266,8 @@ variable = Mailjet::Send.create(
   from_email: "pilot@mailjet.com",
   from_name: "Mailjet Pilot",
   subject: "Your email flight plan!",
-  text_part: "Dear passenger, welcome to Mailjet! On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
-  html_part: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
+  text_part: "Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
+  html_part: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
   vars: {'day' => 'Monday'},
   recipients: [
     {'Email' => 'passenger1@mailjet.com', 'Name' => 'passenger 1', 'Vars' => {'day' => 'Tuesday', 'personalmessage' => 'Happy birthday!'}},
@@ -1286,8 +1285,8 @@ curl -s \
 		"FromEmail":"pilot@mailjet.com",
 		"FromName":"Mailjet Pilot",
 		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
-		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
+		"Text-part":"Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
+		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
 		"Vars":{"day":"Monday"},
 		"Recipients":[{"Email":"passenger1@mailjet.com","Name":"passenger 1","Vars":{"day":"Tuesday","personalmessage":"Happy birthday!"}},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]
 	}'
@@ -1306,8 +1305,8 @@ var request = mailjet
 		"FromEmail":"pilot@mailjet.com",
 		"FromName":"Mailjet Pilot",
 		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
-		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
+		"Text-part":"Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
+		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
 		"Vars":{"day":"Monday"},
 		"Recipients":[{"Email":"passenger1@mailjet.com","Name":"passenger 1","Vars":{"day":"Tuesday","personalmessage":"Happy birthday!"}},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]
 	});
@@ -1343,8 +1342,8 @@ func main () {
       FromEmail: "pilot@mailjet.com",
       FromName: "Mailjet Pilot",
       Subject: "Your email flight plan!",
-      TextPart: "Dear passenger, welcome to Mailjet! On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
-      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
+      TextPart: "Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
+      HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
       Vars: MyVarsStruct {
         Day: "Monday",
       },
@@ -1520,7 +1519,9 @@ func main () {
 
 If the contact you are sending an email to is already in Mailjet system with some contact datas, you can leverage this information to personalise your email.
 
-Use <code>[[data:METADATA_NAME:DEFAULT_VALUE]]</code> to insert datas in your content.
+Use <code>[[data:METADATA_NAME]]</code> or <code>[[data:METADATA_NAME:DEFAULT_VALUE]]</code> to insert datas in your content.
+
+<code>DEFAULT_VALUE</code>is the default value that will be used if no data found.
 
 [More information](#personalisation-add-contact-properties) about how to add contact properties.
 
