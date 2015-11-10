@@ -137,50 +137,69 @@ The response will provide an <code>Email</code> address you can begin using imme
 
 ```json
 {
-   "Sender":"miss@mailjet.com",
-   "Recipient":"",
-   "Date":"20150410T160638",
-   "From":"Miss Mailjet <miss@mailjet.com>",
-   "Subject":"Hey! It's Friday!",
-   "Headers":{  
-      "Return-Path":"<miss@mailjet.com>",
-      "Received":"by 10.107.134.160 with HTTP; Fri, 10 Apr 2015 09:06:38 -0700 (PDT)",
-      "DKIM-Signature":"v=1; a=rsa-sha256; c=relaxed/relaxed;        d=mailjet.com; s=google;        h=mime-version:date:message-id:subject:from:to:content-type;        bh=tsc4ruu5r5loLtAFUwhFp8BIbKzV0AYljT0+Bb/QwWI=;        b=EMkUxZFdmVax53yBCOR4j7pbvv31c0L6+xQ8U/RbHaSH2/VnC2qY6ji6iOhezfoiYy         qpX2fRXCrVNa1tPSU077WMz6z782Fgm3QnONKgWJtVCLrkMtOfZHn+ahNpU3l8I7gSsb         OfWN4cOpYkJUijLfllFPY3p+337rPmZIKsrSA=",
-      "X-Google-DKIM-Signature":"v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:date:message-id:subject:from:to         :content-type;        bh=tsc4ruu5r5loLtAFUwhFp8BIbKzV0AYljT0+Bb/QwWI=;        b=AYNmg8LhUL1+oGQYBvV0yhE2DsNmaMA416enZAvSeQWQir6GfFMbe0N5eDVZ9/QmQK         cguylB8zG+UkJj6liZpfQkOnWZYfjaM1/J04yzPpGTo8eptNZaP1r7E1QKWGEBakldkg         1pIt3nlvIETqwBGMZj+vwYqjusuFPrbhKJxjAeGtLCFXHlP6ePFKEAf37sfRtfvxZ0Wl         8IuJqYSwNkSWqSb/0JzYkecKH1CGDhn5BhKs8VLRrKa/VoNmaEsq7wewpq6PrFCbsv0z         Xf+sl3LXJM5grybzGP+7p2PrbWruYGAdmxF6o38fqjMMCymKC9faQk6ReU/Hlh7J5IGm         Jovw==",
-      "X-Gm-Message-State":"ALoCoQlJBEYSiauMbHc8RXQpv3sUJvPmYAd7exYJKZIZFRZtFkSHqDEP59rQK6oIp9mCwPKCirCL",
-      "MIME-Version":"1.0",
-      "X-Received":"by 10.107.41.72 with SMTP id p69mr3774075iop.58.1428681998638; Fri, 10 Apr 2015 09:06:38 -0700 (PDT)",
-      "Date":"Fri, 10 Apr 2015 18:06:38 +0200",
-      "Message-ID":"<CAE5Zh0ZpHZ6G5DC+He5426a4RkVab7uWaTDwiMcHzOR=YB3urA@mail.gmail.com>",
-      "Subject":"Hey! It's Friday!",
-      "From":"Miss Mailjet <miss@mailjet.com>",
-      "To":"",
-      "Content-Type":"multipart/alternative; boundary=001a1141f3c406f1b2051360f37d"
-   },
-   "Parts":[  
-      {  
-         "Headers":{  
-            "Content-Type":"text/plain; charset=UTF-8"
-         },
-         "ContentRef":"Text-part"
-      },
-      {  
-         "Headers":{  
-            "Content-Type":"text/html; charset=UTF-8",
-            "Content-Transfer-Encoding":"quoted-printable"
-         },
-         "ContentRef":"Html-part"
-      }
-   ],
-   "Text-part":"Hi,\n\nImportant notice: it's Friday. Friday *afternoon*, even!\n\n\nHave a *great* weekend!\nThe Anonymous Friday Teller\n",
-   "Html-part":"<div dir=\"ltr\">Hi,<div><br></div><div>Important notice: it&#39;s Friday. Friday <i>afternoon</i>, even!</div><div><br><br></div><div>Have a <i style=\"font-weight:bold\">great</i> weekend!</div><div>The Anonymous Friday Teller</div></div>\n",
-   "SpamAssassinScore":"0.602",
-   "CustomID":"helloworld",
-   "Payload":"{'message': 'helloworld'}"
+	"Sender":"pilot@mailjet.com",
+	"Recipient":"passenger@mailjet.com",
+	"Date":"20150410T160638",
+	"From":"Pilot <pilot@mailjet.com>",
+	"Subject":"Hey! It's Friday!",
+	"Headers":{
+		"Return-Path": [
+			"<pilot@mailjet.com>"
+		],
+		"Received": [
+			"by 10.107.134.160 with HTTP; Fri, 10 Apr 2015 09:06:38 -0700 (PDT)",
+		],
+		"DKIM-Signature": [
+			"v=1; a=rsa-sha256; c=relaxed/relaxed;        d=mailjet.com; s=google;        h=mime-version:date:message-id:subject:from:to:content-type;        bh=tsc4ruu5r5loLtAFUwhFp8BIbKzV0AYljT0+Bb/QwWI=;        b=EMkUxZFdmVax53yBCOR4j7pbvv31c0L6+xQ8U/RbHaSH2/VnC2qY6ji6iOhezfoiYy         qpX2fRXCrVNa1tPSU077WMz6z782Fgm3QnONKgWJtVCLrkMtOfZHn+ahNpU3l8I7gSsb         OfWN4cOpYkJUijLfllFPY3p+337rPmZIKsrSA="
+		],
+		"MIME-Version": [ 
+			"1.0"
+		],
+		"Content-Transfer-Encoding": [
+			"quoted-printable" 
+		],
+		"Content-Type": [
+			"multipart/alternative; boundary=001a1141f3c406f1b2051360f37d"
+		],
+		"X-CSA-Complaints": [
+			"whitelist-complaints@eco.de" 
+		],
+		"List-Unsubscribe": [
+			"<mailto:unsub-e7221da9.org1.x61425y8x4pt@bnc3.mailjet.com>" 
+		],	
+		"X-Google-DKIM-Signature": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:date:message-id:subject:from:to         :content-type;        bh=tsc4ruu5r5loLtAFUwhFp8BIbKzV0AYljT0+Bb/QwWI=;        b=AYNmg8LhUL1+oGQYBvV0yhE2DsNmaMA416enZAvSeQWQir6GfFMbe0N5eDVZ9/QmQK         cguylB8zG+UkJj6liZpfQkOnWZYfjaM1/J04yzPpGTo8eptNZaP1r7E1QKWGEBakldkg         1pIt3nlvIETqwBGMZj+vwYqjusuFPrbhKJxjAeGtLCFXHlP6ePFKEAf37sfRtfvxZ0Wl         8IuJqYSwNkSWqSb/0JzYkecKH1CGDhn5BhKs8VLRrKa/VoNmaEsq7wewpq6PrFCbsv0z         Xf+sl3LXJM5grybzGP+7p2PrbWruYGAdmxF6o38fqjMMCymKC9faQk6ReU/Hlh7J5IGm         Jovw==",
+		"X-Gm-Message-State":"ALoCoQlJBEYSiauMbHc8RXQpv3sUJvPmYAd7exYJKZIZFRZtFkSHqDEP59rQK6oIp9mCwPKCirCL",
+		"X-Received":"by 10.107.41.72 with SMTP id p69mr3774075iop.58.1428681998638; Fri, 10 Apr 2015 09:06:38 -0700 (PDT)",
+		"Date":"Fri, 10 Apr 2015 18:06:38 +0200",
+		"Message-ID":"<CAE5Zh0ZpHZ6G5DC+He5426a4RkVab7uWaTDwiMcHzOR=YB3urA@mail.gmail.com>",
+		"Subject":"Hey! It's Friday!",
+		"From":"Pilot <pilot@mailjet.com>",
+		"To":"passenger@mailjet.com"
+	},
+	"Parts":[ 
+		{
+			"Headers":{ 
+				"Content-Type":"text/plain; charset=UTF-8"
+			},
+			"ContentRef":"Text-part"
+		},
+		{
+			"Headers":{
+				"Content-Type":"text/html; charset=UTF-8",
+				"Content-Transfer-Encoding":"quoted-printable"
+			},
+			"ContentRef":"Html-part"
+		}
+	],
+	"Text-part":"Hi,\n\nImportant notice: it's Friday. Friday *afternoon*, even!\n\n\nHave a *great* weekend!\nThe Anonymous Friday Teller\n",
+	"Html-part":"<div dir=\"ltr\">Hi,<div><br></div><div>Important notice: it&#39;s Friday. Friday <i>afternoon</i>, even!</div><div><br><br></div><div>Have a <i style=\"font-weight:bold\">great</i> weekend!</div><div>The Anonymous Friday Teller</div></div>\n",
+	"SpamAssassinScore":"0.602",
+	"CustomID":"helloworld",
+	"Payload":"{'message': 'helloworld'}"
 }
 ```
 
-When an email is sent to the email address associated with your instance of the Parse API, the contents of this email will be delivered to your webhook in a JSON format.  Note that the spam score of the email is delivered in the payload via SpamAssassin.
+When an email is sent to the email address associated with your instance of the Parse API, the contents of this email will be delivered to your webhook in a JSON format.  Note that the spam score of the email is delivered in the payload via <code>SpamAssassin</code>.
 
 This payload contains a lot of useful information about the message processed. 
 
@@ -201,7 +220,7 @@ If the parsed message contains attachments, they will be also included in the pa
 
 To retrieve them, you can either loop on the <code>Parts</code> collection and look for any part where the <code>ContentRef</code> property starts with Attachment or you can look directly for the <code>AttachmentN</code> property (where N is the ID of the attachment in the message, following their order). 
 
-The content of the attachments are always encoded in <a href="http://en.wikipedia.org/wiki/Base64" target="_blank">Base64</a>. 
+The content of the attachments are always encoded in <a href="http://en.wikipedia.org/wiki/Base64" target="_blank">Base64</a>. <code>Content-Transfer-Encoding</code> indicate the original encoding of the attachment.
 
 
 ```json
