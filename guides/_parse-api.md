@@ -147,10 +147,10 @@ The response will provide an <code>Email</code> address you can begin using imme
 			"<pilot@mailjet.com>"
 		],
 		"Received": [
-			"by 10.107.134.160 with HTTP; Fri, 10 Apr 2015 09:06:38 -0700 (PDT)",
+			"by 10.107.134.160 with HTTP; Fri, 10 Apr 2015 09:06:38 -0700 (PDT)"
 		],
 		"DKIM-Signature": [
-			"v=1; a=rsa-sha256; c=relaxed/relaxed;        d=mailjet.com; s=google;        h=mime-version:date:message-id:subject:from:to:content-type;        bh=tsc4ruu5r5loLtAFUwhFp8BIbKzV0AYljT0+Bb/QwWI=;        b=EMkUxZFdmVax53yBCOR4j7pbvv31c0L6+xQ8U/RbHaSH2/VnC2qY6ji6iOhezfoiYy         qpX2fRXCrVNa1tPSU077WMz6z782Fgm3QnONKgWJtVCLrkMtOfZHn+ahNpU3l8I7gSsb         OfWN4cOpYkJUijLfllFPY3p+337rPmZIKsrSA="
+			"v=1; a=rsa-sha256; c=relaxed/relaxed;        d=mailjet.com; s=google;        h=mime-version:date:message-id:subject:from:to:content-type;        bh=tsc4ruu5r5loLtAFUwhFp8BIbKzV0AYljT0+Bb/QwWI=;        b=............"
 		],
 		"MIME-Version": [ 
 			"1.0"
@@ -167,9 +167,15 @@ The response will provide an <code>Email</code> address you can begin using imme
 		"List-Unsubscribe": [
 			"<mailto:unsub-e7221da9.org1.x61425y8x4pt@bnc3.mailjet.com>" 
 		],	
-		"X-Google-DKIM-Signature": "v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:date:message-id:subject:from:to         :content-type;        bh=tsc4ruu5r5loLtAFUwhFp8BIbKzV0AYljT0+Bb/QwWI=;        b=AYNmg8LhUL1+oGQYBvV0yhE2DsNmaMA416enZAvSeQWQir6GfFMbe0N5eDVZ9/QmQK         cguylB8zG+UkJj6liZpfQkOnWZYfjaM1/J04yzPpGTo8eptNZaP1r7E1QKWGEBakldkg         1pIt3nlvIETqwBGMZj+vwYqjusuFPrbhKJxjAeGtLCFXHlP6ePFKEAf37sfRtfvxZ0Wl         8IuJqYSwNkSWqSb/0JzYkecKH1CGDhn5BhKs8VLRrKa/VoNmaEsq7wewpq6PrFCbsv0z         Xf+sl3LXJM5grybzGP+7p2PrbWruYGAdmxF6o38fqjMMCymKC9faQk6ReU/Hlh7J5IGm         Jovw==",
-		"X-Gm-Message-State":"ALoCoQlJBEYSiauMbHc8RXQpv3sUJvPmYAd7exYJKZIZFRZtFkSHqDEP59rQK6oIp9mCwPKCirCL",
-		"X-Received":"by 10.107.41.72 with SMTP id p69mr3774075iop.58.1428681998638; Fri, 10 Apr 2015 09:06:38 -0700 (PDT)",
+		"X-Google-DKIM-Signature": [
+			"v=1; a=rsa-sha256; c=relaxed/relaxed;        d=1e100.net; s=20130820;        h=x-gm-message-state:mime-version:date:message-id:subject:from:to         :content-type;        bh=tsc4ruu5r5loLtAFUwhFp8BIbKzV0AYljT0+Bb/QwWI=;        b=..........."
+		],
+		"X-Gm-Message-State": [
+			"ALoCoQlJBEYSiauMbHc8RXQpv3sUJvPmYAd7exYJKZIZFRZtFkSHqDEP59rQK6oIp9mCwPKCirCL"
+		],
+		"X-Received": [
+			"by 10.107.41.72 with SMTP id p69mr3774075iop.58.1428681998638; Fri, 10 Apr 2015 09:06:38 -0700 (PDT)"
+		],
 		"Date":"Fri, 10 Apr 2015 18:06:38 +0200",
 		"Message-ID":"<CAE5Zh0ZpHZ6G5DC+He5426a4RkVab7uWaTDwiMcHzOR=YB3urA@mail.gmail.com>",
 		"Subject":"Hey! It's Friday!",
@@ -210,6 +216,23 @@ In case you need to loop over every <code>Headers</code> or <code>Parts</code>, 
 In the <code>Parts</code> collection, the <code>ContentRef</code> property is here to link a specific part (<code>Html</code> or <code>Text</code> for instance) to its associated headers.
 
 Also, note that the <code>CustomID</code> and the <code>Payload</code> properties are returned back if they were provided in the original message sent through the [Send API](#send-transactional-email)
+
+Finally, be advised that most <code>Headers</code> will be provided as arrays containing the multiple header lines of the parsed email. Some headers in the payload will be represented by single strings: 
+
+ - Date 
+ - From 
+ - Sender
+ - Reply-To
+ - To 
+ - Cc 
+ - Bcc 
+ - Message-ID 
+ - In-Reply-To 
+ - References
+ - Subject
+ - Date
+
+
 
 ##Manage attachments
 
@@ -252,7 +275,7 @@ CustomId and Payload can be used for example to trace the conversation around yo
 
 To receive emails on your own domain name, set this domain in your [parseroute](/email-api/v3/parseroute/) instance. Then, add an MX entry on the domain or subdomain DNS to <code>parse.mailjet.com.</code> (final dot is important) and specify your email address based on your domain in the <code>Email</code> attribute.
 
-A less intrusive alternative is to setup a mail forwarding between your current mailbox to the Parse API send-to email automagically provided by Mailjet
+A less intrusive alternative is to setup a mail forwarding between your current mailbox to the Parse API send-to email automatically provided by Mailjet
 
 ```php
 <?php

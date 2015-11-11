@@ -24,6 +24,49 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
+```bash
+# Create an handler for the open event
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/eventcallbackurl \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"EventType":"open",
+		"Url":"https://mydomain.com/event_handler"
+	}'
+```
+```javascript
+/**
+ *
+ * Create an handler for the open event
+ *
+ */
+var mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+var request = mailjet
+	.post("eventcallbackurl")
+	.request({
+		"EventType":"open",
+		"Url":"https://mydomain.com/event_handler"
+	});
+request
+	.on('success', function (response, body) {
+		console.log (response.statusCode, body);
+	})
+	.on('error', function (err, response) {
+		console.log (response.statusCode, err);
+	});
+```
+```ruby
+# Create an handler for the open event
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler")
+```
 ```python
 """
 Create an handler for the open event
@@ -69,49 +112,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```javascript
-/**
- *
- * Create an handler for the open event
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.post("eventcallbackurl")
-	.request({
-		"EventType":"open",
-		"Url":"https://mydomain.com/event_handler"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-```bash
-# Create an handler for the open event
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/eventcallbackurl \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"EventType":"open",
-		"Url":"https://mydomain.com/event_handler"
-	}'
-```
-```ruby
-# Create an handler for the open event
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler")
 ```
 
 

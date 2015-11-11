@@ -42,15 +42,6 @@ curl -s \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/contact?Limit=150 
 ```
-```ruby
-# View : List of 150 contacts
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Contact.all(limit: "150")
-```
 ```javascript
 /**
  *
@@ -71,6 +62,15 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
+```
+```ruby
+# View : List of 150 contacts
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Contact.all(limit: "150")
 ```
 ```python
 """
@@ -353,27 +353,6 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
-``` go
-/*
-View : List of contact ordered by email in an ascending order
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Contact
-	_, _, err := mailjetClient.List("contact", &data, Filter("Sort", "email"))
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
 ```ruby
 # View : List of contact ordered by email in an ascending order
 Mailjet.configure do |config|
@@ -396,6 +375,27 @@ filters = {
   'Sort': 'email'
 }
 result = mailjet.contact.get(filters=filters)
+```
+``` go
+/*
+View : List of contact ordered by email in an ascending order
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	_, _, err := mailjetClient.List("contact", &data, Filter("Sort", "email"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 
 
@@ -500,6 +500,24 @@ To retrieve the same query only in descending order, amend the URL with <code>+D
 
 ##Resource Filters
 
+```php
+<?php
+// View : Contacts in ContactsList
+$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
+$params = array(
+	"method" => "GET",
+	"ContactsList" => "$ContactsListID"
+);
+$result = $mj->contact($params);
+if ($mj->_response_code == 200){
+   echo "success";
+   var_dump($result);
+} else {
+   echo "error - ".$mj->_response_code;
+   var_dump($mj->_response);
+}
+?>
+```
 ```bash
 # View : Contacts in ContactsList
 curl -s \
@@ -550,24 +568,6 @@ filters = {
   'ContactsList': '$ContactsListID'
 }
 result = mailjet.contact.get(filters=filters)
-```
-```php
-<?php
-// View : Contacts in ContactsList
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "GET",
-	"ContactsList" => "$ContactsListID"
-);
-$result = $mj->contact($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
-?>
 ```
 ``` go
 /*

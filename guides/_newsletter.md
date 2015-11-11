@@ -306,19 +306,6 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
-```bash
-# Create : Definition of available extra data items for contacts.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contactmetadata \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Datatype":"str",
-		"Name":"Age",
-		"NameSpace":"static"
-	}'
-```
 ```javascript
 /**
  *
@@ -366,6 +353,19 @@ data = {
   'NameSpace': 'static'
 }
 result = mailjet.contactmetadata.create(data=data)
+```
+```bash
+# Create : Definition of available extra data items for contacts.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contactmetadata \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Datatype":"str",
+		"Name":"Age",
+		"NameSpace":"static"
+	}'
 ```
 ``` go
 /*
@@ -1307,6 +1307,22 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
+```bash
+# Create : Newsletter data.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/newsletter \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Locale":"en_US",
+		"Sender":"MisterMailjet",
+		"SenderEmail":"Mister@mailjet.com",
+		"Subject":"Greetings from Mailjet",
+		"ContactsListID":"$ID_CONTACTSLIST",
+		"Title":"Friday newsletter"
+	}'
+```
 ```javascript
 /**
  *
@@ -1332,22 +1348,6 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
-```
-```bash
-# Create : Newsletter data.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/newsletter \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Locale":"en_US",
-		"Sender":"MisterMailjet",
-		"SenderEmail":"Mister@mailjet.com",
-		"Subject":"Greetings from Mailjet",
-		"ContactsListID":"$ID_CONTACTSLIST",
-		"Title":"Friday newsletter"
-	}'
 ```
 ```ruby
 # Create : Newsletter data.
@@ -1680,15 +1680,6 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
-```ruby
-# Create : Newsletter data.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Newsletter_test.create(id: $ID, recipients: [{ 'Email'=> 'mailjet@example.org', 'Name'=> 'Mailjet'}])
-```
 ```python
 """
 Create : Newsletter data.
@@ -1708,6 +1699,15 @@ data = {
 		]
 }
 result = mailjet.newsletter_test.create(id=id, data=data)
+```
+```ruby
+# Create : Newsletter data.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Newsletter_test.create(id: $ID, recipients: [{ 'Email'=> 'mailjet@example.org', 'Name'=> 'Mailjet'}])
 ```
 ``` go
 /*
@@ -2250,59 +2250,6 @@ if ($mj->_response_code == 201){
 }
 ?>
 ```
-```bash
-# Create : Newsletter data with segmentation.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/newsletter \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Title":"Mailjet greets every contact over 40",
-		"Locale":"en_US",
-		"Sender":"MisterMailjet",
-		"SenderEmail":"Mister@mailjet.com",
-		"Subject":"Greetings from Mailjet",
-		"ContactsListID":"$ID_CONTACTLIST",
-		"SegmentationID":"$ID_CONTACT_FILTER"
-	}'
-```
-```javascript
-/**
- *
- * Create : Newsletter data with segmentation.
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.post("newsletter")
-	.request({
-		"Title":"Mailjet greets every contact over 40",
-		"Locale":"en_US",
-		"Sender":"MisterMailjet",
-		"SenderEmail":"Mister@mailjet.com",
-		"Subject":"Greetings from Mailjet",
-		"ContactsListID":"$ID_CONTACTLIST",
-		"SegmentationID":"$ID_CONTACT_FILTER"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-```ruby
-# Create : Newsletter data with segmentation.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Newsletter.create(title: "Mailjet greets every contact over 40",locale: "en_US",sender: "MisterMailjet",sender_email: "Mister@mailjet.com",subject: "Greetings from Mailjet",contacts_list_id: "$ID_CONTACTLIST",segmentation_id: "$ID_CONTACT_FILTER")
-```
 ```python
 """
 Create : Newsletter data with segmentation.
@@ -2358,6 +2305,59 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
+```
+```bash
+# Create : Newsletter data with segmentation.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/newsletter \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Title":"Mailjet greets every contact over 40",
+		"Locale":"en_US",
+		"Sender":"MisterMailjet",
+		"SenderEmail":"Mister@mailjet.com",
+		"Subject":"Greetings from Mailjet",
+		"ContactsListID":"$ID_CONTACTLIST",
+		"SegmentationID":"$ID_CONTACT_FILTER"
+	}'
+```
+```javascript
+/**
+ *
+ * Create : Newsletter data with segmentation.
+ *
+ */
+var mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+var request = mailjet
+	.post("newsletter")
+	.request({
+		"Title":"Mailjet greets every contact over 40",
+		"Locale":"en_US",
+		"Sender":"MisterMailjet",
+		"SenderEmail":"Mister@mailjet.com",
+		"Subject":"Greetings from Mailjet",
+		"ContactsListID":"$ID_CONTACTLIST",
+		"SegmentationID":"$ID_CONTACT_FILTER"
+	});
+request
+	.on('success', function (response, body) {
+		console.log (response.statusCode, body);
+	})
+	.on('error', function (err, response) {
+		console.log (response.statusCode, err);
+	});
+```
+```ruby
+# Create : Newsletter data with segmentation.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Newsletter.create(title: "Mailjet greets every contact over 40",locale: "en_US",sender: "MisterMailjet",sender_email: "Mister@mailjet.com",subject: "Greetings from Mailjet",contacts_list_id: "$ID_CONTACTLIST",segmentation_id: "$ID_CONTACT_FILTER")
 ```
 
 
