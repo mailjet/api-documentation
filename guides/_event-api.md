@@ -7,21 +7,15 @@ The Event API is a very efficient way to do specific actions on your website (lo
 ##Endpoint URL
 ```php
 <?php
-// Create an handler for the open event
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "POST",
-	"EventType" => "open",
-	"Url" => "https://mydomain.com/event_handler"
-);
-$result = $mj->eventcallbackurl($params);
-if ($mj->_response_code == 201){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$body = [
+    'EventType' => "open",
+    'Url' => "https://mydomain.com/event_handler"
+];
+$response = $mj->post(Resources::$Eventcallbackurl, ['body' => $body]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -81,6 +75,30 @@ data = {
   'Url': 'https://mydomain.com/event_handler'
 }
 result = mailjet.eventcallbackurl.create(data=data)
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Eventcallbackurl;
+public class MyClass {
+    /**
+     * Create an handler for the open event
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Eventcallbackurl.resource)
+						.property(Eventcallbackurl.EVENTTYPE, "open")
+						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler");
+      response = client.post(request);
+      System.out.println(response.getData());
+    }
+}
 ```
 ``` go
 /*
@@ -336,22 +354,16 @@ Unsub event additional properties:
 
 ```php
 <?php
-// Create an grouped handler for the open event
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "POST",
-	"EventType" => "open",
-	"Url" => "https://mydomain.com/event_handler",
-	"Version" => "2"
-);
-$result = $mj->eventcallbackurl($params);
-if ($mj->_response_code == 201){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$body = [
+    'EventType' => "open",
+    'Url' => "https://mydomain.com/event_handler",
+    'Version' => "2"
+];
+$response = $mj->post(Resources::$Eventcallbackurl, ['body' => $body]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -445,6 +457,31 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Eventcallbackurl;
+public class MyClass {
+    /**
+     * Create an grouped handler for the open event
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Eventcallbackurl.resource)
+						.property(Eventcallbackurl.EVENTTYPE, "open")
+						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler")
+						.property(Eventcallbackurl.VERSION, "2");
+      response = client.post(request);
+      System.out.println(response.getData());
+    }
 }
 ```
 

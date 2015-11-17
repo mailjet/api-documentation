@@ -19,20 +19,14 @@ Mailjet API supports filter combination following these rules:
 
 ```php
 <?php
-// View : List of 150 contacts
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "GET",
-	"Limit" => "150"
-);
-$result = $mj->contact($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$filters = [
+  'Limit' => '150'
+];
+$response = $mj->get(Resources::$Contact, ['filters' => $filters]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -107,6 +101,29 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+public class MyClass {
+    /**
+     * View : List of 150 contacts
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Contact.resource)
+                  .filter(Contact.LIMIT, "150")
+      response = client.get(request);
+      System.out.println(response.getData());
+    }
+}
+```
 
 
 You can limit the number of results by applying the <code>Limit</code> filter. The default value is 10 and the maximum value is 1000. 'Limit=0' delivers the maximum amount of results - 1000.
@@ -116,20 +133,14 @@ You can limit the number of results by applying the <code>Limit</code> filter. T
 
 ```php
 <?php
-// View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "GET",
-	"Offset" => "25000"
-);
-$result = $mj->contact($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$filters = [
+  'Offset' => '25000'
+];
+$response = $mj->get(Resources::$Contact, ['filters' => $filters]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -204,27 +215,44 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+public class MyClass {
+    /**
+     * View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Contact.resource)
+                  .filter(Contact.OFFSET, "25000")
+      response = client.get(request);
+      System.out.println(response.getData());
+    }
+}
+```
 
 You can use the <code>Offset</code> filter to retrieve a list starting from a certain offset.
 <div></div>
 
 ```php
 <?php
-// View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "GET",
-	"Limit" => "150",
-	"Offset" => "25000"
-);
-$result = $mj->contact($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$filters = [
+  'Limit' => '150',
+  'Offset' => '25000'
+];
+$response = $mj->get(Resources::$Contact, ['filters' => $filters]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -301,6 +329,30 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+public class MyClass {
+    /**
+     * View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Contact.resource)
+                  .filter(Contact.LIMIT, "150")
+                  .filter(Contact.OFFSET, "25000")
+      response = client.get(request);
+      System.out.println(response.getData());
+    }
+}
+```
 
 The <code>Offset</code> filter can be combined with the <code>Limit</code> filter. 
 
@@ -309,20 +361,14 @@ The <code>Offset</code> filter can be combined with the <code>Limit</code> filte
 
 ```php
 <?php
-// View : List of contact ordered by email in an ascending order
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "GET",
-	"Sort" => "email"
-);
-$result = $mj->contact($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$filters = [
+  'Sort' => 'email'
+];
+$response = $mj->get(Resources::$Contact, ['filters' => $filters]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -397,6 +443,29 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+public class MyClass {
+    /**
+     * View : List of contact ordered by email in an ascending order
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Contact.resource)
+                  .filter(Contact.SORT, "email")
+      response = client.get(request);
+      System.out.println(response.getData());
+    }
+}
+```
 
 
 You can sort a GET query by specifying a property name as the value of the 'Sort' filter. The default sorting is ascending.  When a property name is postfixed with <code>+DESC</code> , the sort order is descending.  
@@ -406,20 +475,14 @@ Please note that the <code>Sort</code> filter does not work with all properties 
 <div></div>
 ```php
 <?php
-// View : List of contact ordered by email in reverse order
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "GET",
-	"Sort" => "email+DESC"
-);
-$result = $mj->contact($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$filters = [
+  'Sort' => 'email+DESC'
+];
+$response = $mj->get(Resources::$Contact, ['filters' => $filters]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -494,6 +557,29 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+public class MyClass {
+    /**
+     * View : List of contact ordered by email in reverse order
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Contact.resource)
+                  .filter(Contact.SORT, "email+DESC")
+      response = client.get(request);
+      System.out.println(response.getData());
+    }
+}
+```
 
 
 To retrieve the same query only in descending order, amend the URL with <code>+DESC</code>:
@@ -502,20 +588,14 @@ To retrieve the same query only in descending order, amend the URL with <code>+D
 
 ```php
 <?php
-// View : Contacts in ContactsList
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "GET",
-	"ContactsList" => "$ContactsListID"
-);
-$result = $mj->contact($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$filters = [
+  'ContactsList' => '$ContactsListID'
+];
+$response = $mj->get(Resources::$Contact, ['filters' => $filters]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -590,6 +670,29 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+public class MyClass {
+    /**
+     * View : Contacts in ContactsList
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Contact.resource)
+                  .filter(Contact.CONTACTSLIST, "$ContactsListID")
+      response = client.get(request);
+      System.out.println(response.getData());
+    }
+}
+```
 
 
 On each resource, the API provide specific filters. Visit the [reference](/email-api/v3/) to see what is available.
@@ -598,20 +701,11 @@ On each resource, the API provide specific filters. Visit the [reference](/email
 
 ```php
 <?php
-// View : Contact from email address
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "VIEW",
-	"ID" => "$EMAIL_ADDRESS_OR_CONTACT_ID",
-);
-$result = $mj->contact($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->get(Resources::$Contact, ['id' => $id]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -687,27 +781,52 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+public class MyClass {
+    /**
+     * View : Contact from email address
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Contact.resource);
+      response = client.get(request);
+      System.out.println(response.getData());
+    }
+}
+```
 
 
 You can access each unique element using unique key filter. Visit the [reference](/email-api/v3/) to see the keys available for each resource.
 
 <div></div>
+```python
+"""
+View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$EventType|$isBackup'
+result = mailjet.eventcallbackurl.get(id=id)
+```
 ```php
 <?php
-// View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "VIEW",
-	"ID" => "$EventType|$isBackup",
-);
-$result = $mj->eventcallbackurl($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->get(Resources::$Eventcallbackurl, ['id' => $id]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -746,18 +865,6 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Eventcallbackurl.find($EventType|$isBackup)
 ```
-```python
-"""
-View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$EventType|$isBackup'
-result = mailjet.eventcallbackurl.get(id=id)
-```
 ``` go
 /*
 View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
@@ -783,6 +890,28 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Eventcallbackurl;
+public class MyClass {
+    /**
+     * View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Eventcallbackurl.resource);
+      response = client.get(request);
+      System.out.println(response.getData());
+    }
+}
+```
 
 
 In some case the unique key consist of several informations, you can call this unique key combinaison by using the seperator <code>|</code>.
@@ -791,20 +920,14 @@ In some case the unique key consist of several informations, you can call this u
 
 ```php
 <?php
-// View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "GET",
-	"NameLike" => "$Name"
-);
-$result = $mj->liststatistics($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$filters = [
+  'NameLike' => '$Name'
+];
+$response = $mj->get(Resources::$Liststatistics, ['filters' => $filters]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -879,6 +1002,29 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Liststatistics;
+public class MyClass {
+    /**
+     * View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Liststatistics.resource)
+                  .filter(Liststatistics.NAMELIKE, "$Name")
+      response = client.get(request);
+      System.out.println(response.getData());
+    }
+}
+```
 
 
 The Mailjet API allows Like and Case Sensitive filtering on selected properties. Visit the [reference](/email-api/v3/) to see if a filter allows this functionality. 
@@ -895,20 +1041,14 @@ Example : <code>Name</code> filter on <code>[/contact/liststatistics](/email-api
 
 ```php
 <?php
-// View : Total number of contact
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "GET",
-	"countOnly" => "1"
-);
-$result = $mj->contact($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$filters = [
+  'countOnly' => '1'
+];
+$response = $mj->get(Resources::$Contact, ['filters' => $filters]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -981,6 +1121,29 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+public class MyClass {
+    /**
+     * View : Total number of contact
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Contact.resource)
+                  .filter(Contact.COUNTONLY, "1")
+      response = client.get(request);
+      System.out.println(response.getData());
+    }
 }
 ```
 

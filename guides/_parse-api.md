@@ -7,20 +7,14 @@ The Parse API allows you to have emails parsed and its contents delivered to a w
 
 ```php
 <?php
-// Create : ParseRoute description
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "POST",
-	"Url" => "https://www.mydomain.com/mj_parse.php"
-);
-$result = $mj->parseroute($params);
-if ($mj->_response_code == 201){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$body = [
+    'Url' => "https://www.mydomain.com/mj_parse.php"
+];
+$response = $mj->post(Resources::$Parseroute, ['body' => $body]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -106,6 +100,29 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Parseroute;
+public class MyClass {
+    /**
+     * Create : ParseRoute description
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Parseroute.resource)
+						.property(Parseroute.URL, "https://www.mydomain.com/mj_parse.php");
+      response = client.post(request);
+      System.out.println(response.getData());
+    }
 }
 ```
 
@@ -279,21 +296,15 @@ A less intrusive alternative is to setup a mail forwarding between your current 
 
 ```php
 <?php
-// Create : ParseRoute description
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-	"method" => "POST",
-	"Url" => "https://www.mydomain.com/mj_parse.php",
-	"Email" => "mjparse@mydomain.com"
-);
-$result = $mj->parseroute($params);
-if ($mj->_response_code == 201){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$body = [
+    'Url' => "https://www.mydomain.com/mj_parse.php",
+    'Email' => "mjparse@mydomain.com"
+];
+$response = $mj->post(Resources::$Parseroute, ['body' => $body]);
+$response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
@@ -383,6 +394,30 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Parseroute;
+public class MyClass {
+    /**
+     * Create : ParseRoute description
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Parseroute.resource)
+						.property(Parseroute.URL, "https://www.mydomain.com/mj_parse.php")
+						.property(Parseroute.EMAIL, "mjparse@mydomain.com");
+      response = client.post(request);
+      System.out.println(response.getData());
+    }
 }
 ```
 
