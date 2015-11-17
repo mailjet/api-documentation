@@ -58,20 +58,6 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php")
 ```
-```python
-"""
-Create : ParseRoute description
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Url': 'https://www.mydomain.com/mj_parse.php'
-}
-result = mailjet.parseroute.create(data=data)
-```
 ``` go
 /*
 Create : ParseRoute description
@@ -101,6 +87,20 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
+```
+```python
+"""
+Create : ParseRoute description
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Url': 'https://www.mydomain.com/mj_parse.php'
+}
+result = mailjet.parseroute.create(data=data)
 ```
 ```java
 package com.my.project;

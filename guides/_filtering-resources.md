@@ -422,27 +422,6 @@ filters = {
 }
 result = mailjet.contact.get(filters=filters)
 ```
-``` go
-/*
-View : List of contact ordered by email in an ascending order
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Contact
-	_, _, err := mailjetClient.List("contact", &data, Filter("Sort", "email"))
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
@@ -466,6 +445,27 @@ public class MyClass {
     }
 }
 ```
+``` go
+/*
+View : List of contact ordered by email in an ascending order
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	_, _, err := mailjetClient.List("contact", &data, Filter("Sort", "email"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 
 
 You can sort a GET query by specifying a property name as the value of the 'Sort' filter. The default sorting is ascending.  When a property name is postfixed with <code>+DESC</code> , the sort order is descending.  
@@ -484,13 +484,6 @@ $filters = [
 $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# View : List of contact ordered by email in reverse order
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact?Sort=email+DESC 
 ```
 ```javascript
 /**
@@ -556,6 +549,13 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
+```
+```bash
+# View : List of contact ordered by email in reverse order
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact?Sort=email+DESC 
 ```
 ```java
 package com.my.project;
@@ -756,6 +756,28 @@ mailjet = Client(auth=(api_key, api_secret))
 id = '$EMAIL_ADDRESS_OR_CONTACT_ID'
 result = mailjet.contact.get(id=id)
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+public class MyClass {
+    /**
+     * View : Contact from email address
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Contact.resource);
+      response = client.get(request);
+      System.out.println(response.getData());
+    }
+}
+```
 ``` go
 /*
 View : Contact from email address
@@ -781,45 +803,11 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contact;
-public class MyClass {
-    /**
-     * View : Contact from email address
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Contact.resource);
-      response = client.get(request);
-      System.out.println(response.getData());
-    }
-}
-```
 
 
 You can access each unique element using unique key filter. Visit the [reference](/email-api/v3/) to see the keys available for each resource.
 
 <div></div>
-```python
-"""
-View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$EventType|$isBackup'
-result = mailjet.eventcallbackurl.get(id=id)
-```
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -828,13 +816,6 @@ $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'
 $response = $mj->get(Resources::$Eventcallbackurl, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/eventcallbackurl/$EventType|$isBackup 
 ```
 ```javascript
 /**
@@ -855,6 +836,13 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
+```
+```bash
+# View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/eventcallbackurl/$EventType|$isBackup 
 ```
 ```ruby
 # View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
@@ -889,6 +877,18 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
+```
+```python
+"""
+View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$EventType|$isBackup'
+result = mailjet.eventcallbackurl.get(id=id)
 ```
 ```java
 package com.my.project;

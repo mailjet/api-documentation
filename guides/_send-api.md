@@ -42,17 +42,6 @@ $response = $mj->post(Resources::$Sender, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
-# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/sender \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Email":"anothersender@mailjet.com"
-	}'
-```
 ```javascript
 /**
  *
@@ -73,6 +62,17 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
+```
+```bash
+# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/sender \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Email":"anothersender@mailjet.com"
+	}'
 ```
 ```ruby
 # Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
@@ -1299,15 +1299,14 @@ public class MyClass {
 ```
 ```php
 <?php
-<<<<<<< HEAD
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
     'FromEmail' => "pilot@mailjet.com",
     'FromName' => "Mailjet Pilot",
     'Subject' => "Your email flight plan!",
-    'Text-part' => "Dear passenger, welcome to Mailjet! On this [[var:day:\"monday\"]], may the delivery force be with you!",
-    'Html-part' => "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:\"monday\"]], may the delivery force be with you!",
+    'Text-part' => "Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you!",
+    'Html-part' => "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you!",
     'Vars' => [
         'day' => "Monday"
     ],
@@ -1324,28 +1323,6 @@ $body = [
 ]
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
-=======
-// This calls sends an email to the given recipient.
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-    "method" => "POST",
-    "FromEmail" => "pilot@mailjet.com",
-    "FromName" => "Mailjet Pilot",
-    "Subject" => "Your email flight plan!",
-    "Text-part" => "Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you!",
-    "Html-part" => "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you!",
-    "Vars" => json_decode('{"day":"Monday"}', true),
-    "Recipients" => json_decode('[{"Email":"passenger1@mailjet.com","Name":"passenger 1"},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]', true)
-);
-$result = $mj->send($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
->>>>>>> master
 ?>
 ```
 ``` ruby
@@ -1538,15 +1515,14 @@ result = mailjet.send.create(data=data)
 ```
 ```php
 <?php
-<<<<<<< HEAD
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
     'FromEmail' => "pilot@mailjet.com",
     'FromName' => "Mailjet Pilot",
     'Subject' => "Your email flight plan!",
-    'Text-part' => "Dear passenger, welcome to Mailjet! On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
-    'Html-part' => "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day:\"monday\"]], may the delivery force be with you! [[var:personalmessage:\"\"]]",
+    'Text-part' => "Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
+    'Html-part' => "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
     'Vars' => [
         'day' => "Monday"
     ],
@@ -1567,28 +1543,6 @@ $body = [
 ]
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
-=======
-// This calls sends an email to the given recipient.
-$mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-    "method" => "POST",
-    "FromEmail" => "pilot@mailjet.com",
-    "FromName" => "Mailjet Pilot",
-    "Subject" => "Your email flight plan!",
-    "Text-part" => "Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
-    "Html-part" => "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
-    "Vars" => json_decode('{"day":"Monday"}', true),
-    "Recipients" => json_decode('[{"Email":"passenger1@mailjet.com","Name":"passenger 1","Vars":{"day":"Tuesday","personalmessage":"Happy birthday!"}},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]', true)
-);
-$result = $mj->send($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
->>>>>>> master
 ?>
 ```
 ``` ruby
@@ -2265,6 +2219,15 @@ curl -s \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/messagesentstatistics?CustomID=PassengerEticket1234 
 ```
+```ruby
+# View : API Key Statistical campaign/message data.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Messagesentstatistics.all(custom_id: "PassengerEticket1234")
+```
 ```javascript
 /**
  *
@@ -2285,15 +2248,6 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
-```
-```ruby
-# View : API Key Statistical campaign/message data.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Messagesentstatistics.all(custom_id: "PassengerEticket1234")
 ```
 ```python
 """

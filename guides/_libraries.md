@@ -2,7 +2,7 @@
 
 Mailjet maintains several wrappers and resources to make your life easier: 
 
- - PHP : <a href="https://github.com/mailjet/mailjet-apiv3-php-simple" target="_blank">github</a>
+ - PHP : <a href="https://github.com/mailjet/mailjet-apiv3-php" target="_blank">github</a>
  - NodeJs : <a href="https://github.com/mailjet/mailjet-apiv3-nodejs" target="_blank">ES5 github</a>, <a href="https://github.com/mailjet/mailjet-apiv3-nodejs-es2015" target="_blank">ES6 github</a> 
  - Ruby : <a href="https://github.com/mailjet/mailjet-gem" target="_blank">github</a>
  - Python : <a href="https://github.com/mailjet/mailjet-apiv3-python" target="_blank">github</a>
