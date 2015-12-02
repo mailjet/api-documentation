@@ -79,6 +79,8 @@ filters = {
   'Limit': '150'
 }
 result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -118,8 +120,9 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
       request = new MailjetRequest(Contact.resource)
-                  .filter(Contact.LIMIT, "150")
+                  .filter(Contact.LIMIT, "150");
       response = client.get(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -193,6 +196,8 @@ filters = {
   'Offset': '25000'
 }
 result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -232,8 +237,9 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
       request = new MailjetRequest(Contact.resource)
-                  .filter(Contact.OFFSET, "25000")
+                  .filter(Contact.OFFSET, "25000");
       response = client.get(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -307,6 +313,8 @@ filters = {
   'Offset': '25000'
 }
 result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -347,8 +355,9 @@ public class MyClass {
       client = new MailjetClient("api key", "api secret");
       request = new MailjetRequest(Contact.resource)
                   .filter(Contact.LIMIT, "150")
-                  .filter(Contact.OFFSET, "25000")
+                  .filter(Contact.OFFSET, "25000");
       response = client.get(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -421,29 +430,8 @@ filters = {
   'Sort': 'email'
 }
 result = mailjet.contact.get(filters=filters)
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contact;
-public class MyClass {
-    /**
-     * View : List of contact ordered by email in an ascending order
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Contact.resource)
-                  .filter(Contact.SORT, "email")
-      response = client.get(request);
-      System.out.println(response.getData());
-    }
-}
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -466,6 +454,30 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+public class MyClass {
+    /**
+     * View : List of contact ordered by email in an ascending order
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Contact.resource)
+                  .filter(Contact.SORT, "email");
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 
 
 You can sort a GET query by specifying a property name as the value of the 'Sort' filter. The default sorting is ascending.  When a property name is postfixed with <code>+DESC</code> , the sort order is descending.  
@@ -484,6 +496,13 @@ $filters = [
 $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```bash
+# View : List of contact ordered by email in reverse order
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact?Sort=email+DESC 
 ```
 ```javascript
 /**
@@ -528,6 +547,8 @@ filters = {
   'Sort': 'email+DESC'
 }
 result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -550,13 +571,6 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```bash
-# View : List of contact ordered by email in reverse order
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact?Sort=email+DESC 
-```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
@@ -574,8 +588,9 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
       request = new MailjetRequest(Contact.resource)
-                  .filter(Contact.SORT, "email+DESC")
+                  .filter(Contact.SORT, "email+DESC");
       response = client.get(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -648,6 +663,8 @@ filters = {
   'ContactsList': '$ContactsListID'
 }
 result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -687,8 +704,9 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
       request = new MailjetRequest(Contact.resource)
-                  .filter(Contact.CONTACTSLIST, "$ContactsListID")
+                  .filter(Contact.CONTACTSLIST, "$ContactsListID");
       response = client.get(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -755,28 +773,8 @@ api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
 id = '$EMAIL_ADDRESS_OR_CONTACT_ID'
 result = mailjet.contact.get(id=id)
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contact;
-public class MyClass {
-    /**
-     * View : Contact from email address
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Contact.resource);
-      response = client.get(request);
-      System.out.println(response.getData());
-    }
-}
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -803,6 +801,29 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+public class MyClass {
+    /**
+     * View : Contact from email address
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Contact.resource);
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 
 
 You can access each unique element using unique key filter. Visit the [reference](/email-api/v3/) to see the keys available for each resource.
@@ -816,6 +837,13 @@ $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'
 $response = $mj->get(Resources::$Eventcallbackurl, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```bash
+# View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/eventcallbackurl/$EventType|$isBackup 
 ```
 ```javascript
 /**
@@ -837,13 +865,6 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
-```bash
-# View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/eventcallbackurl/$EventType|$isBackup 
-```
 ```ruby
 # View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
 Mailjet.configure do |config|
@@ -852,6 +873,20 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Eventcallbackurl.find($EventType|$isBackup)
+```
+```python
+"""
+View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$EventType|$isBackup'
+result = mailjet.eventcallbackurl.get(id=id)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -878,18 +913,6 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```python
-"""
-View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$EventType|$isBackup'
-result = mailjet.eventcallbackurl.get(id=id)
-```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
@@ -908,6 +931,7 @@ public class MyClass {
       client = new MailjetClient("api key", "api secret");
       request = new MailjetRequest(Eventcallbackurl.resource);
       response = client.get(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -980,6 +1004,8 @@ filters = {
   'NameLike': '$Name'
 }
 result = mailjet.liststatistics.get(filters=filters)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -1019,8 +1045,9 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
       request = new MailjetRequest(Liststatistics.resource)
-                  .filter(Liststatistics.NAMELIKE, "$Name")
+                  .filter(Liststatistics.NAMELIKE, "$Name");
       response = client.get(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -1101,6 +1128,8 @@ filters = {
   'countOnly': '1'
 }
 result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -1140,8 +1169,9 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
       request = new MailjetRequest(Contact.resource)
-                  .filter(Contact.COUNTONLY, "1")
+                  .filter(Contact.COUNTONLY, "1");
       response = client.get(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }

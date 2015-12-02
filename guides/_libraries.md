@@ -43,7 +43,7 @@ Check out a simple example of NodeJS implementation.
  - <a href="https://nodejs-wrapper-demo.mailjet.com/" target="_blank">Online Demo</a>
  - <a href="https://github.com/GuillaumeBadi/mailjet-js-tutorial" target="_blank">Sources on GitHub</a>
 
-## Reply by email, simple messaging app
+## Reply by email, messaging app
 
 This is a messaging app example which lets a group of people communicate together. If a user tagged in a message is currently offline, he’ll receive an email notification so that he won’t miss a beat and can reply (directly by email) even if he wants to stay offline.
 

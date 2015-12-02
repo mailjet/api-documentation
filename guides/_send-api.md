@@ -36,11 +36,22 @@ require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
-    'Email' => "anothersender@mailjet.com"
+    'Email' => "anothersender@example.com"
 ];
 $response = $mj->post(Resources::$Sender, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```bash
+# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/sender \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Email":"anothersender@example.com"
+	}'
 ```
 ```javascript
 /**
@@ -53,7 +64,7 @@ var mailjet = require ('node-mailjet')
 var request = mailjet
 	.post("sender")
 	.request({
-		"Email":"anothersender@mailjet.com"
+		"Email":"anothersender@example.com"
 	});
 request
 	.on('success', function (response, body) {
@@ -63,17 +74,6 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
-```bash
-# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/sender \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Email":"anothersender@mailjet.com"
-	}'
-```
 ```ruby
 # Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
 Mailjet.configure do |config|
@@ -81,21 +81,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Sender.create(email: "anothersender@mailjet.com")
-```
-```python
-"""
-Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Email': 'anothersender@mailjet.com'
-}
-result = mailjet.sender.create(data=data)
+variable = Mailjet::Sender.create(email: "anothersender@example.com")
 ```
 ``` go
 /*
@@ -117,7 +103,7 @@ func main () {
 	fmr := &FullMailjetRequest{
 	  Info: mr,
 	  Payload: &resources.Sender {
-      Email: "anothersender@mailjet.com",
+      Email: "anothersender@example.com",
     },
 	}
 	err := mailjetClient.Post(fmr, &data)
@@ -126,6 +112,22 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
+```
+```python
+"""
+Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Email': 'anothersender@example.com'
+}
+result = mailjet.sender.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```java
 package com.my.project;
@@ -144,8 +146,9 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
       request = new MailjetRequest(Sender.resource)
-						.property(Sender.EMAIL, "anothersender@mailjet.com");
+						.property(Sender.EMAIL, "anothersender@example.com");
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -179,6 +182,8 @@ data = {
 	'Recipients': [{'Email':'passenger@mailjet.com'}]
 }
 result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -216,6 +221,7 @@ func main () {
 ```
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
@@ -229,7 +235,7 @@ $body = [
             'Email' => "passenger@mailjet.com"
         ]
     ]
-]
+];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
@@ -251,9 +257,9 @@ variable = Mailjet::Send.create(
 ```java
 package MyClass;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Email;
 public class MyClass {
     /**
@@ -274,6 +280,7 @@ public class MyClass {
                 .put(new JSONObject()
                     .put("Email", "passenger@mailjet.com")));
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -383,13 +390,15 @@ data = {
 	]
 }
 result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```java
 package MyClass;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Email;
 public class MyClass {
     /**
@@ -414,12 +423,14 @@ public class MyClass {
                     .put("Email", "passenger2@mailjet.com")
                     .put("Name", "passenger 2")));
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
 ```
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
@@ -438,7 +449,7 @@ $body = [
             'Name' => "passenger 2"
         ]
     ]
-]
+];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
@@ -587,13 +598,15 @@ data = {
 		}]
 }
 result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```java
 package MyClass;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Email;
 public class MyClass {
     /**
@@ -666,6 +679,7 @@ func main () {
 ```
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
@@ -686,7 +700,7 @@ $body = [
             'content' => "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"
         ]
     ]
-]
+];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
@@ -785,13 +799,15 @@ data = {
 		]
 }
 result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```java
 package MyClass;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Email;
 public class MyClass {
     /**
@@ -817,12 +833,14 @@ public class MyClass {
                     .put("Filename", "logo.gif")
                     .put("content", "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")));
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
 ```
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
@@ -843,7 +861,7 @@ $body = [
             'content' => "R0lGODlhEAAQAOYAAP////748v39/Pvq1vr6+lJSVeqlK/zqyv7+/unKjJ+emv78+fb29pucnfrlwvTCi9ra2vTCa6urrWdoaurr6/Pz8uHh4vn49PO7QqGfmumaN+2uS1ZWWfr27uyuLnBxd/z8+0pLTvHAWvjar/zr2Z6cl+jal+2kKmhqcEJETvHQbPb07lBRVPv6+cjJycXFxn1+f//+/f337nF0efO/Mf306NfW0fjHSJOTk/TKlfTp0Prlx/XNj83HuPfEL+/v8PbJgueXJOzp4MG8qUNES9fQqN3d3vTJa/vq1f317P769f/8+gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjY5ODYxMzYzMkJCMTFFMDkzQkFFMkFENzVGN0JGRkYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MjY5ODYxMzczMkJCMTFFMDkzQkFFMkFENzVGN0JGRkYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyNjk4NjEzNDMyQkIxMUUwOTNCQUUyQUQ3NUY3QkZGRiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyNjk4NjEzNTMyQkIxMUUwOTNCQUUyQUQ3NUY3QkZGRiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAEAAAAALAAAAAAQABAAAAdUgACCg4SFhoeIiYRGLhaKhA0TMDgSLxAUiEIZHAUsIUQpKAo9Og6FNh8zJUNFJioYQIgJRzc+NBEkiAcnBh4iO4o8QRsjj0gaOY+CDwPKzs/Q0YSBADs="
         ]
     ]
-]
+];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
@@ -989,13 +1007,15 @@ data = {
 	]
 }
 result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```java
 package MyClass;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Email;
 public class MyClass {
     /**
@@ -1029,12 +1049,14 @@ public class MyClass {
                     .put("Text-part", "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!")
                     .put("Html-part", "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!")));
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
 ```
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
@@ -1066,7 +1088,7 @@ $body = [
             'Html-part' => "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!"
         ]
     ]
-]
+];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
@@ -1260,13 +1282,15 @@ data = {
 	]
 }
 result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```java
 package MyClass;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Email;
 public class MyClass {
     /**
@@ -1293,12 +1317,14 @@ public class MyClass {
                     .put("Email", "passenger2@mailjet.com")
                     .put("Name", "passenger 2")));
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
 ```
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
@@ -1320,7 +1346,7 @@ $body = [
             'Name' => "passenger 2"
         ]
     ]
-]
+];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
@@ -1442,9 +1468,9 @@ By using <code>Vars</code> in conjunction with the <code>[[var:VAR_NAME]]</code>
 ```java
 package MyClass;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Email;
 public class MyClass {
     /**
@@ -1474,6 +1500,7 @@ public class MyClass {
                     .put("Email", "passenger2@mailjet.com")
                     .put("Name", "passenger 2")));
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -1512,9 +1539,12 @@ data = {
 	]
 }
 result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
@@ -1540,7 +1570,7 @@ $body = [
             'Name' => "passenger 2"
         ]
     ]
-]
+];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
@@ -1671,9 +1701,9 @@ To go further in personalisation <code>Vars</code> is also available for each re
 ```java
 package MyClass;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Email;
 public class MyClass {
     /**
@@ -1698,6 +1728,7 @@ public class MyClass {
                     .put("Email", "passenger2@mailjet.com")
                     .put("Name", "passenger 2")));
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -1717,9 +1748,12 @@ data = {
 	"Recipients":[{"Email":"passenger1@mailjet.com","Name":"passenger 1"},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]
 }
 result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
@@ -1738,7 +1772,7 @@ $body = [
             'Name' => "passenger 2"
         ]
     ]
-]
+];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
@@ -1855,9 +1889,9 @@ Use <code>[[data:METADATA_NAME]]</code> or <code>[[data:METADATA_NAME:DEFAULT_VA
 ```java
 package MyClass;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Email;
 public class MyClass {
     /**
@@ -1880,6 +1914,7 @@ public class MyClass {
 						.property(Email.HEADERS, new JSONObject()
                 .put("Reply-To", "copilot@mailjet.com"));
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -1900,9 +1935,12 @@ data = {
 	"Headers":  {"Reply-To":"copilot@mailjet.com"}
 }
 result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
@@ -1919,7 +1957,7 @@ $body = [
     'Headers' => [
         'Reply-To' => "copilot@mailjet.com"
     ]
-]
+];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
@@ -1953,7 +1991,7 @@ curl -s \
 		"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
 		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
 		"Recipients":[{"Email":"passenger@mailjet.com"}],
-		"Headers" => {"Reply-To":"copilot@mailjet.com"}
+		"Headers" : {"Reply-To":"copilot@mailjet.com"}
 	}'
 ```
 ```javascript
@@ -2039,9 +2077,9 @@ These custom pieces of information are returned back in the events you registere
 ```java
 package MyClass;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Email;
 public class MyClass {
     /**
@@ -2063,6 +2101,7 @@ public class MyClass {
                     .put("Email", "passenger@mailjet.com")))
 						.property(Email.MJCUSTOMID, "PassengerEticket1234");
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -2083,9 +2122,12 @@ data = {
 	"Mj-CustomID":"PassengerEticket1234"
 }
 result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
@@ -2096,7 +2138,7 @@ $body = [
     'Html-part' => "<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
     'Recipients' => [['Email' => "passenger@mailjet.com"]],
     'Mj-CustomID' => "PassengerEticket1234"
-]
+];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
@@ -2219,15 +2261,6 @@ curl -s \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/messagesentstatistics?CustomID=PassengerEticket1234 
 ```
-```ruby
-# View : API Key Statistical campaign/message data.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Messagesentstatistics.all(custom_id: "PassengerEticket1234")
-```
 ```javascript
 /**
  *
@@ -2249,6 +2282,15 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
+```ruby
+# View : API Key Statistical campaign/message data.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Messagesentstatistics.all(custom_id: "PassengerEticket1234")
+```
 ```python
 """
 View : API Key Statistical campaign/message data.
@@ -2262,6 +2304,8 @@ filters = {
   'CustomID': 'PassengerEticket1234'
 }
 result = mailjet.messagesentstatistics.get(filters=filters)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -2301,8 +2345,9 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
       request = new MailjetRequest(Messagesentstatistics.resource)
-                  .filter(Messagesentstatistics.CUSTOMID, "PassengerEticket1234")
+                  .filter(Messagesentstatistics.CUSTOMID, "PassengerEticket1234");
       response = client.get(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -2317,9 +2362,9 @@ From then, your <code>CustomID</code> is linked to our own Message ID. You can a
 ```java
 package MyClass;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Email;
 public class MyClass {
     /**
@@ -2341,6 +2386,7 @@ public class MyClass {
                     .put("Email", "passenger@mailjet.com")))
 						.property(Email.MJEVENTPAYLOAD, "Eticket,1234,row,15,seat,B");
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -2361,9 +2407,12 @@ data = {
 	"Mj-EventPayLoad":"Eticket,1234,row,15,seat,B"
 }
 result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
@@ -2374,7 +2423,7 @@ $body = [
     'Html-part' => "<h3>Dear passenger, welcome to Mailjet!</h3><br />May the delivery force be with you!",
     'Recipients' => [['Email' => "passenger@mailjet.com"]],
     'Mj-EventPayLoad' => "Eticket,1234,row,15,seat,B"
-]
+];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
@@ -2477,8 +2526,8 @@ func main () {
 
 Sometimes, you need more than just an ID to represent the context to what a specific message is attached to. For this purpose, we let you insert a payload in the message which can be of any format (XML, JSON, CSV, etc). To take advantage of this, just pass the payload you want in the <code>Mj-EventPayLoad</code> property.
 
-
-##Regrouping messages into a campaign
+<div id="regrouping-messages-into-a-campaign"></div>
+##Grouping into a campaign
 
 ``` python
 """
@@ -2500,13 +2549,15 @@ data = {
   'Mj-deduplicatecampaign': '1'
 }
 result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```java
 package MyClass;
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Email;
 public class MyClass {
     /**
@@ -2529,12 +2580,14 @@ public class MyClass {
 						.property(Email.MJCAMPAIGN, "SendAPI_campaign")
 						.property(Email.MJDEDUPLICATECAMPAIGN, "1");
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
 ```
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
@@ -2550,7 +2603,7 @@ $body = [
     ],
     'Mj-campaign' => "SendAPI_campaign",
     'Mj-deduplicatecampaign' => 1
-]
+];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
@@ -2680,6 +2733,7 @@ Cc, Bcc | May include the name part: <code>john@example.com</code> or <code>&lt;
 Subject | At least 1 char, maximum length is 255 chars <br />**MANDATORY - MAX SUBJECTS: 1**
 Text-part | Provides the Text part of the message<br />Mandatory if the HTML param is not specified<br />**MANDATORY IF NO HTML - MAX PARTS: 1**
 Html-part | Provides the HTML part of the message<br />Mandatory if the text param is not specified<br />**MANDATORY IF NO TEXT - MAX PARTS: 1**
+Mj-TemplateID | The Template ID or Name to use as this email content. Overrides the HTML/Text parts if any.**MANDATORY IF NO HTML/TEXT - MAX TEMPLATEID: 1**
 Attachments | Attach files automatically to this Email<br />Sum of all attachments, including inline may not exceed 15 MB total<br />Sample: [{"Content-type": "MIME TYPE", "Filename": "FILENAME.EXT", "content":"BASE64 ENCODED CONTENT"}] 
 Inline_attachments | Attach a file for inline use via <code>cid:FILENAME.EXT</code><br />Sum of all attachements, including inline may not exceed 15 MB total<br />Sample: [{"Content-type": "MIME TYPE", "Filename": "FILENAME.EXT", "content":"BASE64 ENCODED CONTENT"}]
 Mj-prio | Manage message processing priority inside your account (API key) scheduling queue.<br />Default is <code>2</code> as in the SMTP submission.<br />Equivalent of using <code>X-Mailjet-Prio</code> header through SMTP<br /><a href="https://app.mailjet.com/docs/email-priority-management" target="_blank">More information</a>

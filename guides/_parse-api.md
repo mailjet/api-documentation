@@ -1,7 +1,10 @@
 <div id="receive-emails"></div>
-#Parse API: Process inbound emails
+<div id="#parse-api-process-inbound-emails"></div>
+#Parse API: inbound emails
 
-The Parse API allows you to have emails parsed and its contents delivered to a webhook of your choice.
+The Parse API allows you to have inbound emails parsed and their content delivered to a webhook of your choice. 
+
+It will make the processing of inbound messages easier as Mailjet will do all the job of sifting through and organising all the information in headers, content and attachments. What's left to do is just to save the information in your CRM or database. 
 
 ##Basic Setup
 
@@ -58,6 +61,22 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php")
 ```
+```python
+"""
+Create : ParseRoute description
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Url': 'https://www.mydomain.com/mj_parse.php'
+}
+result = mailjet.parseroute.create(data=data)
+print result.status_code
+print result.json()
+```
 ``` go
 /*
 Create : ParseRoute description
@@ -88,20 +107,6 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```python
-"""
-Create : ParseRoute description
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Url': 'https://www.mydomain.com/mj_parse.php'
-}
-result = mailjet.parseroute.create(data=data)
-```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
@@ -121,6 +126,7 @@ public class MyClass {
       request = new MailjetRequest(Parseroute.resource)
 						.property(Parseroute.URL, "https://www.mydomain.com/mj_parse.php");
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -145,10 +151,9 @@ public class MyClass {
 ```
 
 
-In order to begin receiving emails to your webhook, create a new instance of the Parse API via a <code>POST</code> request on the <code>[/parseroute](/email-api/v3/parseroute/)</code> resource. This call has only one mandatory property - the <code>Url</code> of the webhook (Note: URLs provided cannot be the root).  
+In order to begin receiving emails to your webhook, create a new instance of the Parse API via a <code>POST</code> request on the <code>[/parseroute](/email-api/v3/parseroute/)</code> resource. This call has only one mandatory property - the <code>Url</code> of the webhook (Note: URLs provided cannot be the root). Mailjet will provide an <code>Email</code> address (on the subdomain @parse-in1.mailjet.com) in the response, you can begin to use immediately. It can be used as a Reply-to Email address for example.
 
-The response will provide an <code>Email</code> address you can begin using immediately. It can be used as a Reply-to Email address for example.
-
+Parse API also allows to use your own email address and domain using the <code>Email</code> property in the <code>/parseroute</code> ressource. Visit [Use your own domain](#use-your-own-domain) section for more information on how to setup your DNS and your parseroute.
 
 ##What is delivered to your webhook
 
@@ -253,16 +258,6 @@ Finally, be advised that most <code>Headers</code> will be provided as arrays co
 
 ##Manage attachments
 
-
-In the payload, there is a <code>Parts</code> array. This collection contains every parts of the parsed message. This collection relates directly to how an email is represented in <code>Content multipart</code>. 
-
-If the parsed message contains attachments, they will be also included in the payload. 
-
-To retrieve them, you can either loop on the <code>Parts</code> collection and look for any part where the <code>ContentRef</code> property starts with Attachment or you can look directly for the <code>AttachmentN</code> property (where N is the ID of the attachment in the message, following their order). 
-
-The content of the attachments are always encoded in <a href="http://en.wikipedia.org/wiki/Base64" target="_blank">Base64</a>. <code>Content-Transfer-Encoding</code> indicate the original encoding of the attachment.
-
-
 ```json
 {
    "Parts": [
@@ -279,6 +274,15 @@ The content of the attachments are always encoded in <a href="http://en.wikipedi
 }
 ```
 
+In the payload, there is a <code>Parts</code> array. This collection contains every parts of the parsed message. This collection relates directly to how an email is represented in <code>Content multipart</code>. 
+
+If the parsed message contains attachments, they will be also included in the payload. 
+
+To retrieve them, you can either loop on the <code>Parts</code> collection and look for any part where the <code>ContentRef</code> property starts with Attachment or you can look directly for the <code>AttachmentN</code> property (where N is the ID of the attachment in the message, following their order). 
+
+The content of the attachments are always encoded in <a href="http://en.wikipedia.org/wiki/Base64" target="_blank">Base64</a>. <code>Content-Transfer-Encoding</code> indicate the original encoding of the attachment.
+
+
 For instance, in a message containing one attachment of type <code>text/plain</code> containing "Hello World!", we will have this payload.
 
 ##CustomID and Payload
@@ -287,10 +291,14 @@ When using the Send API <code>[Mj-CustomID](#sending-an-email-with-a-custom-id)<
 
 CustomId and Payload can be used for example to trace the conversation around your transactional emails.
 
-##Use your own custom domain name
-
+<div id="use-your-own-custom-domain-name"></div>
+##Use your own domain
 
 To receive emails on your own domain name, set this domain in your [parseroute](/email-api/v3/parseroute/) instance. Then, add an MX entry on the domain or subdomain DNS to <code>parse.mailjet.com.</code> (final dot is important) and specify your email address based on your domain in the <code>Email</code> attribute.
+
+<aside class="notice">
+The email address you want to use need to be a verified sender address. Use the <a href="https://eu.mailjet.com/account/sender/domain" target="_blank">Account setting</a> page, to verify your sender or domain. 
+</aside>
 
 A less intrusive alternative is to setup a mail forwarding between your current mailbox to the Parse API send-to email automatically provided by Mailjet
 
@@ -364,6 +372,8 @@ data = {
   'Email': 'mjparse@mydomain.com'
 }
 result = mailjet.parseroute.create(data=data)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -416,6 +426,7 @@ public class MyClass {
 						.property(Parseroute.URL, "https://www.mydomain.com/mj_parse.php")
 						.property(Parseroute.EMAIL, "mjparse@mydomain.com");
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }

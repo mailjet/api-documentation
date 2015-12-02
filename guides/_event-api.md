@@ -75,30 +75,8 @@ data = {
   'Url': 'https://mydomain.com/event_handler'
 }
 result = mailjet.eventcallbackurl.create(data=data)
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Eventcallbackurl;
-public class MyClass {
-    /**
-     * Create an handler for the open event
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Eventcallbackurl.resource)
-						.property(Eventcallbackurl.EVENTTYPE, "open")
-						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler");
-      response = client.post(request);
-      System.out.println(response.getData());
-    }
-}
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -129,6 +107,31 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Eventcallbackurl;
+public class MyClass {
+    /**
+     * Create an handler for the open event
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Eventcallbackurl.resource)
+						.property(Eventcallbackurl.EVENTTYPE, "open")
+						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 
@@ -379,15 +382,6 @@ curl -s \
 		"Version":"2"
 	}'
 ```
-```ruby
-# Create an grouped handler for the open event
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler",version: "2")
-```
 ```javascript
 /**
  *
@@ -411,6 +405,15 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
+```ruby
+# Create an grouped handler for the open event
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler",version: "2")
+```
 ```python
 """
 Create an grouped handler for the open event
@@ -426,31 +429,8 @@ data = {
   'Version': '2'
 }
 result = mailjet.eventcallbackurl.create(data=data)
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Eventcallbackurl;
-public class MyClass {
-    /**
-     * Create an grouped handler for the open event
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Eventcallbackurl.resource)
-						.property(Eventcallbackurl.EVENTTYPE, "open")
-						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler")
-						.property(Eventcallbackurl.VERSION, "2");
-      response = client.post(request);
-      System.out.println(response.getData());
-    }
-}
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -482,6 +462,32 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Eventcallbackurl;
+public class MyClass {
+    /**
+     * Create an grouped handler for the open event
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Eventcallbackurl.resource)
+						.property(Eventcallbackurl.EVENTTYPE, "open")
+						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler")
+						.property(Eventcallbackurl.VERSION, "2");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 

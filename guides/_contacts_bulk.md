@@ -25,28 +25,8 @@ This process allows to upload csv containing large quantities of contacts.
 [More information](#csv_upload_contacts)
 
 
-<h2 id="managecontactslists">Managing list subscriptions for a single contact</h2>
+<h2 id="managecontactslists">Subscriptions for a contact</h2>
 
-```bash
-# Create : Manage a contact subscription to a list
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact/$ID/managecontactslists \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"ContactsLists":[
-				{
-						"ListID": "$ListID_1",
-						"Action": "addnoforce"
-				},
-				{
-						"ListID": "$ListID_2",
-						"Action": "addforce"
-				}
-		]
-	}'
-```
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -67,6 +47,26 @@ $body = [
 $response = $mj->post(Resources::$ContactManagecontactslists, ['id' => $id, 'body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```bash
+# Create : Manage a contact subscription to a list
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact/$ID/managecontactslists \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"ContactsLists":[
+				{
+						"ListID": "$ListID_1",
+						"Action": "addnoforce"
+				},
+				{
+						"ListID": "$ListID_2",
+						"Action": "addforce"
+				}
+		]
+	}'
 ```
 ```javascript
 /**
@@ -132,6 +132,8 @@ data = {
 		]
 }
 result = mailjet.contact_managecontactslists.create(id=id, data=data)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -199,6 +201,7 @@ public class MyClass {
                                                                     .put("ListID", "$ListID_2")
                                                                     .put("Action", "addforce")));
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -276,7 +279,7 @@ For this API call, there is one specific <code>HTTP 400 status</code> error cond
 		<li>action missing or not valid</li>
 	</ul>
 
-<h2 id="contact_managemanycontacts">Managing and uploading multiple contacts</h2>
+<h2 id="contact_managemanycontacts">Managing multiple contacts</h2>
 
 ```php
 <?php
@@ -453,6 +456,8 @@ data = {
 		]
 }
 result = mailjet.contact_managemanycontacts.create(data=data)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -550,6 +555,7 @@ public class MyClass {
                                                                         .put("Property1", "value")
                                                                         .put("Property2", "value2"))));
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -597,11 +603,35 @@ A successful call will return JSON in the following format, containing the <code
 
 ```php
 <?php
+require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $response = $mj->get(Resources::$ContactManagemanycontacts, ['actionID' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.ContactManagemanycontacts;
+public class MyClass {
+    /**
+     * View : Manage the details of a Contact.
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(ContactManagemanycontacts.resource, 'actionid')
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
 ```
 ``` python
 from mailjet import Client
@@ -686,7 +716,7 @@ This provides the following information:
  - Error: If the status equals 'error', contains error information from the batch job
  - ErrorFile: Contains the URL to the Error information file
 
-<h2 id="contactslist_managemanycontacts">Managing multiple Contacts subscriptions to a List</h2>
+<h2 id="contactslist_managemanycontacts">Managing contacts in a list</h2>
 
 ```php
 <?php
@@ -797,6 +827,41 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Contactslist_ManageManyContacts.create(id: $ID, , action: "addnoforce",contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
 ```
+```python
+"""
+Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$ID'
+data = {
+  'Action': 'addnoforce',
+  'Contacts': [
+				{
+						"Email": "jimsmith@example.com",
+						"Name": "Jim",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				},
+				{
+						"Email": "janetdoe@example.com",
+						"Name": "Janet",
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				}
+		]
+}
+result = mailjet.contactslist_ManageManyContacts.create(id=id, data=data)
+print result.status_code
+print result.json()
+```
 ``` go
 /*
 Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
@@ -847,39 +912,6 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```python
-"""
-Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$ID'
-data = {
-  'Action': 'addnoforce',
-  'Contacts': [
-				{
-						"Email": "jimsmith@example.com",
-						"Name": "Jim",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				},
-				{
-						"Email": "janetdoe@example.com",
-						"Name": "Janet",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				}
-		]
-}
-result = mailjet.contactslist_ManageManyContacts.create(id=id, data=data)
-```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
@@ -912,6 +944,7 @@ public class MyClass {
                                                                         .put("Property1", "value")
                                                                         .put("Property2", "value2"))));
       response = client.post(request);
+      System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
@@ -954,21 +987,33 @@ If a contact (uniquely identified by the email) has already been added to your c
 ```php
 <?php
 // View: Job information
+require 'vendor/autoload.php';
 $mj = new Mailjet($MJ_APIKEY_PUBLIC,$MJ_APIKEY_PRIVATE);
-$params = array(
-    "method" => "VIEW",
-    "unique" => "$ID",
-    "JobID" => "$JOBID",
-);
-$result = $mj->contactslistManageManyContacts($params);
-if ($mj->_response_code == 200){
-   echo "success";
-   var_dump($result);
-} else {
-   echo "error - ".$mj->_response_code;
-   var_dump($mj->_response);
-}
+$result = $mj->get(Resources::$ContactslistManagemanycontacts, ['id' => $id, 'actionid' => $actionId]);
+var_dump($result->getData());
 ?>
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contactslist;
+public class MyClass {
+    /**
+     * Create : only need a Name
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(ContactslistManagemanycontacts.resource, 'id', 'jobid');
+      response = client.get(request);
+      System.out.println(response.getData());
+    }
+}
 ```
 ``` python
 from mailjet import Client
@@ -1055,7 +1100,7 @@ This provides the following information:
  - ErrorFile: Contains the URL to the Error information file
 
 
-<h2 id="csv_upload_contacts">Managing Contacts through CSV upload</h2>
+<h2 id="csv_upload_contacts">Contacts CSV upload</h2>
 
 In some cases you might need to manage large quantities of contacts stored into a csv record in relation to a contactslist. 
 
@@ -1090,6 +1135,32 @@ api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
 f = open('./data.csv')
 result = mailjet.contactslist_csvdata.create(id='$listid', data=f.read())
+print result.status_code
+print result.json()
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Csvimport;
+public class MyClass {
+    /**
+     * Modify : A wrapper for the CSV importer
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Csvimport.resource, ID)
+        .property(Csvimport.DATA, MYFILE);
+      response = client.put(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
 ```
 ```php
 <?php
@@ -1221,31 +1292,8 @@ data = {
   'Method': 'addnoforce'
 }
 result = mailjet.csvimport.create(data=data)
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Csvimport;
-public class MyClass {
-    /**
-     * Create: A wrapper for the CSV importer
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Csvimport.resource)
-						.property(Csvimport.CONTACTSLISTID, "$ID_CONTACTLIST")
-						.property(Csvimport.DATAID, "$ID_DATA")
-						.property(Csvimport.METHOD, "addnoforce");
-      response = client.post(request);
-      System.out.println(response.getData());
-    }
-}
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -1277,6 +1325,32 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Csvimport;
+public class MyClass {
+    /**
+     * Create: A wrapper for the CSV importer
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Csvimport.resource)
+						.property(Csvimport.CONTACTSLISTID, "$ID_CONTACTLIST")
+						.property(Csvimport.DATAID, "$ID_DATA")
+						.property(Csvimport.METHOD, "addnoforce");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 
@@ -1332,6 +1406,13 @@ $response = $mj->get(Resources::$Csvimport, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
+```bash
+# View: CSV upload Batch job running on the Mailjet infrastructure.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/csvimport/$ID_JOB 
+```
 ```javascript
 /**
  *
@@ -1351,13 +1432,6 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
-```
-```bash
-# View: CSV upload Batch job running on the Mailjet infrastructure.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/csvimport/$ID_JOB 
 ```
 ```ruby
 # View: CSV upload Batch job running on the Mailjet infrastructure.
@@ -1379,28 +1453,8 @@ api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
 id = '$ID_JOB'
 result = mailjet.csvimport.get(id=id)
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Csvimport;
-public class MyClass {
-    /**
-     * View: CSV upload Batch job running on the Mailjet infrastructure.
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Csvimport.resource);
-      response = client.get(request);
-      System.out.println(response.getData());
-    }
-}
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -1425,6 +1479,29 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Csvimport;
+public class MyClass {
+    /**
+     * View: CSV upload Batch job running on the Mailjet infrastructure.
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Csvimport.resource);
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 
