@@ -18,6 +18,8 @@ Using Mailjet's SMTP servers to send your transactional emails is very simple. A
 
 You can find your SMTP credentials in your <a href="https://eu.mailjet.com/account/setup" target="_blank">Account Setup page</a>
 
+You can find more information on how to configure the SMTP Relay and custom email headers in our [SMTP Relay Guide](#SMTP_Relay_Use).
+
 
 ### Send API
 
@@ -83,6 +85,22 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Sender.create(email: "anothersender@example.com")
 ```
+```python
+"""
+Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Email': 'anothersender@example.com'
+}
+result = mailjet.sender.create(data=data)
+print result.status_code
+print result.json()
+```
 ``` go
 /*
 Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
@@ -112,22 +130,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```python
-"""
-Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Email': 'anothersender@example.com'
-}
-result = mailjet.sender.create(data=data)
-print result.status_code
-print result.json()
 ```
 ```java
 package com.my.project;
@@ -159,11 +161,14 @@ To create a sender, provide the email address of the sender as part of a <code>P
 
 A verification email will be sent to the address you added to activate this new sender.
 
+<aside class="notice">The validation of a sender address can also be initiated with API calls. Visit the <a href="#domains-and-dns">Domains and DNS</a> guide for more information.</aside>
+
 ##Setup SPF/DKIM on DNS 
 
-To increase the deliverability of your emails, dont forget to setup properly your DNS. 
+To increase the deliverability of your emails, dont forget to setup properly your DNS record. 
 
-[More information](#verify-your-domain)
+You can either visit [the Mailjet user interface](#verify-your-domain) or use the [Domains and DNS](#domains-and-dns) API guide to setup SPF and DKIM.
+
 
 ##Sending a basic email
 
@@ -337,7 +342,7 @@ To send an email, you need the following mandatory properties:
  - <code>FromName</code>: name of the sender visible by the recipient 
  - <code>Recipients</code>: list with at least one <code>Email</code> address 
  - <code>Subject</code>: subject of the message that will be sent
- - <code>Text-part</code> or/and <code>Html-part</code>: content of the message sent in text or HTML format. At least one of these contents type needs to be specified. When Html-part is the only content provided, Mailjet will not generate a Text-part from the HTML version.   
+ - <code>Text-part</code> or/and <code>Html-part</code>: content of the message sent in text or HTML format. At least one of these content type needs to be specified. When Html-part is the only content provided, Mailjet will not generate a Text-part from the HTML version.   
 
 
 
@@ -358,7 +363,7 @@ To send an email, you need the following mandatory properties:
 <code>MessageID</code> is the internal Mailjet id of your message. You will be able to use this id to get more information about your message with <code>[/message](/email-api/v3/message/)</code>,<code>[/messagehistory](/email-api/v3/messagehistory/)</code> and <code>[/messageinformation](/email-api/v3/messageinformation/)</code> resources.
 
 <aside class="notice">
-NOTICE: If a recipient does not exist in any of your contacts list it will be created from scratch, keep that in mind if you are planning on sending a welcome email and then you're trying to add the email to a list as the contact effectively exists already.
+NOTICE: If a recipient does not exist in any of your contact list it will be created from scratch, keep that in mind if you are planning on sending a welcome email and then you're trying to add the email to a list as the contact effectively exists already.
 </aside>
 
 ##Sending to multiple recipients
@@ -770,7 +775,7 @@ request
 To attach files, use <code>Attachments</code> or <code>Inline_attachments</code>.  
 The recipient of a email with attachment will have to click to see it. The inline attachment can be visible directly in the body of the message depending of the email client support.  
 
-In both call, the content will need to be Base64 encoded. You will need to specify the MIME type and a file name.
+In both calls, the content will need to be Base64 encoded. You will need to specify the MIME type and a file name.
 
 <div></div>
 
@@ -968,7 +973,7 @@ func main () {
 ```
 
 
-When using a inline Attachment, it's possible to insert the file inside the HTML code of the email by using <code>cid:FILENAME.EXT</code> where FILENAME.EXT is the <code>Filename</code> specified in the declaration of the Attachment.
+When using an inline Attachment, it's possible to insert the file inside the HTML code of the email by using <code>cid:FILENAME.EXT</code> where FILENAME.EXT is the <code>Filename</code> specified in the declaration of the Attachment.
 
 <aside class="warning">
 Remember to keep the size of your attachements low and not to exceed 15 MB.
@@ -1240,13 +1245,13 @@ To send messages in bulk, package the multiple messages inside a <code>Messages<
 
 ##Personalisation
 <div></div>
-###Content formating
+###Content formatting
 
-Mailjet system allows to insert datas in your text or html parts. 
+Mailjet system allows to insert data in your text or html parts. 
 
 To do so, use <code>[[DATA_TYPE:DATA_NAME]]</code> where: 
 
-- <code>DATA_TYPE</code>: <code>var</code> for Vars specified in the API call or <code>data</code> for contact datas already available on Mailjet system 
+- <code>DATA_TYPE</code>: <code>var</code> for Vars specified in the API call or <code>data</code> for contact data already available on Mailjet system 
 - <code>DATA_NAME</code>: name of the data you want to insert
 
 <div></div>
@@ -1878,11 +1883,17 @@ func main () {
 
 If the contact you are sending an email to is already in Mailjet system with some contact datas, you can leverage this information to personalise your email.
 
-Use <code>[[data:METADATA_NAME]]</code> or <code>[[data:METADATA_NAME:DEFAULT_VALUE]]</code> to insert datas in your content.
+Use <code>[[data:METADATA_NAME]]</code> or <code>[[data:METADATA_NAME:DEFAULT_VALUE]]</code> to insert data in your content.
 
 <code>DEFAULT_VALUE</code>is the default value that will be used if no data found.
 
 [More information](#personalisation-add-contact-properties) about how to add contact properties.
+
+###Go further with personalisation
+
+Mailjet offers a Templating language that can extend the personalisation of your transactional messages. 
+Visit [Transactional templating](#transactional-templating) guide to learn about additional substitutions, modification functions and conditional statements you can use to personalize messages.
+
 
 ##Adding Email Headers 
 
@@ -2733,7 +2744,7 @@ Cc, Bcc | May include the name part: <code>john@example.com</code> or <code>&lt;
 Subject | At least 1 char, maximum length is 255 chars <br />**MANDATORY - MAX SUBJECTS: 1**
 Text-part | Provides the Text part of the message<br />Mandatory if the HTML param is not specified<br />**MANDATORY IF NO HTML - MAX PARTS: 1**
 Html-part | Provides the HTML part of the message<br />Mandatory if the text param is not specified<br />**MANDATORY IF NO TEXT - MAX PARTS: 1**
-Mj-TemplateID | The Template ID or Name to use as this email content. Overrides the HTML/Text parts if any.**MANDATORY IF NO HTML/TEXT - MAX TEMPLATEID: 1**
+Mj-TemplateID | The Template ID or Name to use as this email content. Overrides the HTML/Text parts if any.<br />**MANDATORY IF NO HTML/TEXT - MAX TEMPLATEID: 1**
 Attachments | Attach files automatically to this Email<br />Sum of all attachments, including inline may not exceed 15 MB total<br />Sample: [{"Content-type": "MIME TYPE", "Filename": "FILENAME.EXT", "content":"BASE64 ENCODED CONTENT"}] 
 Inline_attachments | Attach a file for inline use via <code>cid:FILENAME.EXT</code><br />Sum of all attachements, including inline may not exceed 15 MB total<br />Sample: [{"Content-type": "MIME TYPE", "Filename": "FILENAME.EXT", "content":"BASE64 ENCODED CONTENT"}]
 Mj-prio | Manage message processing priority inside your account (API key) scheduling queue.<br />Default is <code>2</code> as in the SMTP submission.<br />Equivalent of using <code>X-Mailjet-Prio</code> header through SMTP<br /><a href="https://app.mailjet.com/docs/email-priority-management" target="_blank">More information</a>
@@ -2747,4 +2758,12 @@ Headers | Add lines to the email's headers<br />List of headers as <code>"proper
 Vars | Global variables used for personalisation
 Messages | List of messages<br /> Used for bulk emailing.<br />[More information](#sending-in-bulk)
 
+##Send API errors
 
+Error Code | Message | Reason 
+  ----------|------------|------------
+400 | Invalid characters detected | A non UTF-8 character was detected
+400 | "Headers" is not JSON object type | The Headers property should follow the format {"X-My-Header":"my own value","X-My-Header-2":"my own value 2"}
+400 | Header [Property name] is not string type | 
+400 | Missing "To" or "Recipients" property | Send API must be called with either "To" or "Recipient" properties 
+400 | Too many recipients in To <br /> Too many recipients in Cc <br /> Too many recipients in Bcc <br />|  To, Cc and Bcc can't exceed 50 Email addresses

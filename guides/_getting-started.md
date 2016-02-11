@@ -52,7 +52,7 @@ Now run the Curl command line, after replacing:
 
 ###API in a Nutshell
 
-The Mailjet API is designed to be <a href="http://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank">RESTful compliant</a>.  This means that the API communicate over HTTP (including the use of HTTP verbs) . The API allows you to create, read, update and delete (<a href="http://en.wikipedia.org/wiki/CRUD" target="_blank">CRUD</a>) resources. Also, each single resource has a URI (Unique Resource Identifier) to help access it's properties.
+The Mailjet API is designed to be <a href="http://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank">RESTful compliant</a>.  This means that the API communicate over HTTP (including the use of HTTP verbs) . The API allows you to create, read, update and delete (<a href="http://en.wikipedia.org/wiki/CRUD" target="_blank">CRUD</a>) resources. Also, each single resource has a URI (Unique Resource Identifier) to help access its properties.
 
 The CRUD methods on the Mailjet API correspond to HTTP's verbs <code>POST</code>, <code>GET</code>, <code>PUT</code> and <code>DELETE</code>, so that depending on the resources and providing you have the access rights, you can do the following :
 
@@ -65,7 +65,7 @@ The CRUD methods on the Mailjet API correspond to HTTP's verbs <code>POST</code>
 Each resource has a list of properties and methods you can see in our [API reference](/email-api/v3/).
 
 <aside class="notice">
-On the Mailjet API, all <code>PUT</code> method use will behave like a <code>PATCH</code> method. The update will affect only the specified properties, the other properties of an existing single resource will not be modified nor deleted. It also mean that all non mandatory properties can be omitted from your payload.
+On the Mailjet API, all <code>PUT</code> method use will behave like a <code>PATCH</code> method. The update will affect only the specified properties, the other properties of an existing single resource will not be modified nor deleted. It also means that all non mandatory properties can be omitted from your payload.
 </aside>
 
 ###Authenticate
@@ -119,7 +119,7 @@ In this example :
 
 Both these keys can be found in your control panel, once you're logged-in and your account is provisioned (activated).
 
-The usual json payload response will have the following structure : <code>{"Count": int, "Data": array, "Total": int}</code> where <code>Count</code> and <code>Total</code> represent the number of line affected by your API call. When using the <code>[countOnly](#the-count-filter)</code> filter <code>Total</code> will be the global number of elements corresponding to your API call.  
+The usual json payload response will have the following structure : <code>{"Count": int, "Data": array, "Total": int}</code> where <code>Count</code> and <code>Total</code> represent the number of lines affected by your API call. When using the <code>[countOnly](#the-count-filter)</code> filter <code>Total</code> will be the global number of elements corresponding to your API call.  
 
 <div></div>
 ###Status Codes
@@ -192,6 +192,9 @@ You can also visit the offical and third-party documentations for DNS providers 
 
 With some DNS providers the setup can be quite tedious, but we would be happy to help you out. Just contact <a href="https://www.mailjet.com/support/ticket" target="_blank">our support</a>!
 
+<aside class="notice">The validation of a domain can also be initiated with API calls. Visit the <a href="#domains-and-dns">Domains and DNS</a> for more information.</aside>
+
+
 ## Where to go from here ?
 
 In the next sections of this guide, you will find 2 common user cases:
@@ -199,7 +202,7 @@ In the next sections of this guide, you will find 2 common user cases:
  - [Send transactional email](#send-transactional-email) : sending custom email for each client events
  - [Send marketing campaigns](#send-marketing-campaigns) : setting up a mailing list, a newsletter and extracting statistics
 
-You can also discover our [real time notification API](#event-api-real-time-notifications) that allows you to monitor every events (sent, opened, clicked, bounced...) on the emails you will send.
+You can also discover our [real time notification API](#event-api-real-time-notifications) that allows you to monitor every event (sent, opened, clicked, bounced...) on the emails you will send.
 
 Mailjet also offers an [inbound emails parsing](#receive-emails) solution that allows to easily manage your contacts replies.
  

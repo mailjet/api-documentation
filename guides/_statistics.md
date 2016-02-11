@@ -108,7 +108,7 @@ public class MyClass {
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Message.resource);
+      request = new MailjetRequest(Message.resource, ID);
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -259,7 +259,7 @@ public class MyClass {
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Messageinformation.resource);
+      request = new MailjetRequest(Messageinformation.resource, ID);
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -400,7 +400,7 @@ public class MyClass {
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Messagehistory.resource);
+      request = new MailjetRequest(Messagehistory.resource, ID);
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -540,7 +540,7 @@ public class MyClass {
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Messagesentstatistics.resource);
+      request = new MailjetRequest(Messagesentstatistics.resource, ID);
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -834,6 +834,8 @@ public class MyClass {
 			"ProcessedCount": "287",
 			"QueuedCount": "0",
 			"SpamComplaintCount": "0",
+			"TotalClicksCount": "",
+			"TotalOpensCount": "",
 			"TransactionalCount": "187",
 			"UnsubscribedCount": "0"
 		}
@@ -1371,6 +1373,15 @@ The <code>[/openstatistics](/email-api/v3/openstatistics/)</code> resource shows
 
 <div></div>
 
+```php
+<?php
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->get(Resources::$Toplinkclicked);
+$response->success() && var_dump($response->getData());
+?>
+```
 ```bash
 # View : Top links clicked historgram.
 curl -s \
@@ -1406,6 +1417,19 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Toplinkclicked.all()
 ```
+```python
+"""
+View : Top links clicked historgram.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+result = mailjet.toplinkclicked.get()
+print result.status_code
+print result.json()
+```
 ``` go
 /*
 View : Top links clicked historgram.
@@ -1426,28 +1450,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```python
-"""
-View : Top links clicked historgram.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.toplinkclicked.get()
-print result.status_code
-print result.json()
-```
-```php
-<?php
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Toplinkclicked);
-$response->success() && var_dump($response->getData());
-?>
 ```
 ```java
 package com.my.project;

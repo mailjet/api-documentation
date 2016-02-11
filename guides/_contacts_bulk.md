@@ -192,7 +192,7 @@ public class MyClass {
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(ContactManagecontactslists.resource)
+      request = new MailjetRequest(ContactManagecontactslists.resource, ID)
 						.property(ContactManagecontactslists.CONTACTSLISTS, new JSONArray()
                                                                 .put(new JSONObject()
                                                                     .put("ListID", "$ListID_1")
@@ -316,7 +316,7 @@ $body = [
         ]
     ]
 ];
-$response = $mj->post(Resources::$ContactManagemanycontacts, ['id' => $id, 'body' => $body]);
+$response = $mj->post(Resources::$ContactManagemanycontacts, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
@@ -777,6 +777,15 @@ curl -s \
 		]
 	}'
 ```
+```ruby
+# Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Contactslist_ManageManyContacts.create(id: $ID, , action: "addnoforce",contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
+```
 ```javascript
 /**
  *
@@ -817,15 +826,6 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
-```
-```ruby
-# Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Contactslist_ManageManyContacts.create(id: $ID, , action: "addnoforce",contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
 ```
 ```python
 """
@@ -928,7 +928,7 @@ public class MyClass {
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(ContactslistManagemanycontacts.resource)
+      request = new MailjetRequest(ContactslistManagemanycontacts.resource, ID)
 						.property(ContactslistManagemanycontacts.ACTION, "addnoforce")
 						.property(ContactslistManagemanycontacts.CONTACTS, new JSONArray()
                                                                 .put(new JSONObject()
@@ -1268,15 +1268,6 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
-```ruby
-# Create: A wrapper for the CSV importer
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Csvimport.create(contacts_list_id: "$ID_CONTACTLIST",data_id: "$ID_DATA",method: "addnoforce")
-```
 ```python
 """
 Create: A wrapper for the CSV importer
@@ -1294,6 +1285,15 @@ data = {
 result = mailjet.csvimport.create(data=data)
 print result.status_code
 print result.json()
+```
+```ruby
+# Create: A wrapper for the CSV importer
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Csvimport.create(contacts_list_id: "$ID_CONTACTLIST",data_id: "$ID_DATA",method: "addnoforce")
 ```
 ``` go
 /*
@@ -1497,7 +1497,7 @@ public class MyClass {
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Csvimport.resource);
+      request = new MailjetRequest(Csvimport.resource, ID);
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());

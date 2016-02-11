@@ -817,7 +817,7 @@ public class MyClass {
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Contact.resource);
+      request = new MailjetRequest(Contact.resource, ID);
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -929,7 +929,7 @@ public class MyClass {
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Eventcallbackurl.resource);
+      request = new MailjetRequest(Eventcallbackurl.resource, ID);
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());

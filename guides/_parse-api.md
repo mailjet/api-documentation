@@ -153,6 +153,10 @@ public class MyClass {
 
 In order to begin receiving emails to your webhook, create a new instance of the Parse API via a <code>POST</code> request on the <code>[/parseroute](/email-api/v3/parseroute/)</code> resource. This call has only one mandatory property - the <code>Url</code> of the webhook (Note: URLs provided cannot be the root). Mailjet will provide an <code>Email</code> address (on the subdomain @parse-in1.mailjet.com) in the response, you can begin to use immediately. It can be used as a Reply-to Email address for example.
 
+<aside class="notice">
+Mailjet provides only one Email address (on the subdomain @parse-in1.mailjet.com) per API key. 
+</aside>
+
 Parse API also allows to use your own email address and domain using the <code>Email</code> property in the <code>/parseroute</code> ressource. Visit [Use your own domain](#use-your-own-domain) section for more information on how to setup your DNS and your parseroute.
 
 ##What is delivered to your webhook
@@ -293,14 +297,6 @@ CustomId and Payload can be used for example to trace the conversation around yo
 
 <div id="use-your-own-custom-domain-name"></div>
 ##Use your own domain
-
-To receive emails on your own domain name, set this domain in your [parseroute](/email-api/v3/parseroute/) instance. Then, add an MX entry on the domain or subdomain DNS to <code>parse.mailjet.com.</code> (final dot is important) and specify your email address based on your domain in the <code>Email</code> attribute.
-
-<aside class="notice">
-The email address you want to use need to be a verified sender address. Use the <a href="https://eu.mailjet.com/account/sender/domain" target="_blank">Account setting</a> page, to verify your sender or domain. 
-</aside>
-
-A less intrusive alternative is to setup a mail forwarding between your current mailbox to the Parse API send-to email automatically provided by Mailjet
 
 ```php
 <?php
@@ -449,6 +445,15 @@ public class MyClass {
 	"Total": 1
 }
 ```
+
+
+To receive emails on your own domain name, set this domain in your [parseroute](/email-api/v3/parseroute/) instance. Then, add an MX entry on the domain or subdomain DNS to <code>parse.mailjet.com.</code> (final dot is important) and specify your email address based on your domain in the <code>Email</code> attribute.
+
+<aside class="notice">
+Your domain name need to be a verified domain. Use the <a href="https://eu.mailjet.com/account/sender/domain" target="_blank">Account setting</a> page or follow the <a href="#validate-sender-and-domain">Domains and DNS</a> guide to verify your domain.
+</aside>
+
+A less intrusive alternative is to setup a mail forwarding between your current mailbox to the Parse API send-to email automatically provided by Mailjet
 
 
 To use a custom domain name and email address with the Parse API, update your instance via a PUT request with the email you wish to use.
