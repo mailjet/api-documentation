@@ -5,6 +5,19 @@ The Event API offer a real-time notification through http request on any events 
 The Event API is a very efficient way to do specific actions on your website (log the marketing messages sent to your customers, generate your own statistics, update the unsubscribed contacts on a CRM...). Instead of polling our API a few times a day, we push new data just as the events happen, almost instantly.
 
 ##Endpoint URL
+```php
+<?php
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$body = [
+    'EventType' => "open",
+    'Url' => "https://mydomain.com/event_handler"
+];
+$response = $mj->post(Resources::$Eventcallbackurl, ['body' => $body]);
+$response->success() && var_dump($response->getData());
+?>
+```
 ```bash
 # Create an handler for the open event
 curl -s \
@@ -38,19 +51,6 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
-```
-```php
-<?php
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$body = [
-    'EventType' => "open",
-    'Url' => "https://mydomain.com/event_handler"
-];
-$response = $mj->post(Resources::$Eventcallbackurl, ['body' => $body]);
-$response->success() && var_dump($response->getData());
-?>
 ```
 ```ruby
 # Create an handler for the open event
@@ -369,19 +369,6 @@ $response = $mj->post(Resources::$Eventcallbackurl, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
-# Create an grouped handler for the open event
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/eventcallbackurl \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"EventType":"open",
-		"Url":"https://mydomain.com/event_handler",
-		"Version":"2"
-	}'
-```
 ```javascript
 /**
  *
@@ -404,6 +391,19 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
+```
+```bash
+# Create an grouped handler for the open event
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/eventcallbackurl \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"EventType":"open",
+		"Url":"https://mydomain.com/event_handler",
+		"Version":"2"
+	}'
 ```
 ```ruby
 # Create an grouped handler for the open event
@@ -431,32 +431,6 @@ data = {
 result = mailjet.eventcallbackurl.create(data=data)
 print result.status_code
 print result.json()
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Eventcallbackurl;
-public class MyClass {
-    /**
-     * Create an grouped handler for the open event
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Eventcallbackurl.resource)
-						.property(Eventcallbackurl.EVENTTYPE, "open")
-						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler")
-						.property(Eventcallbackurl.VERSION, "2");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
 ```
 ``` go
 /*
@@ -488,6 +462,32 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Eventcallbackurl;
+public class MyClass {
+    /**
+     * Create an grouped handler for the open event
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(Eventcallbackurl.resource)
+						.property(Eventcallbackurl.EVENTTYPE, "open")
+						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler")
+						.property(Eventcallbackurl.VERSION, "2");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 

@@ -12,7 +12,7 @@ The SMTP Relay is useful if you have an existing solution for transactional emai
 The best and fastest way to use the SMTP Relay is to have your own local mail server relaying messages to the Mailjet SMTP. Your local mail server will give you reliable management of the messages and connections between our 2 systems. 
 In case of breakage in the connection, your mail server will handle properly the error and retry to send your messages. 
 
-In case you don't have a local mail server, you can still use the SMTP Relay by using one of the many SMTP libraries available or configuring your exiting system (frameworks, CMS, CRM...). However, some of these libraries or systems can lack the advanced error handling necessary to queue and resend the messages in case of error. The use of Send API can be a better choice has it require less interactions between our systems and limit the risk of failures. The error handling is also a lot simpler with the API as we are managing for you the delivery and queuing of your messages.
+In case you don't have a local mail server, you can still use the SMTP Relay by using one of the many SMTP libraries available or configuring your exiting system (frameworks, CMS, CRM...). However, some of these libraries or systems can lack the advanced error handling necessary to queue and resend the messages in case of error. The use of Send API can be a better choice has it require less interactions between our systems and limits the risk of failures. The error handling is also a lot simpler with the API as we are managing for you the delivery and queuing of your messages.
 
 Using Mailjet's SMTP servers to send your transactional emails is very simple. All you have to do is update your SMTP server settings to use our server as a "relay" or "smarthost" with the credentials provided by Mailjet. The credentials are your $MJ_APIKEY_PUBLIC as a login and $MJ_APIKEY_PRIVATE as a password.
 
@@ -2253,6 +2253,22 @@ func main () {
 Sometimes you need to use your own ID in addition to ours to be able to trace back the message in our system easily. For this purpose we let you insert your own ID in the message. To achieve this, just pass the ID you want to use in the <code>Mj-CustomID</code> property.
 
 <div></div>
+```bash
+# View : API Key Statistical campaign/message data.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/messagesentstatistics?CustomID=PassengerEticket1234 
+```
+```ruby
+# View : API Key Statistical campaign/message data.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Messagesentstatistics.all(custom_id: "PassengerEticket1234")
+```
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -2264,13 +2280,6 @@ $filters = [
 $response = $mj->get(Resources::$Messagesentstatistics, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# View : API Key Statistical campaign/message data.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/messagesentstatistics?CustomID=PassengerEticket1234 
 ```
 ```javascript
 /**
@@ -2292,15 +2301,6 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
-```
-```ruby
-# View : API Key Statistical campaign/message data.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Messagesentstatistics.all(custom_id: "PassengerEticket1234")
 ```
 ```python
 """
@@ -2740,11 +2740,14 @@ FromName | Must be a valid, activated and registered sender for this account <br
 Sender | This can be set only on given API Keys. Contact the <a href="https://app.mailjet.com/support/ticket" target="_blank">support team</a> if you want us to enable this setting on your account.<br />Must be a valid active sender for this account.<br />Perform a simple GET on resource <code>/sender</code> to view a list of allowed senders for your account, or within the Mailjet Account Settings under <a href="https://app.mailjet.com/account/sender" target="_blank">Sender Addresses</a><br />**MAX SENDER: 1**
 Recipients | List of recipients, Must include at least a property <code>Email</code> in each element<br />Sample: <code>[{"Email":"passenger@mailjet.com","Name":"passenger"}]</code><br />**MANDATORY**
 To | May include the name part: <code>john@example.com</code> or <code>&lt;john@example.com&gt;</code> or <code>"John Doe" &lt;john@example.com&gt;</code><br />If a recipient is specified twice (in the to, cc, or bcc), it is counted only once.<br />Can be a magic list @lists.mailjet.com. See the <code>Address</code> [contactslist](/email-api/v3/contactslist/) property.<br />**MAX RECIPIENTS: 50**
-Cc, Bcc | May include the name part: <code>john@example.com</code> or <code>&lt;john@example.com&gt;</code> or <code>"John Doe" &lt;john@example.com&gt;</code><br />If one recipient is specified twice, count as one only (including to, cc, bcc)<br />**MAX RECIPIENTS: 50**
+Cc, Bcc | May include the name part: <code>john@example.com</code> or <code>&lt;john@example.com&gt;</code> or <code>"John Doe" &lt;john@example.com&gt;</code><br />If one recipient is specified twice, count as one only (including to, cc, bcc)<br />**MAX RECIPIENTS: 50**<br /> **Cc and Bcc can't be used in conjunction with Recipients property**
 Subject | At least 1 char, maximum length is 255 chars <br />**MANDATORY - MAX SUBJECTS: 1**
 Text-part | Provides the Text part of the message<br />Mandatory if the HTML param is not specified<br />**MANDATORY IF NO HTML - MAX PARTS: 1**
 Html-part | Provides the HTML part of the message<br />Mandatory if the text param is not specified<br />**MANDATORY IF NO TEXT - MAX PARTS: 1**
 Mj-TemplateID | The Template ID or Name to use as this email content. Overrides the HTML/Text parts if any.<br />**MANDATORY IF NO HTML/TEXT - MAX TEMPLATEID: 1**
+Mj-TemplateLanguage | Activate the template language processing. By default the template language processing is desactivated. Use <code>True</code> to activate.<br />Equivalent to using the X-MJ-TemplateLanguage header through SMTP.<br />[More information](#use-the-template-in-send-api)
+MJ-TemplateErrorReporting | Email Address where a carbon copy with error message is sent to.<br />Equivalent to using the X-MJ-TemplateErrorReporting header through SMTP.<br />[More information](#templates-error-management)
+MJ-TemplateErrorDeliver | Define if the message is delivered if an error is discovered in the templating language. By default the delivery is desactivated. Use <code>deliver</code> to let the message be delivered to the recipient, <code>0</code> to stop it. <br />Equivalent to using the X-MJ-TemplateErrorDeliver header through SMTP.<br />[More information](#templates-error-management)
 Attachments | Attach files automatically to this Email<br />Sum of all attachments, including inline may not exceed 15 MB total<br />Sample: [{"Content-type": "MIME TYPE", "Filename": "FILENAME.EXT", "content":"BASE64 ENCODED CONTENT"}] 
 Inline_attachments | Attach a file for inline use via <code>cid:FILENAME.EXT</code><br />Sum of all attachements, including inline may not exceed 15 MB total<br />Sample: [{"Content-type": "MIME TYPE", "Filename": "FILENAME.EXT", "content":"BASE64 ENCODED CONTENT"}]
 Mj-prio | Manage message processing priority inside your account (API key) scheduling queue.<br />Default is <code>2</code> as in the SMTP submission.<br />Equivalent of using <code>X-Mailjet-Prio</code> header through SMTP<br /><a href="https://app.mailjet.com/docs/email-priority-management" target="_blank">More information</a>

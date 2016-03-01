@@ -135,6 +135,36 @@ result = mailjet.contact_managecontactslists.create(id=id, data=data)
 print result.status_code
 print result.json()
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.ContactManagecontactslists;
+public class MyClass {
+    /**
+     * Create : Manage a contact subscription to a list
+     */
+    public static void main(String[] args) throws MailjetException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient("api key", "api secret");
+      request = new MailjetRequest(ContactManagecontactslists.resource, ID)
+						.property(ContactManagecontactslists.CONTACTSLISTS, new JSONArray()
+                                                                .put(new JSONObject()
+                                                                    .put("ListID", "$ListID_1")
+                                                                    .put("Action", "addnoforce"))
+                                                                .put(new JSONObject()
+                                                                    .put("ListID", "$ListID_2")
+                                                                    .put("Action", "addforce")));
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 ``` go
 /*
 Create : Manage a contact subscription to a list
@@ -174,36 +204,6 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.ContactManagecontactslists;
-public class MyClass {
-    /**
-     * Create : Manage a contact subscription to a list
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(ContactManagecontactslists.resource, ID)
-						.property(ContactManagecontactslists.CONTACTSLISTS, new JSONArray()
-                                                                .put(new JSONObject()
-                                                                    .put("ListID", "$ListID_1")
-                                                                    .put("Action", "addnoforce"))
-                                                                .put(new JSONObject()
-                                                                    .put("ListID", "$ListID_2")
-                                                                    .put("Action", "addforce")));
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
 }
 ```
 
@@ -777,15 +777,6 @@ curl -s \
 		]
 	}'
 ```
-```ruby
-# Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Contactslist_ManageManyContacts.create(id: $ID, , action: "addnoforce",contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
-```
 ```javascript
 /**
  *
@@ -826,6 +817,15 @@ request
 	.on('error', function (err, response) {
 		console.log (response.statusCode, err);
 	});
+```
+```ruby
+# Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Contactslist_ManageManyContacts.create(id: $ID, , action: "addnoforce",contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
 ```
 ```python
 """
@@ -1268,6 +1268,15 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
+```ruby
+# Create: A wrapper for the CSV importer
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Csvimport.create(contacts_list_id: "$ID_CONTACTLIST",data_id: "$ID_DATA",method: "addnoforce")
+```
 ```python
 """
 Create: A wrapper for the CSV importer
@@ -1285,15 +1294,6 @@ data = {
 result = mailjet.csvimport.create(data=data)
 print result.status_code
 print result.json()
-```
-```ruby
-# Create: A wrapper for the CSV importer
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Csvimport.create(contacts_list_id: "$ID_CONTACTLIST",data_id: "$ID_DATA",method: "addnoforce")
 ```
 ``` go
 /*
@@ -1433,15 +1433,6 @@ request
 		console.log (response.statusCode, err);
 	});
 ```
-```ruby
-# View: CSV upload Batch job running on the Mailjet infrastructure.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Csvimport.find($ID_JOB)
-```
 ```python
 """
 View: CSV upload Batch job running on the Mailjet infrastructure.
@@ -1480,6 +1471,15 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
+```
+```ruby
+# View: CSV upload Batch job running on the Mailjet infrastructure.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Csvimport.find($ID_JOB)
 ```
 ```java
 package com.my.project;
