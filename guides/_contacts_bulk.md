@@ -825,7 +825,7 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contactslist_ManageManyContacts.create(id: $ID, , action: "addnoforce",contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
+variable = Mailjet::Contactslist_managemanycontacts.create(id: $ID, , action: "addnoforce",contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
 ```
 ```python
 """
