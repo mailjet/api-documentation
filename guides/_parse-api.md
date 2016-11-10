@@ -37,20 +37,20 @@ curl -s \
  * Create : ParseRoute description
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.post("parseroute")
 	.request({
 		"Url":"https://www.mydomain.com/mj_parse.php"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```ruby
 # Create : ParseRoute description
@@ -91,10 +91,10 @@ import (
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
 	var data []resources.Parseroute
-	mr := &MailjetRequest{
+	mr := &Request{
 	  Resource: "parseroute",
 	}
-	fmr := &FullMailjetRequest{
+	fmr := &FullRequest{
 	  Info: mr,
 	  Payload: &resources.Parseroute {
       Url: "https://www.mydomain.com/mj_parse.php",
@@ -110,19 +110,22 @@ func main () {
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Parseroute;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * Create : ParseRoute description
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Parseroute.resource)
 						.property(Parseroute.URL, "https://www.mydomain.com/mj_parse.php");
       response = client.post(request);
@@ -152,6 +155,14 @@ public class MyClass {
 
 
 In order to begin receiving emails to your webhook, create a new instance of the Parse API via a <code>POST</code> request on the <code>[/parseroute](/email-api/v3/parseroute/)</code> resource. This call has only one mandatory property - the <code>Url</code> of the webhook (Note: URLs provided cannot be the root). Mailjet will provide an <code>Email</code> address (on the subdomain @parse-in1.mailjet.com) in the response, you can begin to use immediately. It can be used as a Reply-to Email address for example.
+
+We strongly recommend using a secure (HTTPS) URL in combination with a basic authentification to make sure data cannot be intercepted, and that only our servers can send you data.
+
+<code>Eg: https://username:password@www.example.com/mailjet_parser.php</code>
+
+You can also specify a port in your webhook URL.
+
+<code>Eg: https://www.example.com:123/mailjet_triggers.php</code>
 
 <aside class="notice">
 Mailjet provides only one Email address (on the subdomain @parse-in1.mailjet.com) per API key. 
@@ -329,21 +340,21 @@ curl -s \
  * Create : ParseRoute description
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.post("parseroute")
 	.request({
 		"Url":"https://www.mydomain.com/mj_parse.php",
 		"Email":"mjparse@mydomain.com"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```ruby
 # Create : ParseRoute description
@@ -353,6 +364,37 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php",email: "mjparse@mydomain.com")
+```
+``` go
+/*
+Create : ParseRoute description
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Parseroute
+	mr := &Request{
+	  Resource: "parseroute",
+	}
+	fmr := &FullRequest{
+	  Info: mr,
+	  Payload: &resources.Parseroute {
+      Url: "https://www.mydomain.com/mj_parse.php",
+      Email: "mjparse@mydomain.com",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```python
 """
@@ -371,53 +413,25 @@ result = mailjet.parseroute.create(data=data)
 print result.status_code
 print result.json()
 ```
-``` go
-/*
-Create : ParseRoute description
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Parseroute
-	mr := &MailjetRequest{
-	  Resource: "parseroute",
-	}
-	fmr := &FullMailjetRequest{
-	  Info: mr,
-	  Payload: &resources.Parseroute {
-      Url: "https://www.mydomain.com/mj_parse.php",
-      Email: "mjparse@mydomain.com",
-    },
-	}
-	err := mailjetClient.Post(fmr, &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Parseroute;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * Create : ParseRoute description
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Parseroute.resource)
 						.property(Parseroute.URL, "https://www.mydomain.com/mj_parse.php")
 						.property(Parseroute.EMAIL, "mjparse@mydomain.com");

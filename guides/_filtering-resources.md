@@ -29,27 +29,6 @@ $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```javascript
-/**
- *
- * View : List of 150 contacts
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("contact")
-	.request({
-		"Limit":"150"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
 ```bash
 # View : List of 150 contacts
 curl -s \
@@ -65,22 +44,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Contact.all(limit: "150")
-```
-```python
-"""
-View : List of 150 contacts
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-filters = {
-  'Limit': '150'
-}
-result = mailjet.contact.get(filters=filters)
-print result.status_code
-print result.json()
 ```
 ``` go
 /*
@@ -103,22 +66,62 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```javascript
+/**
+ *
+ * View : List of 150 contacts
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("contact")
+	.request({
+		"Limit":"150"
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```python
+"""
+View : List of 150 contacts
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'Limit': '150'
+}
+result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
+```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Contact;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : List of 150 contacts
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Contact.resource)
                   .filter(Contact.LIMIT, "150");
       response = client.get(request);
@@ -159,20 +162,41 @@ curl -s \
  * View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("contact")
 	.request({
 		"Offset":"25000"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+``` go
+/*
+View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	_, _, err := mailjetClient.List("contact", &data, Filter("Offset", "25000"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```ruby
 # View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
@@ -202,19 +226,22 @@ print result.json()
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Contact;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Contact.resource)
                   .filter(Contact.OFFSET, "25000");
       response = client.get(request);
@@ -223,31 +250,17 @@ public class MyClass {
     }
 }
 ```
-``` go
-/*
-View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Contact
-	_, _, err := mailjetClient.List("contact", &data, Filter("Offset", "25000"))
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
 
 You can use the <code>Offset</code> filter to retrieve a list starting from a certain offset.
 <div></div>
 
+```bash
+# View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact?Limit=150\&Offset=25000 
+```
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -261,43 +274,27 @@ $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
-# View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact?Limit=150\&Offset=25000 
-```
 ```javascript
 /**
  *
  * View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("contact")
 	.request({
 		"Limit":"150",
 		"Offset":"25000"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-```ruby
-# View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Contact.all(limit: "150",offset: "25000")
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```python
 """
@@ -316,30 +313,14 @@ result = mailjet.contact.get(filters=filters)
 print result.status_code
 print result.json()
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contact;
-public class MyClass {
-    /**
-     * View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Contact.resource)
-                  .filter(Contact.LIMIT, "150")
-                  .filter(Contact.OFFSET, "25000");
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
+```ruby
+# View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Contact.all(limit: "150",offset: "25000")
 ```
 ``` go
 /*
@@ -360,6 +341,34 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Contact.resource)
+                  .filter(Contact.LIMIT, "150")
+                  .filter(Contact.OFFSET, "25000");
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 
@@ -387,27 +396,6 @@ curl -s \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/contact?Sort=email 
 ```
-```javascript
-/**
- *
- * View : List of contact ordered by email in an ascending order
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("contact")
-	.request({
-		"Sort":"email"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
 ```ruby
 # View : List of contact ordered by email in an ascending order
 Mailjet.configure do |config|
@@ -416,6 +404,27 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Contact.all(sort: "email")
+```
+```javascript
+/**
+ *
+ * View : List of contact ordered by email in an ascending order
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("contact")
+	.request({
+		"Sort":"email"
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```python
 """
@@ -457,19 +466,22 @@ func main () {
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Contact;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : List of contact ordered by email in an ascending order
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Contact.resource)
                   .filter(Contact.SORT, "email");
       response = client.get(request);
@@ -480,9 +492,9 @@ public class MyClass {
 ```
 
 
-You can sort a GET query by specifying a property name as the value of the 'Sort' filter. The default sorting is ascending.  When a property name is postfixed with <code>+DESC</code> , the sort order is descending.  
+You can sort a GET query by specifying a property name as the value of the 'Sort' filter. The default sorting is ascending.  When a property name is postfixed with <code>DESC</code> (ie <code>property_name DESC</code>, seperated by a space) , the sort order is descending.  
 
-Please note that the <code>Sort</code> filter does not work with all properties and that the <code>+DESC</code> is not available for all properties.
+Please note that the <code>Sort</code> filter does not work with all properties and that the <code> DESC</code> is not available for all properties.
 
 <div></div>
 ```php
@@ -491,7 +503,7 @@ require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $filters = [
-  'Sort' => 'email+DESC'
+  'Sort' => 'email DESC'
 ];
 $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
@@ -504,6 +516,27 @@ curl -s \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/contact?Sort=email+DESC 
 ```
+```javascript
+/**
+ *
+ * View : List of contact ordered by email in reverse order
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("contact")
+	.request({
+		"Sort":"email DESC"
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
 ```ruby
 # View : List of contact ordered by email in reverse order
 Mailjet.configure do |config|
@@ -511,28 +544,23 @@ Mailjet.configure do |config|
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Contact.all(sort: "email+DESC")
+variable = Mailjet::Contact.all(sort: "email DESC")
 ```
-```javascript
-/**
- *
- * View : List of contact ordered by email in reverse order
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("contact")
-	.request({
-		"Sort":"email+DESC"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+```python
+"""
+View : List of contact ordered by email in reverse order
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'Sort': 'email DESC'
+}
+result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -548,47 +576,34 @@ import (
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
 	var data []resources.Contact
-	_, _, err := mailjetClient.List("contact", &data, Filter("Sort", "email+DESC"))
+	_, _, err := mailjetClient.List("contact", &data, Filter("Sort", "email DESC"))
 	if err != nil {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```python
-"""
-View : List of contact ordered by email in reverse order
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-filters = {
-  'Sort': 'email+DESC'
-}
-result = mailjet.contact.get(filters=filters)
-print result.status_code
-print result.json()
-```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Contact;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : List of contact ordered by email in reverse order
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Contact.resource)
-                  .filter(Contact.SORT, "email+DESC");
+                  .filter(Contact.SORT, "email DESC");
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -597,17 +612,10 @@ public class MyClass {
 ```
 
 
-To retrieve the same query only in descending order, amend the URL with <code>+DESC</code>:
+To retrieve the same query only in descending order, amend the sort filter with <code>DESC</code>:
 
 ##Resource Filters
 
-```bash
-# View : Contacts in ContactsList
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact?ContactsList=$ContactsListID 
-```
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -620,26 +628,12 @@ $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```javascript
-/**
- *
- * View : Contacts in ContactsList
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("contact")
-	.request({
-		"ContactsList":"$ContactsListID"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+```bash
+# View : Contacts in ContactsList
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact?ContactsList=$ContactsListID 
 ```
 ```ruby
 # View : Contacts in ContactsList
@@ -649,6 +643,27 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Contact.all(contacts_list: "$ContactsListID")
+```
+```javascript
+/**
+ *
+ * View : Contacts in ContactsList
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("contact")
+	.request({
+		"ContactsList":"$ContactsListID"
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```python
 """
@@ -669,19 +684,22 @@ print result.json()
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Contact;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : Contacts in ContactsList
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Contact.resource)
                   .filter(Contact.CONTACTSLIST, "$ContactsListID");
       response = client.get(request);
@@ -739,19 +757,19 @@ curl -s \
  * View : Contact from email address
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("contact")
 	.id($EMAIL_ADDRESS_OR_CONTACT_ID)
-	.request();
+	.request()
 request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
+	.then((result) => {
+		console.log(result.body)
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```ruby
 # View : Contact from email address
@@ -761,20 +779,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Contact.find($EMAIL_ADDRESS_OR_CONTACT_ID)
-```
-```python
-"""
-View : Contact from email address
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$EMAIL_ADDRESS_OR_CONTACT_ID'
-result = mailjet.contact.get(id=id)
-print result.status_code
-print result.json()
 ```
 ``` go
 /*
@@ -790,7 +794,7 @@ import (
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
 	var data []resources.Contact
-	mr := &MailjetRequest{
+	mr := &Request{
 	  Resource: "contact",
 	  ID: RESOURCE_ID,
 	}
@@ -804,25 +808,42 @@ func main () {
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Contact;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : Contact from email address
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Contact.resource, ID);
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
 }
+```
+```python
+"""
+View : Contact from email address
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$EMAIL_ADDRESS_OR_CONTACT_ID'
+result = mailjet.contact.get(id=id)
+print result.status_code
+print result.json()
 ```
 
 
@@ -838,32 +859,32 @@ $response = $mj->get(Resources::$Eventcallbackurl, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```javascript
-/**
- *
- * View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("eventcallbackurl")
-	.id($EventType|$isBackup)
-	.request();
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
 ```bash
 # View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
 curl -s \
 	-X GET \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/eventcallbackurl/$EventType|$isBackup 
+```
+```javascript
+/**
+ *
+ * View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("eventcallbackurl")
+	.id($EventType|$isBackup)
+	.request()
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```ruby
 # View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
@@ -888,29 +909,6 @@ result = mailjet.eventcallbackurl.get(id=id)
 print result.status_code
 print result.json()
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Eventcallbackurl;
-public class MyClass {
-    /**
-     * View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Eventcallbackurl.resource, ID);
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
 ``` go
 /*
 View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
@@ -925,7 +923,7 @@ import (
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
 	var data []resources.Eventcallbackurl
-	mr := &MailjetRequest{
+	mr := &Request{
 	  Resource: "eventcallbackurl",
 	  ID: RESOURCE_ID,
 	}
@@ -936,9 +934,35 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Eventcallbackurl;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Eventcallbackurl.resource, ID);
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 
 
-In some case the unique key consist of several informations, you can call this unique key combinaison by using the seperator <code>|</code>.
+In some case the unique key consist of several informations, you can call this unique key combination by using the seperator <code>|</code>.
 
 ## Like and Case Sensitive Filters
 
@@ -967,20 +991,20 @@ curl -s \
  * View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("liststatistics")
 	.request({
 		"NameLike":"$Name"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```ruby
 # View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
@@ -1031,19 +1055,22 @@ func main () {
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Liststatistics;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Liststatistics.resource)
                   .filter(Liststatistics.NAMELIKE, "$Name");
       response = client.get(request);
@@ -1066,13 +1093,6 @@ Example : <code>Name</code> filter on <code>[/contact/liststatistics](/email-api
 
 ##The Count Filter
 
-```bash
-# View : Total number of contact
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact?countOnly=1 
-```
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -1082,7 +1102,7 @@ $filters = [
   'countOnly' => '1'
 ];
 $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
-$response->success() && var_dump($response->getData());
+$response->success() && var_dump($response->getTotal());
 ?>
 ```
 ```javascript
@@ -1091,20 +1111,27 @@ $response->success() && var_dump($response->getData());
  * View : Total number of contact
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("contact")
 	.request({
 		"countOnly":"1"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```bash
+# View : Total number of contact
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact?countOnly=1 
 ```
 ```ruby
 # View : Total number of contact
@@ -1155,19 +1182,22 @@ func main () {
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Contact;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : Total number of contact
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Contact.resource)
                   .filter(Contact.COUNTONLY, "1");
       response = client.get(request);

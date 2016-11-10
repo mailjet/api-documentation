@@ -2,7 +2,7 @@
 
 ##Messages
 
-The Mailjet API offers resources to extracts information for every messages you send. You can also filter through the message statistics to view specific metrics for your messages.
+The Mailjet API offers resources to extract information for every message you send. You can also filter through the message statistics to view specific metrics for your messages.
 
 ### Information about a message
 
@@ -24,6 +24,26 @@ curl -s \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/message/$ID_MESSAGE 
 ```
+```javascript
+/**
+ *
+ * View : Details of a specific Message (e-mail) processed by Mailjet
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("message")
+	.id($ID_MESSAGE)
+	.request()
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
 ```ruby
 # View : Details of a specific Message (e-mail) processed by Mailjet
 Mailjet.configure do |config|
@@ -32,51 +52,6 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Message.find($ID_MESSAGE)
-```
-```javascript
-/**
- *
- * View : Details of a specific Message (e-mail) processed by Mailjet
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("message")
-	.id($ID_MESSAGE)
-	.request();
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-``` go
-/*
-View : Details of a specific Message (e-mail) processed by Mailjet
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Message
-	mr := &MailjetRequest{
-	  Resource: "message",
-	  ID: RESOURCE_ID,
-	}
-	err := mailjetClient.Get(mr, &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
 ```
 ```python
 """
@@ -92,22 +67,50 @@ result = mailjet.message.get(id=id)
 print result.status_code
 print result.json()
 ```
+``` go
+/*
+View : Details of a specific Message (e-mail) processed by Mailjet
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Message
+	mr := &Request{
+	  Resource: "message",
+	  ID: RESOURCE_ID,
+	}
+	err := mailjetClient.Get(mr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Message;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : Details of a specific Message (e-mail) processed by Mailjet
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Message.resource, ID);
       response = client.get(request);
       System.out.println(response.getStatus());
@@ -154,11 +157,18 @@ public class MyClass {
 
 Perform a GET on <code>[/message](/email-api/v3/message/)</code> to get basic information about a message such as the contact it was sent to, who it was sent by, if there were any attachments and how large the message was.
 
-The <code>StateID</code> property shows the current status the messages is in. To get the full listing of <code>StateId</code> and their meaning, use the <code>[/messagestate](/email-api/v3/messagestate/)</code> resource.
+The <code>StateID</code> property shows the current status the message is in. To get the full listing of <code>StateId</code> and their meaning, use the <code>[/messagestate](/email-api/v3/messagestate/)</code> resource.
 
 
 <div></div>
 
+```bash
+# View : information for a specific message
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/messageinformation/$ID_MESSAGE 
+```
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -168,32 +178,25 @@ $response = $mj->get(Resources::$Messageinformation, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
-# View : information for a specific message
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/messageinformation/$ID_MESSAGE 
-```
 ```javascript
 /**
  *
  * View : information for a specific message
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("messageinformation")
 	.id($ID_MESSAGE)
-	.request();
+	.request()
 request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
+	.then((result) => {
+		console.log(result.body)
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```ruby
 # View : information for a specific message
@@ -232,7 +235,7 @@ import (
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
 	var data []resources.Messageinformation
-	mr := &MailjetRequest{
+	mr := &Request{
 	  Resource: "messageinformation",
 	  ID: RESOURCE_ID,
 	}
@@ -246,19 +249,22 @@ func main () {
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Messageinformation;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : information for a specific message
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Messageinformation.resource, ID);
       response = client.get(request);
       System.out.println(response.getStatus());
@@ -322,19 +328,19 @@ curl -s \
  * View : Event history of a message.
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("messagehistory")
 	.id($ID_MESSAGE)
-	.request();
+	.request()
 request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
+	.then((result) => {
+		console.log(result.body)
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```ruby
 # View : Event history of a message.
@@ -362,19 +368,22 @@ print result.json()
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Messagehistory;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : Event history of a message.
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Messagehistory.resource, ID);
       response = client.get(request);
       System.out.println(response.getStatus());
@@ -396,7 +405,7 @@ import (
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
 	var data []resources.Messagehistory
-	mr := &MailjetRequest{
+	mr := &Request{
 	  Resource: "messagehistory",
 	  ID: RESOURCE_ID,
 	}
@@ -447,6 +456,26 @@ curl -s \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/messagesentstatistics/$ID_MESSAGE 
 ```
+```javascript
+/**
+ *
+ * View : statuses and events summary for a specific message
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("messagesentstatistics")
+	.id($ID_MESSAGE)
+	.request()
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -456,25 +485,14 @@ $response = $mj->get(Resources::$Messagesentstatistics, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```javascript
-/**
- *
- * View : statuses and events summary for a specific message
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("messagesentstatistics")
-	.id($ID_MESSAGE)
-	.request();
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+```ruby
+# View : statuses and events summary for a specific message
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Messagesentstatistics.find($ID_MESSAGE)
 ```
 ```python
 """
@@ -490,15 +508,6 @@ result = mailjet.messagesentstatistics.get(id=id)
 print result.status_code
 print result.json()
 ```
-```ruby
-# View : statuses and events summary for a specific message
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Messagesentstatistics.find($ID_MESSAGE)
-```
 ``` go
 /*
 View : statuses and events summary for a specific message
@@ -513,7 +522,7 @@ import (
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
 	var data []resources.Messagesentstatistics
-	mr := &MailjetRequest{
+	mr := &Request{
 	  Resource: "messagesentstatistics",
 	  ID: RESOURCE_ID,
 	}
@@ -527,19 +536,22 @@ func main () {
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Messagesentstatistics;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : statuses and events summary for a specific message
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Messagesentstatistics.resource, ID);
       response = client.get(request);
       System.out.println(response.getStatus());
@@ -619,27 +631,6 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Message.all(campaign: "$CAMPAIGN_ID")
 ```
-```javascript
-/**
- *
- * View : Details of Messages in a campaign
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("message")
-	.request({
-		"Campaign":"$CAMPAIGN_ID"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
 ```python
 """
 View : Details of Messages in a campaign
@@ -655,6 +646,54 @@ filters = {
 result = mailjet.message.get(filters=filters)
 print result.status_code
 print result.json()
+```
+```javascript
+/**
+ *
+ * View : Details of Messages in a campaign
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("message")
+	.request({
+		"Campaign":"$CAMPAIGN_ID"
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Message;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : Details of Messages in a campaign
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Message.resource)
+                  .filter(Message.CAMPAIGN, "$CAMPAIGN_ID");
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
 ```
 ``` go
 /*
@@ -677,30 +716,6 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Message;
-public class MyClass {
-    /**
-     * View : Details of Messages in a campaign
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Message.resource)
-                  .filter(Message.CAMPAIGN, "$CAMPAIGN_ID");
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
 
 
 When working with campaigns, you can list your messages by using the filter <code>Campaign</code> on <code>[/message](/email-api/v3/message/)</code> resource or <code>CampaignID</code> on <code>[/messagesentstatistics](/email-api/v3/messagesentstatistics/)</code> and <code>[/messageinformation](/email-api/v3/messageinformation/)</code> resources.
@@ -711,13 +726,6 @@ If you don't specify any filter on the above resources, the current day messages
 
 ###Message Statistics
 
-```bash
-# View : API key Campaign/Message statistics.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/messagestatistics 
-```
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -727,24 +735,31 @@ $response = $mj->get(Resources::$Messagestatistics);
 $response->success() && var_dump($response->getData());
 ?>
 ```
+```bash
+# View : API key Campaign/Message statistics.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/messagestatistics 
+```
 ```javascript
 /**
  *
  * View : API key Campaign/Message statistics.
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("messagestatistics")
-	.request();
+	.request()
 request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
+	.then((result) => {
+		console.log(result.body)
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```ruby
 # View : API key Campaign/Message statistics.
@@ -768,29 +783,6 @@ result = mailjet.messagestatistics.get()
 print result.status_code
 print result.json()
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Messagestatistics;
-public class MyClass {
-    /**
-     * View : API key Campaign/Message statistics.
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Messagestatistics.resource);
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
 ``` go
 /*
 View : API key Campaign/Message statistics.
@@ -810,6 +802,32 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Messagestatistics;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : API key Campaign/Message statistics.
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Messagestatistics.resource);
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 
@@ -847,14 +865,24 @@ func main () {
 
 The <code>[/messagestatistics](/email-api/v3/messagestatistics/)</code> resource aggregates statistics on your selected filter. It is showing a count of each event attached to the messages you filtered on. 
 
-By default if no filter is defined, this resource will aggregate todays messages statistics. You can use the filters <code>FromTS</code> and <code>ToTS</code> (Unix timestamp) to specify the period of extraction.  
+By default, if no filter is defined, this resource will aggregate today's messages statistics. You can use the filters <code>FromTS</code> and <code>ToTS</code> (Unix timestamp) to specify the period of extraction.  
 
 Visit the <code>[/messagestatistics](/email-api/v3/messagestatistics/)</code> resource reference for a full list of available filters.
+
+<div></div>
+###Troubleshooting missing messages
+
+Please note that sometimes, messages may not be traceable with the <code>MessageID</code> returned from our SEND API. There could be few reasons behind that:
+
+ - <code>Message was sent from non-validated sender.</code> When this happens, the message remains in queue for 5 days. If in the meantime the sender is validated, the message will be released. Otherwise, it will be discarded in 5 days.
+ - <code>Sending limits reached.</code> Messages above the quota allowed will be stored in queue for 5 days and will be retried later. To increase your quota, please  upgrade your billing plan.
+ - <code>Processing in process.</code> Sometimes it may take some time for the messages to appear in your statistics, especially for big campaigns. Please try again later.
+
 
 ##Event Statistics
 
 The following statistic resources will allow you to view information about the events on your messages. 
-By default, they will show the current day statistics. To show more information, we advise you to use the <code>FromTS</code> and <code>ToTS</code> filters to increase the range of extraction. Visit each resource reference for even more filters allowing you to navigate these statistics.  
+By default, they will show the current day statistics. To show more information, we advise you to use the <code>FromTS</code> and <code>ToTS</code> filters to increase the range of extraction. Visit each resource reference for even more filters allowing you to navigate through these statistics.  
 
 ### list per event types
 
@@ -872,15 +900,6 @@ $response = $mj->get(Resources::$Openinformation);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```ruby
-# View : Retrieve informations about messages opened at least once by their recipients.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Openinformation.all()
-```
 ```bash
 # View : Retrieve informations about messages opened at least once by their recipients.
 curl -s \
@@ -894,18 +913,27 @@ curl -s \
  * View : Retrieve informations about messages opened at least once by their recipients.
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("openinformation")
-	.request();
+	.request()
 request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
+	.then((result) => {
+		console.log(result.body)
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```ruby
+# View : Retrieve informations about messages opened at least once by their recipients.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Openinformation.all()
 ```
 ```python
 """
@@ -944,19 +972,22 @@ func main () {
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Openinformation;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : Retrieve informations about messages opened at least once by their recipients.
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Openinformation.resource);
       response = client.get(request);
       System.out.println(response.getStatus());
@@ -1014,18 +1045,27 @@ curl -s \
  * View : Click statistics for messages.
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("clickstatistics")
-	.request();
+	.request()
 request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
+	.then((result) => {
+		console.log(result.body)
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```ruby
+# View : Click statistics for messages.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Clickstatistics.all()
 ```
 ```python
 """
@@ -1039,15 +1079,6 @@ mailjet = Client(auth=(api_key, api_secret))
 result = mailjet.clickstatistics.get()
 print result.status_code
 print result.json()
-```
-```ruby
-# View : Click statistics for messages.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Clickstatistics.all()
 ```
 ``` go
 /*
@@ -1073,19 +1104,22 @@ func main () {
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Clickstatistics;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : Click statistics for messages.
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Clickstatistics.resource);
       response = client.get(request);
       System.out.println(response.getStatus());
@@ -1150,18 +1184,31 @@ variable = Mailjet::Bouncestatistics.all()
  * View : Statistics on the bounces generated by emails sent on a given API Key.
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("bouncestatistics")
-	.request();
+	.request()
 request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
+	.then((result) => {
+		console.log(result.body)
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```python
+"""
+View : Statistics on the bounces generated by emails sent on a given API Key.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+result = mailjet.bouncestatistics.get()
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -1184,35 +1231,25 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```python
-"""
-View : Statistics on the bounces generated by emails sent on a given API Key.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.bouncestatistics.get()
-print result.status_code
-print result.json()
-```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Bouncestatistics;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : Statistics on the bounces generated by emails sent on a given API Key.
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Bouncestatistics.resource);
       response = client.get(request);
       System.out.println(response.getStatus());
@@ -1249,6 +1286,13 @@ The <code>[/bouncestatistics](/email-api/v3/bouncestatistics/)</code> resource s
 
 ### statistics per event types
 
+```bash
+# View : Retrieve statistics on e-mails opened at least once by their recipients.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/openstatistics 
+```
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -1258,12 +1302,24 @@ $response = $mj->get(Resources::$Openstatistics);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
-# View : Retrieve statistics on e-mails opened at least once by their recipients.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/openstatistics 
+```javascript
+/**
+ *
+ * View : Retrieve statistics on e-mails opened at least once by their recipients.
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("openstatistics")
+	.request()
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```ruby
 # View : Retrieve statistics on e-mails opened at least once by their recipients.
@@ -1308,41 +1364,25 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```javascript
-/**
- *
- * View : Retrieve statistics on e-mails opened at least once by their recipients.
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.get("openstatistics")
-	.request();
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Openstatistics;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : Retrieve statistics on e-mails opened at least once by their recipients.
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Openstatistics.resource);
       response = client.get(request);
       System.out.println(response.getStatus());
@@ -1395,18 +1435,18 @@ curl -s \
  * View : Top links clicked historgram.
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("toplinkclicked")
-	.request();
+	.request()
 request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
+	.then((result) => {
+		console.log(result.body)
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```ruby
 # View : Top links clicked historgram.
@@ -1416,6 +1456,19 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Toplinkclicked.all()
+```
+```python
+"""
+View : Top links clicked historgram.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+result = mailjet.toplinkclicked.get()
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -1438,35 +1491,25 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```python
-"""
-View : Top links clicked historgram.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.toplinkclicked.get()
-print result.status_code
-print result.json()
-```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Toplinkclicked;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : Top links clicked historgram.
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Toplinkclicked.resource);
       response = client.get(request);
       System.out.println(response.getStatus());
@@ -1484,7 +1527,6 @@ public class MyClass {
 	"Data": [
 		{
 			"ClickedCount": "3",
-			"ID": "-1",
 			"LinkId": "1",
 			"Url": "www.example.com"
 		}
@@ -1502,19 +1544,10 @@ The <code>[/toplinkclicked](/email-api/v3/toplinkclicked/)</code> resource shows
 
 Mailjet captures a number of statistics for each resource, such as the number of messages that were delivered, opened and blocked. Each of the following resource groups the statistics per resource.
 
-By default, these resources will show you statistics on the full history of the account. When <code>FromTS</code> and <code>ToTS</code> filter are available, they will refer to the a campaign start date. Please visit these resource references for more information on available filters.  
+By default, these resources will show you statistics on the full history of the account. When <code>FromTS</code> and <code>ToTS</code> filter are available, they will refer to the campaign start date. Please visit these resource references for more information on available filters.  
 
 <div></div>
 
-```php
-<?php
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Contactstatistics);
-$response->success() && var_dump($response->getData());
-?>
-```
 ```bash
 # View : View message statistics for a given contact.
 curl -s \
@@ -1528,27 +1561,18 @@ curl -s \
  * View : View message statistics for a given contact.
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("contactstatistics")
-	.request();
+	.request()
 request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
+	.then((result) => {
+		console.log(result.body)
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-```ruby
-# View : View message statistics for a given contact.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Contactstatistics.all()
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```python
 """
@@ -1562,6 +1586,24 @@ mailjet = Client(auth=(api_key, api_secret))
 result = mailjet.contactstatistics.get()
 print result.status_code
 print result.json()
+```
+```php
+<?php
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->get(Resources::$Contactstatistics);
+$response->success() && var_dump($response->getData());
+?>
+```
+```ruby
+# View : View message statistics for a given contact.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Contactstatistics.all()
 ```
 ``` go
 /*
@@ -1587,19 +1629,22 @@ func main () {
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Contactstatistics;
+import org.json.JSONArray;
+import org.json.JSONObject;
 public class MyClass {
     /**
      * View : View message statistics for a given contact.
      */
-    public static void main(String[] args) throws MailjetException {
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Contactstatistics.resource);
       response = client.get(request);
       System.out.println(response.getStatus());
@@ -1656,40 +1701,24 @@ $response = $mj->get(Resources::$Apikeytotals);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```ruby
-# View : Global counts for an API Key, since its creation.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Apikeytotals.all()
-```
 ```javascript
 /**
  *
  * View : Global counts for an API Key, since its creation.
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.get("apikeytotals")
-	.request();
+	.request()
 request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
+	.then((result) => {
+		console.log(result.body)
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-```bash
-# View : Global counts for an API Key, since its creation.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/apikeytotals 
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```python
 """
@@ -1704,28 +1733,21 @@ result = mailjet.apikeytotals.get()
 print result.status_code
 print result.json()
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Apikeytotals;
-public class MyClass {
-    /**
-     * View : Global counts for an API Key, since its creation.
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Apikeytotals.resource);
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
+```bash
+# View : Global counts for an API Key, since its creation.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/apikeytotals 
+```
+```ruby
+# View : Global counts for an API Key, since its creation.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Apikeytotals.all()
 ```
 ``` go
 /*
@@ -1746,6 +1768,32 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Apikeytotals;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : Global counts for an API Key, since its creation.
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Apikeytotals.resource);
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 

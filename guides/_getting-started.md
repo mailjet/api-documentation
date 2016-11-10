@@ -121,8 +121,11 @@ Both these keys can be found in your control panel, once you're logged-in and yo
 
 The usual json payload response will have the following structure : <code>{"Count": int, "Data": array, "Total": int}</code> where <code>Count</code> and <code>Total</code> represent the number of lines affected by your API call. When using the <code>[countOnly](#the-count-filter)</code> filter <code>Total</code> will be the global number of elements corresponding to your API call.  
 
+
 <div></div>
 ###Status Codes
+
+<aside class="notice">From September 1st 2016, Mailjet API will apply a rate limitation on the number of calls authorized per minute. The API will return a <code>429 Too Many Requests</code> in case you reach the limit. See the table below for the list of all status codes returned by the API.</aside>
 
 These status codes will be sent back by the API to notify of the success or failure of your calls.
 
@@ -137,7 +140,9 @@ Code|  | Description
 403 | Forbidden | You are not authorised to access this resource. 
 404 | Not Found | The resource with the specified ID you are trying to reach does not exist.
 405 | Method Not Allowed | The method requested on the resource does not exist.
-500 | Internal Server Error | Ouch! Something went wrong on our side and we apologize! Please contact <a href="https://www.mailjet.com/support" target="_blank">our support team</a> who'll be able to help you on this
+429 | Too Many Requests | Oops! You have reach the maximum number of calls allowed per minute by our API. Please review your integration to reduce the number of call issued by your system.
+500 | Internal Server Error | Ouch! Something went wrong on our side and we apologize! When such error occurs, it will contain an error identifier in it's description (e.g. "ErrorIdentifier" : "D4DF574C-0C5F-45C7-BA52-7AA8E533C3DE"), which is crucial for us to track the problem and identify the root cause. Please contact <a href="https://www.mailjet.com/support" target="_blank">our support team</a> , providing the error indetifier and  we will do our best to help.
+
 
 
 <div></div>
@@ -150,6 +155,12 @@ Code|  | Description
 ```
 
 In addition to the status codes, in case of error, you can find hints in a standardised JSON response with the reason under <code>ErrorMessage</code>.  
+
+In case of a <code>429 Too Many Requests</code> error, keep in mind that Mailjet API offers multiple bulk functionalities to replace and ease some heavy duty API needs :
+ 
+ - Large update of contacts and lists: [using bulk contact management](#managing-contacts-in-bulk)
+ - Significant number of distinct transactional messages: [using transactional bulk sending](#sending-in-bulk) 
+ - Significant number of identical transactional messages: [putting multiple recipients in a transactional API call](#sending-to-multiple-recipients) and [using templates and template language for personalisation](#transactional-templating)
 
 ##Verify Your Domain
 
@@ -195,7 +206,7 @@ With some DNS providers the setup can be quite tedious, but we would be happy to
 <aside class="notice">The validation of a domain can also be initiated with API calls. Visit the <a href="#domains-and-dns">Domains and DNS</a> for more information.</aside>
 
 
-## Where to go from here ?
+## Where to go from here?
 
 In the next sections of this guide, you will find 2 common user cases:
 

@@ -12,14 +12,15 @@ use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $body = [
     'EventType' => "open",
-    'Url' => "https://mydomain.com/event_handler"
+    'Url' => "https://mydomain.com/event_handler",
+    'Version' => "2"
 ];
 $response = $mj->post(Resources::$Eventcallbackurl, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
-# Create an handler for the open event
+# Create a grouped handler for the open event
 curl -s \
 	-X POST \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
@@ -27,43 +28,45 @@ curl -s \
 	-H 'Content-Type: application/json' \
 	-d '{
 		"EventType":"open",
-		"Url":"https://mydomain.com/event_handler"
+		"Url":"https://mydomain.com/event_handler",
+		"Version":"2"
 	}'
 ```
 ```javascript
 /**
  *
- * Create an handler for the open event
+ * Create a grouped handler for the open event
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
+const request = mailjet
 	.post("eventcallbackurl")
 	.request({
 		"EventType":"open",
-		"Url":"https://mydomain.com/event_handler"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
+		"Url":"https://mydomain.com/event_handler",
+		"Version":"2"
 	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```ruby
-# Create an handler for the open event
+# Create a grouped handler for the open event
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
   config.default_from = 'your default sending address'
 end
-variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler")
+variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler",version: "2")
 ```
 ```python
 """
-Create an handler for the open event
+Create a grouped handler for the open event
 """
 from mailjet_rest import Client
 import os
@@ -72,15 +75,45 @@ api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
 data = {
   'EventType': 'open',
-  'Url': 'https://mydomain.com/event_handler'
+  'Url': 'https://mydomain.com/event_handler',
+  'Version': '2'
 }
 result = mailjet.eventcallbackurl.create(data=data)
 print result.status_code
 print result.json()
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Eventcallbackurl;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Create a grouped handler for the open event
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Eventcallbackurl.resource)
+						.property(Eventcallbackurl.EVENTTYPE, "open")
+						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler")
+						.property(Eventcallbackurl.VERSION, "2");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 ``` go
 /*
-Create an handler for the open event
+Create a grouped handler for the open event
 */
 package main
 import (
@@ -92,14 +125,15 @@ import (
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
 	var data []resources.Eventcallbackurl
-	mr := &MailjetRequest{
+	mr := &Request{
 	  Resource: "eventcallbackurl",
 	}
-	fmr := &FullMailjetRequest{
+	fmr := &FullRequest{
 	  Info: mr,
 	  Payload: &resources.Eventcallbackurl {
       EventType: "open",
       Url: "https://mydomain.com/event_handler",
+      Version: 2,
     },
 	}
 	err := mailjetClient.Post(fmr, &data)
@@ -109,42 +143,81 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Eventcallbackurl;
-public class MyClass {
-    /**
-     * Create an handler for the open event
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Eventcallbackurl.resource)
-						.property(Eventcallbackurl.EVENTTYPE, "open")
-						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
 
 
 The endpoint is an URL our server will call for each event (it can lead to a lot of hits !). You can use the API to setup a new endpoint using the <code>[/eventcallbackurl](/email-api/v3/eventcallbackurl/)</code> resource. Alternatively, you can configure this in your account preferences, in the <a href="https://app.mailjet.com/account/triggers" target="_blank">Event Tracking</a> section.
 
-It must return a <code>200 OK</code> HTTP code if all goes well. Any other HTTP code will result in our server retrying the request later (up to 10 times, every 10 minutes). If the request still fails after 10 errors, we will stop trying.
+It must return a <code>200 OK</code> HTTP code if all goes well. Any other HTTP code will result in our server retrying the request later. 
+
+Our system will retry following these rules : 
+
+ - 10 attempts with 30 seconds between each attempt
+ - followed by 10 attempts with 30 minutes between each attempt
+ - finally the url is suspended 
+
+The event API also allows to configure a backup endpoint URL with the property <code>isBackup</code> that will be used in case the primary url is suspended.
+
+To reactivate a suspended enpoint URL, you need to update the URL with a new URL.
 
 We strongly recommend using a secure (HTTPS) URL in combination with a basic authentification to make sure data cannot be intercepted, and that only our servers can send you data.
 
 <code>Eg: https://username:password@www.example.com/mailjet_triggers.php</code>
 
+You can also specify a port in your webhook URL.
+
+<code>Eg: https://www.example.com:123/mailjet_triggers.php</code>
+
 The event data is sent in the <code>POST</code> request body using a JSON object. Its content depends on the event.
+
+<div></div>
+
+> JSON Sample delivered to the webhook URL:
+
+```json
+[
+   {
+      "event": "sent",
+      "time": 1433333949,
+      "MessageID": 19421777835146490,
+      "email": "api@mailjet.com",
+      "mj_campaign_id": 7257,
+      "mj_contact_id": 4,
+      "customcampaign": "",
+      "mj_message_id": "19421777835146490",
+      "smtp_reply": "sent (250 2.0.0 OK 1433333948 fa5si855896wjc.199 - gsmtp)",
+      "CustomID": "helloworld",
+      "Payload": ""
+   },
+   {
+      "event": "sent",
+      "time": 1433333949,
+      "MessageID": 19421777835146491,
+      "email": "api@mailjet.com",
+      "mj_campaign_id": 7257,
+      "mj_contact_id": 4,
+      "customcampaign": "",
+      "mj_message_id": "19421777835146491",
+      "smtp_reply": "sent (250 2.0.0 OK 1433333948 fa5si855896wjc.199 - gsmtp)",
+      "CustomID": "helloworld",
+      "Payload": ""
+   }
+]
+
+```
+
+All the events will be delivered to your webhook in a JSON array of event objects.
+
+Please note that the event types in the collection can be mixed. We group together all the events of the last second for the same webhook url.
+
+##Best practice
+
+The Event API rely on your server being able to handle large amount of POST calls on your webhook(s). 
+
+We advise you to follow some basic guidelines for implementation and usage.
+
+ - Process the payload received asynchronously : as much as possible, the webhook script should rely on an asynchronous consumer process that will use the data saved by your webhook. You should keep out of your webhook logic all cross matches of the delivered events with other ressources of our API or your internal database. This step will allow your webhook to answer in a timely manner to our calls and avoid it to timeout and being retried by our server. 
+ - Check regularly your server logs for any errors : all non 200 errors would be retried and could cause an increasing volume of calls to your system.
+ - Leverage the [transactional message tagging](#tagging-email-messages) to simplify reconciliation between the events and your own system.
 
 ##Events
 
@@ -272,6 +345,10 @@ Bounce event additional properties:
 - error_related_to : see error table
 - error : see [error table](#possible-values-for-errors)
 
+<aside class="notice">
+NOTICE: If you consider using this event to modify the status of your recipient subscription or viability , please take into account the value of the <code>hard_bounce</code> and <code>error</code> property. All bounce event may not have the same level of importance. 
+</aside>
+
 <div></div>
 ###Blocked event
 
@@ -297,6 +374,11 @@ Blocked event additional properties:
 
 - error_related_to : see error table
 - error : see [error table](#possible-values-for-errors)
+
+
+<aside class="notice">
+NOTICE: If you consider using this event to modify the status of your recipient subscription, please take into account the value of the <code>error</code> property. All blocked event may not have the same reason and perpetuity on the status of the contact (ie: <code>duplicate in campaign</code> indicates that the recipient message was blocked for the campaign and <code>preblocked</code> indicates that the recipient is blocked for all messages).  
+</aside>
 
 <div></div>
 ###Spam event
@@ -353,203 +435,6 @@ Unsub event additional properties:
 - agent : User-Agent
 
 
-##Grouping events
-
-```php
-<?php
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$body = [
-    'EventType' => "open",
-    'Url' => "https://mydomain.com/event_handler",
-    'Version' => "2"
-];
-$response = $mj->post(Resources::$Eventcallbackurl, ['body' => $body]);
-$response->success() && var_dump($response->getData());
-?>
-```
-```javascript
-/**
- *
- * Create an grouped handler for the open event
- *
- */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.post("eventcallbackurl")
-	.request({
-		"EventType":"open",
-		"Url":"https://mydomain.com/event_handler",
-		"Version":"2"
-	});
-request
-	.on('success', function (response, body) {
-		console.log (response.statusCode, body);
-	})
-	.on('error', function (err, response) {
-		console.log (response.statusCode, err);
-	});
-```
-```bash
-# Create an grouped handler for the open event
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/eventcallbackurl \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"EventType":"open",
-		"Url":"https://mydomain.com/event_handler",
-		"Version":"2"
-	}'
-```
-```ruby
-# Create an grouped handler for the open event
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler",version: "2")
-```
-```python
-"""
-Create an grouped handler for the open event
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'EventType': 'open',
-  'Url': 'https://mydomain.com/event_handler',
-  'Version': '2'
-}
-result = mailjet.eventcallbackurl.create(data=data)
-print result.status_code
-print result.json()
-```
-``` go
-/*
-Create an grouped handler for the open event
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Eventcallbackurl
-	mr := &MailjetRequest{
-	  Resource: "eventcallbackurl",
-	}
-	fmr := &FullMailjetRequest{
-	  Info: mr,
-	  Payload: &resources.Eventcallbackurl {
-      EventType: "open",
-      Url: "https://mydomain.com/event_handler",
-      Version: 2,
-    },
-	}
-	err := mailjetClient.Post(fmr, &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Eventcallbackurl;
-public class MyClass {
-    /**
-     * Create an grouped handler for the open event
-     */
-    public static void main(String[] args) throws MailjetException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient("api key", "api secret");
-      request = new MailjetRequest(Eventcallbackurl.resource)
-						.property(Eventcallbackurl.EVENTTYPE, "open")
-						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler")
-						.property(Eventcallbackurl.VERSION, "2");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
-
-
-When you create an handler (see above), the default behaviour is to send one event at the time. 
-
-It is convenient and efficient enough for low event volumes but if you're sending larger volumes, it is more efficient to group events together. 
-
-To enable the grouping of events, you have to use the Version 2 of our Event API. To do so, just set the <code>Version</code> field of the <code>/[eventcallbackurl](/email-api/v3/eventcallbackurl/)</code> resource to 2.
-
-
-> From now, all the events will be delivered to your webhook in a JSON array, similar to:
-
-```json
-[
-   {
-      "customcampaign": "test",
-      "email": "api@mailjet.com",
-      "event": "sent",
-      "mj_campaign_id": 483,
-      "mj_contact_id": 4,
-      "mj_message_id": "18858825588804172",
-      "smtp_reply": "sent (250 2.0.0 OK 1424873937 fn1si2587485pab.205 - gsmtp)",
-      "time": 1424873938
-   },
-   {
-      "customcampaign": "test",
-      "email": "api@mailjet.com",
-      "event": "sent",
-      "mj_campaign_id": 483,
-      "mj_contact_id": 4,
-      "mj_message_id": "18858825588803684",
-      "smtp_reply": "sent (250 2.0.0 OK 1424873937 av4si15414111pbd.46 - gsmtp)",
-      "time": 1424873938
-   },
-   {
-      "customcampaign": "test",
-      "email": "api@mailjet.com",
-      "event": "sent",
-      "mj_campaign_id": 483,
-      "mj_contact_id": 4,
-      "mj_message_id": "18014400413866302",
-      "smtp_reply": "sent (250 2.0.0 OK 1424873938 j6si29391363wif.14 - gsmtp)",
-      "time": 1424873939
-   },
-   {
-      "customcampaign": "test",
-      "email": "api@mailjet.com",
-      "event": "sent",
-      "mj_campaign_id": 483,
-      "mj_contact_id": 4,
-      "mj_message_id": "18858825588804459",
-      "smtp_reply": "sent (250 2.0.0 OK 1424873939 r6si17223863wjx.75 - gsmtp)",
-      "time": 1424873940
-   }
-]
-```
-
-Please note that the event types in the collection can be mixed. We group together all the events of the last second.
-
-You can always go back to the default mode by setting the <code>Version</code> field to 1.
-
 ##Possible values for errors
 
 error_related_to | error | What really happened ?
@@ -557,17 +442,22 @@ error_related_to | error | What really happened ?
 recipient | user unknown | Email address doesn't exist, double check it for typos !
  | mailbox inactive | Account has been inactive for too long (likely that it doesn't exist anymore).
  | quota exceeded | Even though this is a non-permanent error, most of the time when accounts are over-quota, it means they are inactive.
+ | blacklisted | You tried to send to a blacklisted recipient for this account. 
+ | spam reporter | You tried to send to a recipient that has reported a previous message from this account as spam. 
 domain | invalid domain | There's a typo in the domain name part of the address. Or the address is so old that its domain has expired !
  | no mail host | Nobody answers when we knock at the door.
  | relay/access denied | The destination mail server is refusing to talk to us.
  | greylisted | This is a temporary error due to possible unrecognised senders. Delivery will be re-attempted.
+ | typofix | The domain part of your recipient email address was not valid.
+content | bad or empty template | You should check that the template you are using has a content or is not corrupted. 
+ | error in template language | Your content contain a template language error , you can refer to the [error reporting functionalities](#templates-error-management) to get more information.
 spam | sender blocked | This is quite bad! You should contact us to investigate this issue.
  | content blocked | Something in your email has triggered an anti-spam filter and your email was rejected. Please contact us so we can review the email content and report any false positives.
  | policy issue | We do our best to avoid these errors with outbound throttling and following best practices. Although we do receive alerts when this happens, make sure to contact us for further information and a workaround
 system | system issue | Something went wrong on our server-side. A temporary error. Please contact us if you receive an event of this type.
  | protocol issue | Something went wrong with our servers. This should not happen, and never be permanent !
  | connection issue | Something went wrong with our servers. This should not happen, and never be permanent !
-mailjet | preblocked | You tried to send an email to an address that recently (or repeatedly) bounced. We didn't try to send it to avoid damaging your reputation. (Coming soon: New options to bypass email blocking)
+mailjet | preblocked | You tried to send an email to an address that recently (or repeatedly) bounced. We didn't try to send it to avoid damaging your reputation. 
  | duplicate in campaign | You used X-Mailjet-DeduplicateCampaign and sent more than one email to a single recipient. Only the first email was sent; the others were blocked.
 
 ##Online Demonstration
