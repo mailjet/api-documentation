@@ -7,6 +7,9 @@ The Event API is a very efficient way to do specific actions on your website (lo
 ##Endpoint URL
 ```php
 <?php
+/*
+Create a grouped handler for the open event
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -82,35 +85,6 @@ result = mailjet.eventcallbackurl.create(data=data)
 print result.status_code
 print result.json()
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Eventcallbackurl;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Create a grouped handler for the open event
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Eventcallbackurl.resource)
-						.property(Eventcallbackurl.EVENTTYPE, "open")
-						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler")
-						.property(Eventcallbackurl.VERSION, "2");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
 ``` go
 /*
 Create a grouped handler for the open event
@@ -141,6 +115,35 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Eventcallbackurl;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Create a grouped handler for the open event
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Eventcallbackurl.resource)
+						.property(Eventcallbackurl.EVENTTYPE, "open")
+						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler")
+						.property(Eventcallbackurl.VERSION, "2");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 
@@ -254,7 +257,7 @@ All JSON event objects contain the following properties:
 }
 ```
 
-Dispatched when the destination SMTP server (gmail, hotmail, yahoo, etc) has accepted the message. Depending on your volume, it could dispatch a lot of events to your system. See [Event grouping section](#grouping-events) to group events together.
+Dispatched when the destination SMTP server (gmail, hotmail, yahoo, etc) has accepted the message. Depending on your volume, it could dispatch a lot of events to your system, please make sure you have checked the Group Events Checkbox in the [Event API user interface](https://app.mailjet.com/account/triggers) or that the <code>[/eventcallbackurl](/email-api/v3/eventcallbackurl/)</code> <code>version</code> property is set at <code>2</code>
 
 Sent event additional properties:
 

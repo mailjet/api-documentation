@@ -228,7 +228,7 @@ variable = Mailjet::Send.create(
 """
 This calls sends an email to the given recipient with vars and custom vars.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -237,7 +237,7 @@ data = {
   'FromEmail': 'pilot@mailjet.com',
   'FromName': 'Mailjet Pilot',
   'Subject': 'Your email flight plan!',
-  'MJ-TemplateLanguage': true,
+  'MJ-TemplateLanguage': 'true',
   'Text-part': 'Dear passenger, welcome to Mailjet! On this {{var:day:"monday"}}, may the delivery force be with you! {{var:personalmessage:""}}',
   'Html-part': '<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:"monday"}}, may the delivery force be with you! {{var:personalmessage:""}}',
   'Vars': {
@@ -270,7 +270,6 @@ package main
 import (
 	"fmt"
 	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
 	"os"
 )
 type  MyVarsStruct  struct {
@@ -288,7 +287,7 @@ func main () {
       Subject: "Your email flight plan!",
       MJTemplateLanguage: "true",
     TextPart: "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
-    HtmlPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+    HTMLPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
       Vars: MyVarsStruct {
         Day: "Monday",
       },
@@ -354,7 +353,6 @@ The predefined variables are useful to access information related to the sender,
   - <code>mj:template.ID</code> 
   - <code>mj:template.name</code> 
   - <code>mj:template.copyright</code> 
- - <code>mj:permalink</code>: the permanent URL to the online version of the message
  - <code>mj:unsub_link</code>: the unsubscription link in english (EN)
  - <code>mj:unsub_link_$lang</code>: the unsubscription link in the specified language ([ISO-639-1](https://en.wikipedia.org/wiki/ISO_639-1) formatted)
  - <code>mj:share_twitter</code>: the Twitter link to share the online version of the newsletter
@@ -377,7 +375,6 @@ The predefined variables are useful to access information related to the sender,
 
 ```html
 <html><body>
-    <h1>Segment nameSegment is true for the recipient</h1>
 </body></html>
 ```
 
@@ -455,25 +452,6 @@ or
     A few more years to wait !!!
 {% endif %}
 ```
-<code>if</code>,<code>else</code>,<code>elseif</code> and <code>endif</code> allow you to insert conditional display of information in your template.
-
-The <code>if</code> statements can be nested inside one another.
-
-The conditional statement allows the usage of a default value for your variables. This can be helpful if you are not always passing all the variables in your Send API call. 
-
-You can specify a default value with the usual format <code>var:name:default_value</code>.
-
-The behavior of the conditional statement will be as follow: 
-
-|                                                  | Var “test” defined <br />and with true value | Var “test” defined <br />and with false value | Var “test” not defined |
-|--------------------------------------------------|-----------------------------------------|------------------------------------------|------------------------|
-| {% if var:test %}<br />YES<br />{% else %}<br />NO<br />{% endif %}     | YES                                     | NO                                       | !TEMPLATE ERROR!       |
-| {% if var:test:true %}<br />YES<br />{% else %}<br />NO<br />{% endif %} | YES                                     | NO                                       | YES                    |
-| {% if var:test:true %}<br />YES<br />{% else %}<br />NO<br />{% endif %} | YES                                     | NO                                       | NO                     |
-| {{var:test:"N/A"}}                               | true                                    | false                                    | N/A                    |
-| {{var:test}}                                     | true                                    | false                                    | !TEMPLATE ERROR!       |
-
-<div></div>
 
 <code>if</code>,<code>else</code>,<code>elseif</code> and <code>endif</code> allow you to insert conditional display of information in your template.
 
@@ -684,6 +662,9 @@ Instead of providing the template code in each Send API call, you can also store
 ### Creating the template
 ```php
 <?php
+/*
+Create : 
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -849,6 +830,9 @@ You can them reuse the template at will for your messages by referencing the <co
 
 ```php
 <?php
+/*
+Create : Template content
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -1050,7 +1034,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 public class MyClass {
     /**
-     * This calls sends an email to one recipient.
+     * This calls sends a message based on a template.
      */
     public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
@@ -1075,6 +1059,9 @@ public class MyClass {
 ```
 ```php
 <?php
+/*
+This calls sends a message based on a template.
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -1091,7 +1078,7 @@ $response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
-# This calls sends an email to one recipient.
+# This calls sends a message based on a template.
 curl -s \
 	-X POST \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
@@ -1113,7 +1100,7 @@ curl -s \
 ```javascript
 /**
  *
- * This calls sends an email to one recipient.
+ * This calls sends a message based on a template.
  *
  */
 var mailjet = require ('node-mailjet')
@@ -1141,7 +1128,7 @@ request
 	})
 ```
 ```ruby
-# This calls sends an email to one recipient.
+# This calls sends a message based on a template.
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
@@ -1158,9 +1145,9 @@ variable = Mailjet::Send.create(
 ```
 ```python
 """
-This calls sends an email to one recipient.
+This calls sends a message based on a template.
 """
-from mailjet import Client
+from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -1170,7 +1157,7 @@ data = {
   'FromName': 'Mailjet Pilot',
   'Subject': 'Your email flight plan!',
   'MJ-TemplateID': '1',
-  'MJ-TemplateLanguage': true,
+  'MJ-TemplateLanguage': 'true',
   'Recipients': [
 				{
 						"Email": "passenger@mailjet.com"
@@ -1183,13 +1170,12 @@ print result.json()
 ```
 ``` go
 /*
-This calls sends an email to one recipient.
+This calls sends a message based on a template.
 */
 package main
 import (
 	"fmt"
 	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
 	"os"
 )
 func main () {
@@ -1235,6 +1221,9 @@ Refer to the <code>[Send API](#sending-a-basic-email)</code> guide for more info
 
 ```php
 <?php
+/*
+View : Find your personal templates
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -1353,6 +1342,9 @@ public class MyClass {
 
 ```php
 <?php
+/*
+View : Find your templates, created in Passport
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -1395,15 +1387,6 @@ request
 		console.log(err.statusCode)
 	})
 ```
-```ruby
-# View : Find your templates, created in Passport
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Template.all(edit_mode: "tool",limit: "100",owner_type: "user")
-```
 ```python
 """
 View : Find your templates, created in Passport
@@ -1421,6 +1404,15 @@ filters = {
 result = mailjet.template.get(filters=filters)
 print result.status_code
 print result.json()
+```
+```ruby
+# View : Find your templates, created in Passport
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Template.all(edit_mode: "tool",limit: "100",owner_type: "user")
 ```
 ``` go
 /*
@@ -1485,6 +1477,9 @@ You can find your templates with a GET on the <code>/template</code> resource th
 
 ```php
 <?php
+/*
+This calls sends a message to a recipient and an template error email.
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -1507,7 +1502,7 @@ $response->success() && var_dump($response->getData());
 ?>
 ```
 ```bash
-# This calls sends an email to one recipient.
+# This calls sends a message to a recipient and an template error email.
 curl -s \
 	-X POST \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
@@ -1531,7 +1526,7 @@ curl -s \
 ```javascript
 /**
  *
- * This calls sends an email to one recipient.
+ * This calls sends a message to a recipient and an template error email.
  *
  */
 const mailjet = require ('node-mailjet')
@@ -1561,7 +1556,7 @@ request
 	})
 ```
 ```ruby
-# This calls sends an email to one recipient.
+# This calls sends a message to a recipient and an template error email.
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
@@ -1580,7 +1575,7 @@ variable = Mailjet::Send.create(
 ```
 ```python
 """
-This calls sends an email to one recipient.
+This calls sends a message to a recipient and an template error email.
 """
 from mailjet_rest import Client
 import os
@@ -1592,7 +1587,7 @@ data = {
   'FromName': 'Mailjet Pilot',
   'Subject': 'Your email flight plan!',
   'MJ-TemplateID': '1',
-  'MJ-TemplateLanguage': true,
+  'MJ-TemplateLanguage': 'true',
   'MJ-TemplateErrorReporting': 'air-traffic-control@mailjet.com',
   'MJ-TemplateErrorDeliver': 'deliver',
   'Recipients': [
@@ -1607,13 +1602,12 @@ print result.json()
 ```
 ``` go
 /*
-This calls sends an email to one recipient.
+This calls sends a message to a recipient and an template error email.
 */
 package main
 import (
 	"fmt"
 	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
 	"os"
 )
 func main () {
@@ -1653,7 +1647,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 public class MyClass {
     /**
-     * This calls sends an email to one recipient.
+     * This calls sends a message to a recipient and an template error email.
      */
     public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
@@ -1686,11 +1680,12 @@ Send API offers two payload properties to allow error management:
 
 By default, the delivery of a message in error to the recipient is turned off. 
 
-When an error occurs, and when template error reporting is enabled, a message from <code>templating-language-error@mailjet.com</code> is delivered to the given address. It will contain the error message in the body and an attachement containing the source of the original message (base64 encoded). 
+If an error occurs when the template error reporting is enabled, a message from <code>templating-language-error@mailjet.com</code> with subject <code>Error while evaluating Mailjet Templating language for message "original subject" </code> will be delivered to the given error reporting address. It will contain the error message in the body and an attachement, containing the source of the original message (base64 encoded). 
 
 ### Common templating errors:
 
- - <code> expression parsing error ## Unknown identifier: var:day ## near ## {{var:day ## </code> : This error indicates that there is variable which is not defined in "Vars". It can be fixed by adding defult value for the variable.
+ - <code> expression parsing error ## Unknown identifier: var:day ## near ## {{var:day ## </code> : This error indicates that the "day" variable is not defined in your <code>Vars</code>. It can be fixed by adding default value for the variable or making sure that you pass all the variables required by the template.
+ - <code> expression parsing error ## Unknown identifier: day ## near ## {{day ## </code> : This error is similar to the previous one, except for the absence of namespace (<code>var</code> or <code>data</code>). It can indicates that you forgot to specify whether you want to use a Send API variable <code>var:day</code> or a contact property <code>data:day</code>. It can also indicate that you are trying to use a template variable that is neither define in a <code>set</code> function nor a loop statement.
  - <code> not valid template ## near ## y}}</html> ## </code> : This error occurs when the statement is not finished - missing {% end if %}
  - <code> "var:day" is not an array value </code> : This error is generally returned when you try to loop on a non-array value. 
 
@@ -1835,7 +1830,7 @@ When confirming order, we need to show the customer additional details about the
 "vat":"$12.00",
 "totalprice":"$72.00",
 "firstname":"Mr. Awesome",
-"step":"unavailable",
+"step":"confirmorder",
 "order_date":"10-01-2016",
 "order_id":"423482",
 "productname":"T-shirt"
@@ -1919,7 +1914,7 @@ When confirming order, we need to show the customer additional details about the
 "vat":"$12.00",
 "totalprice":"$72.00",
 "firstname":"Mr. Awesome",
-"step":"unavailable",
+"step":"refund",
 "order_date":"10-01-2016",
 "order_id":"423482",
 "productname":"T-shirt"

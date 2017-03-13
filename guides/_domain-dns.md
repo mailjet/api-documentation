@@ -8,6 +8,9 @@ You will also need to verify your sender addresses and domain names. The validat
 
 ```php
 <?php
+/*
+Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -169,21 +172,24 @@ The added email will be inactive except if the domain they belong to has already
 
 To see the SPF and DKIM for your domain, use a GET request on the <code>[/dns/$id_or_domain](/email-api/v3/dns/)</code> resource using either the <code>DNSID</code> or domain name.
 
-```bash
-# View : Sender Domain properties.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/dns/$ID_OR_DOMAINNAME 
-```
 ```php
 <?php
+/*
+View : Sender Domain properties.
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $response = $mj->get(Resources::$Dns, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```bash
+# View : Sender Domain properties.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/dns/$ID_OR_DOMAINNAME 
 ```
 ```javascript
 /**
@@ -205,6 +211,15 @@ request
 		console.log(err.statusCode)
 	})
 ```
+```ruby
+# View : Sender Domain properties.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Dns.find($ID_OR_DOMAINNAME)
+```
 ```python
 """
 View : Sender Domain properties.
@@ -219,14 +234,30 @@ result = mailjet.dns.get(id=id)
 print result.status_code
 print result.json()
 ```
-```ruby
-# View : Sender Domain properties.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Dns.find($ID_OR_DOMAINNAME)
+``` go
+/*
+View : Sender Domain properties.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Dns
+	mr := &Request{
+	  Resource: "dns",
+	  ID: RESOURCE_ID,
+	}
+	err := mailjetClient.Get(mr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```java
 package com.my.project;
@@ -252,31 +283,6 @@ public class MyClass {
       System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
-}
-```
-``` go
-/*
-View : Sender Domain properties.
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Dns
-	mr := &Request{
-	  Resource: "dns",
-	  ID: RESOURCE_ID,
-	}
-	err := mailjetClient.Get(mr, &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
 }
 ```
 
@@ -322,6 +328,9 @@ Follow the ["How to setup DomainKeys (DKIM) and SPF in my DNS records"](https://
 
 ```php
 <?php
+/*
+Check : Run a check on a domain
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -500,6 +509,9 @@ In the case of a standard sender email address, an email will be sent with a val
 
 ```php
 <?php
+/*
+Validate : check if the Ownership token has been properly setup on the website or DNS
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));

@@ -141,7 +141,7 @@ Code|  | Description
 404 | Not Found | The resource with the specified ID you are trying to reach does not exist.
 405 | Method Not Allowed | The method requested on the resource does not exist.
 429 | Too Many Requests | Oops! You have reach the maximum number of calls allowed per minute by our API. Please review your integration to reduce the number of call issued by your system.
-500 | Internal Server Error | Ouch! Something went wrong on our side and we apologize! When such error occurs, it will contain an error identifier in it's description (e.g. "ErrorIdentifier" : "D4DF574C-0C5F-45C7-BA52-7AA8E533C3DE"), which is crucial for us to track the problem and identify the root cause. Please contact <a href="https://www.mailjet.com/support" target="_blank">our support team</a> , providing the error indetifier and  we will do our best to help.
+500 | Internal Server Error | Ouch! Something went wrong on our side and we apologize! When such error occurs, it will contain an error identifier in it's description (e.g. "ErrorIdentifier" : "D4DF574C-0C5F-45C7-BA52-7AA8E533C3DE"), which is crucial for us to track the problem and identify the root cause. Please contact <a href="https://www.mailjet.com/support" target="_blank">our support team</a> , providing the error identifier and  we will do our best to help.
 
 
 

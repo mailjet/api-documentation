@@ -78,20 +78,18 @@ If you need more than an ID, no problem: insert a payload to your messages, usin
 
 ###X-Mailjet-TrackOpen
 
-This header indicates that you want to activate or not the open tracking on the concerned message. This option can overrides your tracking options set on your user account.
+This header indicates that you want to activate or not the open tracking on the concerned message. This option will override your tracking options set on your user account.
  
- - <code>0</code>: take the values defined on the account. The ones shown <a href="https://app.mailjet.com/account/settings" target="_blank">here</a>
- - <code>1</code>: disable the tracking <br />
- - <code>2</code>: enable the tracking
+ - <code>0</code>: disable the tracking <br />
+ - <code>1</code>: enable the tracking
 
 
 ###X-Mailjet-TrackClick
 
-This header indicates that you want to activate or not the click tracking on the concerned message. This option can overrides your tracking options set on your user account.
+This header indicates that you want to activate or not the click tracking on the concerned message. This option will override your tracking options set on your user account.
 
- - <code>0</code>: take the values defined on the account. The ones shown <a href="https://app.mailjet.com/account/settings" target="_blank">here</a>
- - <code>1</code>: disable the tracking <br />
- - <code>2</code>: enable the tracking
+ - <code>0</code>: disable the tracking <br />
+ - <code>1</code>: enable the tracking
 
 
 ###X-Mailjet-Prio

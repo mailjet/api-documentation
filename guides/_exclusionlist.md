@@ -10,6 +10,9 @@ It is possible to manage contacts individualy or in bulk.
 
 ```php
 <?php
+/*
+Call to add contact to exclusion list
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -173,36 +176,6 @@ To remove a contact from the exclusion list, <code>IsExcludedFromCampaigns</code
 
 ###Managing multiple contacts with /contact/managemanycontacts
 
-```bash
-# Create : Manage the details of a Contact.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact/managemanycontacts \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Contacts":[
-				{
-						"Email": "jimsmith@example.com",
-						"Name": "Jim",
-						"IsExcludedFromCampaigns": true,
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				},
-				{
-						"Email": "janetdoe@example.com",
-						"Name": "Janet",
-						"IsExcludedFromCampaigns": true,
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				}
-		]
-	}'
-```
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -233,6 +206,36 @@ $body = [
 $response = $mj->post(Resources::$ContactManagemanycontacts, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```bash
+# Create : Manage the details of a Contact.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact/managemanycontacts \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Contacts":[
+				{
+						"Email": "jimsmith@example.com",
+						"Name": "Jim",
+						"IsExcludedFromCampaigns": true,
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				},
+				{
+						"Email": "janetdoe@example.com",
+						"Name": "Janet",
+						"IsExcludedFromCampaigns": true,
+						"Properties": {
+								"Property1": "value",
+								"Property2": "value2"
+						}
+				}
+		]
+	}'
 ```
 ```javascript
 /**
@@ -298,7 +301,7 @@ data = {
 				{
 						"Email": "jimsmith@example.com",
 						"Name": "Jim",
-						"IsExcludedFromCampaigns": true,
+						"IsExcludedFromCampaigns": "true",
 						"Properties": {
 								"Property1": "value",
 								"Property2": "value2"
@@ -307,7 +310,7 @@ data = {
 				{
 						"Email": "janetdoe@example.com",
 						"Name": "Janet",
-						"IsExcludedFromCampaigns": true,
+						"IsExcludedFromCampaigns": "true",
 						"Properties": {
 								"Property1": "value",
 								"Property2": "value2"
@@ -419,6 +422,9 @@ The same way, you can upload contacts asynchronously in one or more list with <c
 
 ```php
 <?php
+/*
+Create: A wrapper for the CSV importer
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -429,18 +435,6 @@ $body = [
 $response = $mj->post(Resources::$Csvimport, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# Create: A wrapper for the CSV importer
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/csvimport \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"DataID":"$ID_DATA",
-		"Method":"excludemarketing"
-	}'
 ```
 ```javascript
 /**
@@ -472,6 +466,18 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Csvimport.create(data_id: "$ID_DATA",method: "excludemarketing")
+```
+```bash
+# Create: A wrapper for the CSV importer
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/csvimport \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"DataID":"$ID_DATA",
+		"Method":"excludemarketing"
+	}'
 ```
 ```python
 """

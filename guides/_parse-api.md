@@ -8,18 +8,6 @@ It will make the processing of inbound messages easier as Mailjet will do all th
 
 ##Basic Setup
 
-```php
-<?php
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$body = [
-    'Url' => "https://www.mydomain.com/mj_parse.php"
-];
-$response = $mj->post(Resources::$Parseroute, ['body' => $body]);
-$response->success() && var_dump($response->getData());
-?>
-```
 ```bash
 # Create : ParseRoute description
 curl -s \
@@ -30,6 +18,21 @@ curl -s \
 	-d '{
 		"Url":"https://www.mydomain.com/mj_parse.php"
 	}'
+```
+```php
+<?php
+/*
+Create : ParseRoute description
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$body = [
+    'Url' => "https://www.mydomain.com/mj_parse.php"
+];
+$response = $mj->post(Resources::$Parseroute, ['body' => $body]);
+$response->success() && var_dump($response->getData());
+?>
 ```
 ```javascript
 /**
@@ -311,6 +314,9 @@ CustomId and Payload can be used for example to trace the conversation around yo
 
 ```php
 <?php
+/*
+Create : ParseRoute description
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -365,6 +371,23 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php",email: "mjparse@mydomain.com")
 ```
+```python
+"""
+Create : ParseRoute description
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Url': 'https://www.mydomain.com/mj_parse.php',
+  'Email': 'mjparse@mydomain.com'
+}
+result = mailjet.parseroute.create(data=data)
+print result.status_code
+print result.json()
+```
 ``` go
 /*
 Create : ParseRoute description
@@ -395,23 +418,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```python
-"""
-Create : ParseRoute description
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Url': 'https://www.mydomain.com/mj_parse.php',
-  'Email': 'mjparse@mydomain.com'
-}
-result = mailjet.parseroute.create(data=data)
-print result.status_code
-print result.json()
 ```
 ```java
 package com.my.project;

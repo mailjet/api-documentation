@@ -10,6 +10,9 @@ Be aware that all messaging under these sub API keys will be accounted under you
 
 ```php
 <?php
+/*
+Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -61,6 +64,22 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Apikey.create(name: "MynewKEY")
 ```
+```python
+"""
+Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Name': 'MynewKEY'
+}
+result = mailjet.apikey.create(data=data)
+print result.status_code
+print result.json()
+```
 ``` go
 /*
 Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
@@ -90,22 +109,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```python
-"""
-Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Name': 'MynewKEY'
-}
-result = mailjet.apikey.create(data=data)
-print result.status_code
-print result.json()
 ```
 ```java
 package com.my.project;
@@ -172,6 +175,9 @@ The response will contain a new <code>APIKey</code> and <code>SecretKey</code>. 
 
 ```php
 <?php
+/*
+View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+*/
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
@@ -185,15 +191,6 @@ curl -s \
 	-X GET \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/apikey 
-```
-```ruby
-# View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Apikey.all()
 ```
 ```javascript
 /**
@@ -213,6 +210,15 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
+```
+```ruby
+# View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Apikey.all()
 ```
 ```python
 """
