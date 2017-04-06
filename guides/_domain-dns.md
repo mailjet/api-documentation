@@ -2,9 +2,9 @@
 
 To fully take advantage of Mailjet deliverability, you will need to modify your DNS records to include DKIM signature and SPF.
 
-You will also need to verify your sender addresses and domain names. The validation can be done online with the [Sender domains & addresses](https://app.mailjet.com/account/sender) page or through API.
+You will also need to verify your sender addresses and domain names. The validation can be done online with the <a href="https://app.mailjet.com/account/sender" target="_blank">Sender domains & addresses</a> page or through API.
 
-##Create a new DNS entry 
+##Create DNS entry
 
 ```php
 <?php
@@ -160,13 +160,7 @@ public class MyClass {
 ```
 
 
-When adding a new sender, if the DNS entry does not exist, the Mailjet system will automatically creates it generating a SPF and DKIM information. 
-
-Use the <code>[/sender](/email-api/v3/sender/)</code> resource to add a new sender. You will get in the response a <code>DNSID</code> you can use to find SPF and DKIM information using the <code>[/dns/$id_or_domain](/email-api/v3/dns/)</code> resource.
-
-You can also add all email addresses for the domain using a catch-all expression like <code>*@yourdomain.com</code> as an <code>Email</code>.
-
-The added email will be inactive except if the domain they belong to has already been validated.
+In order to create new sending address, you have to use the resource <code>[/sender](/email-api/v3/sender/)</code>. The domain name will be extracted from the email address and the system will create a <code>DNS</code> resource with it. You can also add all email addresses for the domain using a catch-all expression like <code>*@yourdomain.com</code> as an <code>Email</code>. When querying <code>dns/$id_or_domain</code>, you will find SPF, DKIM and sender validation information.
 
 ##Get SPF / DKIM settings 
 
@@ -211,15 +205,6 @@ request
 		console.log(err.statusCode)
 	})
 ```
-```ruby
-# View : Sender Domain properties.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Dns.find($ID_OR_DOMAINNAME)
-```
 ```python
 """
 View : Sender Domain properties.
@@ -233,6 +218,15 @@ id = '$ID_OR_DOMAINNAME'
 result = mailjet.dns.get(id=id)
 print result.status_code
 print result.json()
+```
+```ruby
+# View : Sender Domain properties.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Dns.find($ID_OR_DOMAINNAME)
 ```
 ``` go
 /*
@@ -295,13 +289,14 @@ public class MyClass {
 	"Data": [
 		{
 			"DKIMRecordName": "mailjet._domainkey.example.com",
-			"DKIMRecordValue": "k=rsa; p=FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+			"DKIMRecordValue": "k=rsa; p=FFFFFFFFFFFFFFFFFFF",
 			"DKIMStatus": "OK",
 			"Domain": "example.com",
 			"ID": "1",
 			"IsCheckInProgress": "false",
 			"LastCheckAt": "2015-10-30T20:10:08Z",
 			"OwnerShipToken": "0123456789abcdef",
+			"OwnerShipTokenRecordName": "abcdef0123456789",
 			"SPFRecordValue": "v=spf1 include:spf.mailjet.com ?all",
 			"SPFStatus": "OK"
 		}
@@ -318,26 +313,15 @@ Let's have a closer look to some of the response fields:
  - <code>DKIMStatus</code>: last result of the domain DKIM configuration check ran (via the check action or a periodic check on Mailjet side). Status can be "Not checked", "OK", "Error".
  - <code>IsCheckInProgress</code>: indicates if a check is already in progress on Mailjet side. 
  - <code>LastCheckAt</code>: last time a check was run on the given domain (via the check action or a periodic check on Mailjet side)
- - <code>OwnerShipToken</code>: a token, used to validate the domain ownership by the current API key. Validated either by checking the existance of a file at domain root named after this token or a DNS txt record containing this token. 
+ - <code>OwnerShipTokenRecordName</code>: provides hostname value for the TXT record, used to validate sending domain
+ - <code>OwnerShipToken</code>: provides TXT record value, for the TXT record, used for sending validation 
  - <code>SPFRecordValue</code>: contains the name of the DNS txt record for the SPF configuration. Please note that this field contains the default value, not taking in account existing SPF records for the domain. Concatenating this with the existing value is left up to the API client.
  - <code>SPFStatus</code>: last result of the domain SPF configuration check ran (via the check action or a periodic check on Mailjet side). Status can be "Not checked", "OK", "Error"
 
-Follow the ["How to setup DomainKeys (DKIM) and SPF in my DNS records"](https://www.mailjet.com/support/how-to-setup-domainkeys-dkim-and-spf-in-my-dns-records,84.htm) guide to learn how to use this information to modify your DNS records.
+Follow the <a href="https://www.mailjet.com/docs/spf-dkim-guide" target="_blank">"How to setup DomainKeys (DKIM) and SPF in my DNS records"</a> guide to learn how to use this information to modify your DNS records.
 
 ##Check your DNS 
 
-```php
-<?php
-/*
-Check : Run a check on a domain
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->post(Resources::$DnsCheck, ['id' => $id]);
-$response->success() && var_dump($response->getData());
-?>
-```
 ```bash
 # Check : Run a check on a domain
 curl -s \
@@ -377,6 +361,18 @@ Mailjet.configure do |config|
   config.default_from = 'your default sending address'
 end
 variable = Mailjet::Dns_check.create(id: $ID_OR_DOMAINNAME)
+```
+```php
+<?php
+/*
+Check : Run a check on a domain
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->post(Resources::$DnsCheck, ['id' => $id]);
+$response->success() && var_dump($response->getData());
+?>
 ```
 ```python
 """
@@ -490,20 +486,167 @@ You can see if SPF and DKIM are ready to use Mailjet.
 
 The check action follows the SPF records in cascade and takes CNAME records into account.
 
-##Validate sender and domain
+##Validate a sender
 
-When adding a new sender, you will need to validate this sender to be able to use this email address as a sender. Mailjet will need to verify that you have control over the domain or email address you wish to use.
+###Validate single sending address
 
-In the case of a catch-all expression, you will need to do so through one of those 2 options: 
+```php
+<?php
+/*
+Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$body = [
+    'Email' => "anothersender@example.com"
+];
+$response = $mj->post(Resources::$Sender, ['body' => $body]);
+$response->success() && var_dump($response->getData());
+?>
+```
+```bash
+# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/sender \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Email":"anothersender@example.com"
+	}'
+```
+```javascript
+/**
+ *
+ * Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.post("sender")
+	.request({
+		"Email":"anothersender@example.com"
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```ruby
+# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Sender.create(email: "anothersender@example.com")
+```
+```python
+"""
+Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Email': 'anothersender@example.com'
+}
+result = mailjet.sender.create(data=data)
+print result.status_code
+print result.json()
+```
+``` go
+/*
+Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"os"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Sender
+	mr := &Request{
+	  Resource: "sender",
+	}
+	fmr := &FullRequest{
+	  Info: mr,
+	  Payload: &resources.Sender {
+      Email: "anothersender@example.com",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Sender;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Sender.resource)
+						.property(Sender.EMAIL, "anothersender@example.com");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 
- - adding a text file at the root of you website 
- - adding a TXT record in your domain’s DNS
 
-The text file name can be found in the property <code>Filename</code> when doing a GET on <code>[/sender$id](/email-api/v3/sender/)</code>. You just need to create a file with this name at the root of you website. Mailjet will be looking for http://www.yourdomain.com/[filename].
+> API response:
 
-The TXT record for the DNS can be found in the property <code>OwnerShipTokenRecordName</code> when doing a GET on <code>[/dns/$id_or_domain](/email-api/v3/dns/)</code>. You need to go in your DNS administration interface and add the content of <code>OwnerShipTokenRecordName</code> as a TXT record. The procedure is similar to the <a href="https://www.mailjet.com/support/how-to-setup-domainkeys-dkim-and-spf-in-my-dns-records,84.htm" target="_blank">setup of a SPF record</a>. 
+```json
+{
+	"Count": 1,
+	"Data": [
+		{
+			"CreatedAt": "2015-09-07T06:59:52Z",
+			"DNSID": "1",
+			"Email": "anothersender@example.com",
+			"EmailType": "unknown",
+			"Filename": "0123456789abcdef.txt",
+			"ID": "1",
+			"IsDefaultSender": "false",
+			"Name": "Myname",
+			"Status": "Inactive"
+		}
+	],
+	"Total": 1
+}
+```
 
-In the case of a standard sender email address, an email will be sent with a validation link. There will be no text file creation or DNS setup necessary and available for validation.
+
+In order to authorize sending email address in Mailjet, use the <code>[/sender](/email-api/v3/sender/)</code> resource. The operation will return <code>ID</code> in the response.
+
+Once added, the email will be inactive by default. In order to activate it, call <code>sender/$ID/validate</code>, substituting the <code>$ID</code> with the relevant sender ID. The successful operation will trigger confirmation email, sent to the email address, you want to activate. Once you click on the activation link, the email address will be ready to go.
 
 <div></div>
 
@@ -652,15 +795,32 @@ public class MyClass {
 ```
 
 
-To start the validation, you can call the <code>validate</code> action on the <code>/sender</code> resource.
+###Validate sending domain
 
-For a catch-all sender, this synchroneous action will first check for the presence of the proper .txt file at the root of the domain and if not available will check the DNS record for a TXT record.
+You can also authorize all email addresses for a whole domain, using a catch-all expression. You should provide a value <code>*@yourdomain.com</code> for the <code>Email</code> property for <code>/sender</code> resource. The API response will contain property called <code>DNSID</code>. Use the ID to query the resource <code>dns/$id</code>. The output will contain information about the available validation methods.
 
-In the case of a simple sender email address, the validation email will be sent.
+####DNS validation using TXT record
+You can activate the domain by creating a TXT record in it's DNS zone file. The TXT record should contain the following values:
+
+ - Hostname: contains the value of the property <code>OwnerShipTokenRecordName</code>, returned when querying <code>dns/$id</code>
+ - Record value: contains the value of the property <code>OwnerShipToken</code>, returned when querying <code>dns/$id</code>
+
+The valid TXT record has the following format:
+<code>OwnerShipTokenRecordName.yourdomain.com. IN TXT 300 OwnerShipToken</code>
+
+Once the record is live, you can call <code>sender/$id/validate</code> to activate the sending domain. Keep in mind that here you need to use the sender ID and not the DNS id.
+
+The process of TXT record creation for sender validation is similar to the TXT record creation for SPF and DKIM. Please refer to <a href="https://www.mailjet.com/docs/spf-dkim-guide" target="_blank">"How to setup DomainKeys (DKIM) and SPF in my DNS records"</a> guide for details.
+
+####Validation using TXT file upload
+
+Another option to authorize a domain will be to upload a file to your website. The text file name can be found in the property <code>Filename</code> when doing a GET on <code>/sender/$id</code>. You just need to create a file with this name at the root of you website. Mailjet will be looking for http://www.yourdomain.com/[filename].
 
 The response will contain the method used to validate you domain (<code>ValidationMethod</code>) and an error message (<code>GlobalError</code>).
 
-You will also find a detailed error report per validation method in the <code>Errors</code> property.
+####Error handling
+
+You can find a detailed error report per validation method in the <code>Errors</code> property.
 
 The status code returned will be : 
 

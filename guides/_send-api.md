@@ -348,10 +348,10 @@ To send an email, you need the following mandatory properties:
  - <code>Recipients</code>: list with at least one <code>Email</code> address 
  - <code>Text-part</code> or/and <code>Html-part</code>: content of the message sent in text or HTML format. At least one of these content type needs to be specified. When Html-part is the only content provided, Mailjet will not generate a Text-part from the HTML version.   
 
-Optionally, in place of <code>Recipients</code>, you can use <code>To</code>, <code>Cc</code> and <code>Bcc</code> properties. To, Cc and Bcc can't be used in conjunction with <code>Recipients</code>. The properties can contain several recipients seperated by comma using the following format <code>john@example.com</code>, <code>&lt;john@example.com&gt;</code> or <code>"John Doe" &lt;john@example.com&gt;</code>. 
+Optionally, in place of <code>Recipients</code>, you can use <code>To</code>, <code>Cc</code> and <code>Bcc</code> properties. To, Cc and Bcc can't be used in conjunction with <code>Recipients</code>. The properties can contain several recipients separated by comma using the following format <code>john@example.com</code>, <code>&lt;john@example.com&gt;</code> or <code>"John Doe" &lt;john@example.com&gt;</code>. 
 
 
-Important: <code>Recipients</code> and <code>To</code> have a different behaviors. The recipients listed in <code>To</code> will recieve a common message showing every other recipients and carbon copies recipients. The recipients listed in <code>Recipients</code> will each recieve an seperate message without showing all the other recipients. 
+Important: <code>Recipients</code> and <code>To</code> have a different behaviors. The recipients listed in <code>To</code> will receive a common message showing every other recipients and carbon copies recipients. The recipients listed in <code>Recipients</code> will each receive an separate message without showing all the other recipients. 
 
 
 <div></div>
@@ -2266,14 +2266,14 @@ func main () {
       FromEmail: "pilot@mailjet.com",
       FromName: "Mailjet Pilot",
       Subject: "Your email flight plan!",
-      MJTemplateID: 1,
-      MJTemplateLanguage: "true",
+      MjTemplateID: "1",
+      MjTemplateLanguage: "true",
       Recipients: []Recipient {
         Recipient {
           Email: "passenger@mailjet.com",
         },
       },
-    },
+    }
 	res, err := mailjetClient.SendMail(email)
 	if err != nil {
 			fmt.Println(err)
@@ -2287,19 +2287,286 @@ func main () {
 
 Mailjet offers to store your transactional message templates on its platform. You can use these templates in your transactional API call to remove the need to repeat the content of a transactional message at each Send API call. 
 
-You can either create the templates through our online drag and drop tool [Passport](https://www.mailjet.com/feature/passport/) or through the [/template]((/email-api/v3/template/)) resource. 
+You can either create the templates through our online drag and drop tool [Passport](https://www.mailjet.com/feature/passport/) or through the [/template](/email-api/v3/template/) resource. 
 
 You can learn more about storing your templates through API [here](#storing-a-template).
 
 You can also follow our [Step by Step guide](#step-by-step-guide) to create your first Passport template with templating language.
 
-In the templates, you will be able to use simple [personalisation](#personalisation) (<code>[[data:property_name]]</code> or <code>[[var:variable_name]]</code>) or advanced [templating language](#transactional-templating) (<code>{{data:property_name}}</code>, <code>{{var:variable_name}}</code>, conditional statements and loop statements)
+In the templates, you will be able to use simple [personalisation](#personalisation) (<code>[[data:property_name]]</code> or <code>[[var:variable_name]]</code>) or advanced [templating language](#template-api) (<code>{{data:property_name}}</code>, <code>{{var:variable_name}}</code>, conditional statements and loop statements)
 
 In this sample, <code>Mj-TemplateID</code> will be the Id provided by Passport at the end of your designing process or the Id returned by the <code>/template</code> resource. 
 
 <aside class="notice">
 The <code>Mj-TemplateLanguage</code> property in the payload provided to send API is optional but if you want to have the templating language interpreted, it will be mandatory and must have a  <code>true</code> value.
 </aside>
+
+## Using Template Language
+
+```java
+package MyClass;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.errors.MailjetClient;
+import com.mailjet.client.errors.MailjetRequest;
+import com.mailjet.client.errors.MailjetResponse;
+import com.mailjet.client.resource.Email;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * This calls sends an email to one recipient.
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Email.resource)
+						.property(Email.FROMEMAIL, "pilot@mailjet.com")
+						.property(Email.FROMNAME, "Mailjet Pilot")
+            .property(Email.TEXTPART, "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}")
+            .property(Email.HTMLPART, "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}")
+						.property(Email.MJTEMPLATELANGUAGE, true)
+            .put(Email.VARS, new JSONObject().put("Day", "Monday"))
+						.property(Email.SUBJECT, "Your email flight plan!")
+						.property(Email.RECIPIENTS, new JSONArray()
+                .put(new JSONObject()
+                    .put("Email", "passenger@mailjet.com")
+                    .put("Vars", new JSONObject().put("Day", "Tuesday"))))
+                .put(new JSONObject()
+                    .put("Email", "passenger2@mailjet.com"))
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
+```php
+<?php
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$body = [
+    'FromEmail' => "pilot@mailjet.com",
+    'FromName' => "Mailjet Pilot",
+    'Subject' => "Your email flight plan!",
+    'MJ-TemplateLanguage' => true,
+    'Text-part' => 'Dear passenger, welcome to Mailjet! On this {{var:day:"monday"}}, may the delivery force be with you! {{var:personalmessage:""}}'
+    'Html-part' => '<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:"monday"}}, may the delivery force be with you! {{var:personalmessage:""}}',
+    'Recipients' => [
+      ['Email' => 'passenger2@mailjet.com', 'Name' => 'Passenger 2'],
+      ['Email' => 'passenger@mailjet.com', 'Name' => 'passenger 1',
+        'Vars' => ['day' => 'Tuesday', 'Personalmessage' => 'Happy Birthday!']]
+    ]
+];
+$response = $mj->post(Resources::$Email, ['body' => $body]);
+$response->success() && var_dump($response->getData());
+?>
+```
+```bash
+# This calls sends an email to the given recipient with vars and custom vars.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/send \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"FromEmail":"pilot@mailjet.com",
+		"FromName":"Mailjet Pilot",
+		"Subject":"Your email flight plan!",
+		"MJ-TemplateLanguage":true,
+		"Text-part":"Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+		"Vars":{
+				"day": "Monday"
+		},
+		"Recipients":[
+				{
+						"Email": "passenger1@mailjet.com",
+						"Name": "passenger 1",
+						"Vars": {
+								"day": "Tuesday",
+								"personalmessage": "Happy birthday!"
+						}
+				},
+				{
+						"Email": "passenger2@mailjet.com",
+						"Name": "passenger 2"
+				}
+		]
+	}'
+```
+```javascript
+/**
+ *
+ * This calls sends an email to the given recipient with vars and custom vars.
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.post("send")
+	.request({
+		"FromEmail":"pilot@mailjet.com",
+		"FromName":"Mailjet Pilot",
+		"Subject":"Your email flight plan!",
+		"MJ-TemplateLanguage":"true",
+		"Text-part":"Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+		"Vars":{
+				"day": "Monday"
+		},
+		"Recipients":[
+				{
+						"Email": "passenger1@mailjet.com",
+						"Name": "passenger 1",
+						"Vars": {
+								"day": "Tuesday",
+								"personalmessage": "Happy birthday!"
+						}
+				},
+				{
+						"Email": "passenger2@mailjet.com",
+						"Name": "passenger 2"
+				}
+		]
+	})
+request
+	.then(result => {
+		console.log(result.body)
+	})
+	.catch(err => {
+		console.log(err.statusCode)
+	})
+```
+```ruby
+# This calls sends an email to the given recipient with vars and custom vars.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Send.create(
+  from_email: "pilot@mailjet.com",
+  from_name: "Mailjet Pilot",
+  subject: "Your email flight plan!",
+  "Mj-TemplateLanguage": true,
+  text_part: "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+  html_part: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+  vars: {'day' => 'Monday'},
+  recipients: [
+    {'Email' => 'passenger1@mailjet.com', 'Name' => 'passenger 1',
+      'Vars' => {'day' => 'Tuesday', 'personalmessage' => 'Happy birthday!'}},
+    {'Email' => 'passenger2@mailjet.com', 'Name' => 'passenger 2'}]
+)
+```
+```python
+"""
+This calls sends an email to the given recipient with vars and custom vars.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'FromEmail': 'pilot@mailjet.com',
+  'FromName': 'Mailjet Pilot',
+  'Subject': 'Your email flight plan!',
+  'MJ-TemplateLanguage': 'true',
+  'Text-part': 'Dear passenger, welcome to Mailjet! On this {{var:day:"monday"}}, may the delivery force be with you! {{var:personalmessage:""}}',
+  'Html-part': '<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:"monday"}}, may the delivery force be with you! {{var:personalmessage:""}}',
+  'Vars': {
+				"day": "Monday"
+		},
+  'Recipients': [
+				{
+						"Email": "passenger1@mailjet.com",
+						"Name": "passenger 1",
+						"Vars": {
+								"day": "Tuesday",
+								"personalmessage": "Happy birthday!"
+						}
+				},
+				{
+						"Email": "passenger2@mailjet.com",
+						"Name": "passenger 2"
+				}
+		]
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
+```
+``` go
+/*
+This calls sends an email to the given recipient with vars and custom vars.
+*/
+package main
+import (
+	"fmt"
+	. "github.com/mailjet/mailjet-apiv3-go"
+	"os"
+)
+type  MyVarsStruct  struct {
+  Day  string
+}
+type MyRecipientsVarsStruct struct {
+  Day               string
+  Personalmessage   string
+}
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	email := &InfoSendMail {
+      FromEmail: "pilot@mailjet.com",
+      FromName: "Mailjet Pilot",
+      Subject: "Your email flight plan!",
+      MjTemplateLanguage: "true",
+    TextPart: "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+    HTMLPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+      Vars: MyVarsStruct {
+        Day: "Monday",
+      },
+      Recipients: []Recipient {
+        Recipient {
+          Email: "passenger1@mailjet.com",
+          Name: "passenger 1",
+          Vars: MyRecipientsVarsStruct {
+            Day: "Tuesday",
+            Personalmessage: "Happy birthday!",
+          },
+        },
+        Recipient {
+          Email: "passenger2@mailjet.com",
+          Name: "passenger 2",
+        },
+      },
+    }
+	res, err := mailjetClient.SendMail(email)
+	if err != nil {
+			fmt.Println(err)
+	} else {
+			fmt.Println("Success")
+			fmt.Println(res)
+	}
+}
+```
+
+
+Mailjet Send API allow to leverage template language in your transactional messages. 
+
+The Mailjet Template Language include fonctionality for :
+
+ - variable substitution
+ - conditions 
+ - loops
+ - and a lot more... 
+
+<aside class="notice">
+The <code>Mj-TemplateLanguage</code> property in the payload provided to send API is optional but if you want to have the templating language interpreted, it will be mandatory and must have a  <code>true</code> value.
+</aside>
+
+Find our dedicated guide [here](/template-language/).
 
 ##Adding Email Headers 
 
@@ -2682,6 +2949,15 @@ curl -s \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/messagesentstatistics?CustomID=PassengerEticket1234 
 ```
+```ruby
+# View : API Key Statistical campaign/message data.
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Messagesentstatistics.all(custom_id: "PassengerEticket1234")
+```
 ```javascript
 /**
  *
@@ -2702,15 +2978,6 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
-```
-```ruby
-# View : API Key Statistical campaign/message data.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Messagesentstatistics.all(custom_id: "PassengerEticket1234")
 ```
 ```python
 """
@@ -3166,8 +3433,8 @@ Text-part | Provides the Text part of the message<br />Mandatory if the HTML par
 Html-part | Provides the HTML part of the message<br />Mandatory if the text param is not specified<br />**MANDATORY IF NO TEXT - MAX PARTS: 1**
 Mj-TemplateID | The Template ID or Name to use as this email content. Overrides the HTML/Text parts if any.<br />Equivalent to using the X-MJ-TemplateID header through SMTP.<br />**MANDATORY IF NO HTML/TEXT - MAX TEMPLATEID: 1**
 Mj-TemplateLanguage | Activate the template language processing. By default the template language processing is deactivated. Use <code>True</code> to activate.<br />Equivalent to using the X-MJ-TemplateLanguage header through SMTP.<br />[More information](#use-the-template-in-send-api)
-MJ-TemplateErrorReporting | Email Address where a carbon copy with error message is sent to.<br />Equivalent to using the X-MJ-TemplateErrorReporting header through SMTP.<br />[More information](#templates-error-management)
-MJ-TemplateErrorDeliver | Define if the message is delivered if an error is discovered in the templating language. By default the delivery is deactivated. Use <code>deliver</code> to let the message be delivered to the recipient, <code>0</code> to stop it. <br />Equivalent to using the X-MJ-TemplateErrorDeliver header through SMTP.<br />[More information](#templates-error-management)
+MJ-TemplateErrorReporting | Email Address where a carbon copy with error message is sent to.<br />Equivalent to using the X-MJ-TemplateErrorReporting header through SMTP.<br />[More information](../template-language/sendapi/#templates-error-management)
+MJ-TemplateErrorDeliver | Define if the message is delivered if an error is discovered in the templating language. By default the delivery is deactivated. Use <code>deliver</code> to let the message be delivered to the recipient, <code>0</code> to stop it. <br />Equivalent to using the X-MJ-TemplateErrorDeliver header through SMTP.<br />[More information](../template-language/sendapi/#templates-error-management)
 Attachments | Attach files automatically to this Email<br />Sum of all attachments, including inline may not exceed 15 MB total<br />Sample: [{"Content-type": "MIME TYPE", "Filename": "FILENAME.EXT", "content":"BASE64 ENCODED CONTENT"}] 
 Inline_attachments | Attach a file for inline use via <code>cid:FILENAME.EXT</code><br />Sum of all attachements, including inline may not exceed 15 MB total<br />Sample: [{"Content-type": "MIME TYPE", "Filename": "FILENAME.EXT", "content":"BASE64 ENCODED CONTENT"}]
 Mj-prio | Manage message processing priority inside your account (API key) scheduling queue.<br />Default is <code>2</code> as in the SMTP submission.<br />Equivalent of using <code>X-Mailjet-Prio</code> header through SMTP<br /><a href="https://app.mailjet.com/docs/email-priority-management" target="_blank">More information</a>

@@ -64,22 +64,6 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Apikey.create(name: "MynewKEY")
 ```
-```python
-"""
-Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Name': 'MynewKEY'
-}
-result = mailjet.apikey.create(data=data)
-print result.status_code
-print result.json()
-```
 ``` go
 /*
 Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
@@ -136,6 +120,22 @@ public class MyClass {
       System.out.println(response.getData());
     }
 }
+```
+```python
+"""
+Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Name': 'MynewKEY'
+}
+result = mailjet.apikey.create(data=data)
+print result.status_code
+print result.json()
 ```
 
 
@@ -220,19 +220,6 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Apikey.all()
 ```
-```python
-"""
-View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.apikey.get()
-print result.status_code
-print result.json()
-```
 ``` go
 /*
 View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
@@ -279,6 +266,19 @@ public class MyClass {
       System.out.println(response.getData());
     }
 }
+```
+```python
+"""
+View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+result = mailjet.apikey.get()
+print result.status_code
+print result.json()
 ```
 
 

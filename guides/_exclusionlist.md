@@ -458,15 +458,6 @@ request
 		console.log(err.statusCode)
 	})
 ```
-```ruby
-# Create: A wrapper for the CSV importer
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Csvimport.create(data_id: "$ID_DATA",method: "excludemarketing")
-```
 ```bash
 # Create: A wrapper for the CSV importer
 curl -s \
@@ -478,6 +469,15 @@ curl -s \
 		"DataID":"$ID_DATA",
 		"Method":"excludemarketing"
 	}'
+```
+```ruby
+# Create: A wrapper for the CSV importer
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Csvimport.create(data_id: "$ID_DATA",method: "excludemarketing")
 ```
 ```python
 """

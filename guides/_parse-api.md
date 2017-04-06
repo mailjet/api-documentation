@@ -8,17 +8,6 @@ It will make the processing of inbound messages easier as Mailjet will do all th
 
 ##Basic Setup
 
-```bash
-# Create : ParseRoute description
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/parseroute \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Url":"https://www.mydomain.com/mj_parse.php"
-	}'
-```
 ```php
 <?php
 /*
@@ -34,26 +23,16 @@ $response = $mj->post(Resources::$Parseroute, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```javascript
-/**
- *
- * Create : ParseRoute description
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.post("parseroute")
-	.request({
+```bash
+# Create : ParseRoute description
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/parseroute \
+	-H 'Content-Type: application/json' \
+	-d '{
 		"Url":"https://www.mydomain.com/mj_parse.php"
-	})
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+	}'
 ```
 ```ruby
 # Create : ParseRoute description
@@ -79,6 +58,27 @@ data = {
 result = mailjet.parseroute.create(data=data)
 print result.status_code
 print result.json()
+```
+```javascript
+/**
+ *
+ * Create : ParseRoute description
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.post("parseroute")
+	.request({
+		"Url":"https://www.mydomain.com/mj_parse.php"
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ``` go
 /*
@@ -362,15 +362,6 @@ request
 		console.log(err.statusCode)
 	})
 ```
-```ruby
-# Create : ParseRoute description
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php",email: "mjparse@mydomain.com")
-```
 ```python
 """
 Create : ParseRoute description
@@ -387,6 +378,15 @@ data = {
 result = mailjet.parseroute.create(data=data)
 print result.status_code
 print result.json()
+```
+```ruby
+# Create : ParseRoute description
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php",email: "mjparse@mydomain.com")
 ```
 ``` go
 /*
