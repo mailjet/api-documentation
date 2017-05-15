@@ -2194,7 +2194,7 @@ var request = mailjet
 		"FromName":"Mailjet Pilot",
 		"Subject":"Your email flight plan!",
 		"MJ-TemplateID":"1",
-		"MJ-TemplateLanguage":"true",
+		"Mj-TemplateLanguage":"true",
 		"Recipients":[
 				{
 						"Email": "passenger@mailjet.com"
