@@ -139,6 +139,47 @@ public class MyClass {
     }
 }
 ```
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+   class Program
+   {
+      /// <summary>
+      /// Call to add contact to exclusion list
+      /// </summary>
+      static void Main(string[] args)
+      {
+         RunAsync().Wait();
+      }
+      static async Task RunAsync()
+      {
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetRequest request = new MailjetRequest
+         {
+            Resource = Contact.Resource,
+            ResourceId = ResourceId.Numeric(ID)
+         }
+            .Property(Contact.IsExcludedFromCampaigns, "true");
+         MailjetResponse response = await client.PutAsync(request);
+         if (response.IsSuccessStatusCode)
+         {
+            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+            Console.WriteLine(response.GetData());
+         }
+         else
+         {
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+         }
+      }
+   }
+}
+```
 
 
 > API response:
@@ -413,6 +454,65 @@ public class MyClass {
     }
 }
 ```
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+    class Program
+    {
+	/// <summary>
+	/// Create : Manage the details of a Contact.
+	/// </summary>
+	static void Main(string[] args)
+        {
+            RunAsync().Wait();
+        }
+        static async Task RunAsync()
+        {
+            MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+            MailjetRequest request = new MailjetRequest
+            {
+                Resource = ContactManagemanycontacts.Resource,
+            }
+		.Property(ContactManagemanycontacts.Contacts, new JArray {
+                new JObject {
+                 {"Email", "jimsmith@example.com"},
+                 {"Name", "Jim"},
+                 {"IsExcludedFromCampaigns", "true"},
+                 {"Properties", new JObject {
+                  {"Property1", "value"},
+                  {"Property2", "value2"}
+                  }}
+                 },
+                new JObject {
+                 {"Email", "janetdoe@example.com"},
+                 {"Name", "Janet"},
+                 {"IsExcludedFromCampaigns", "true"},
+                 {"Properties", new JObject {
+                  {"Property1", "value"},
+                  {"Property2", "value2"}
+                  }}
+                 }
+                });
+            MailjetResponse response = await client.PostAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+                Console.WriteLine(response.GetData());
+            }
+            else
+            {
+                Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+                Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+                Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+            }
+	}
+    }
+}
+```
 
 
 The same way, you can upload contacts asynchronously in one or more list with <code>/contact/managemanycontacts</code>, you can add/remove contacts from exclusion list by specifying the value of the <code>IsExcludedFromCampaigns</code> contact property.
@@ -436,6 +536,18 @@ $response = $mj->post(Resources::$Csvimport, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
+```bash
+# Create: A wrapper for the CSV importer
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/csvimport \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"DataID":"$ID_DATA",
+		"Method":"excludemarketing"
+	}'
+```
 ```javascript
 /**
  *
@@ -457,18 +569,6 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
-```
-```bash
-# Create: A wrapper for the CSV importer
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/csvimport \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"DataID":"$ID_DATA",
-		"Method":"excludemarketing"
-	}'
 ```
 ```ruby
 # Create: A wrapper for the CSV importer
@@ -553,6 +653,47 @@ public class MyClass {
       System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
+}
+```
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+   class Program
+   {
+      /// <summary>
+      /// Create: A wrapper for the CSV importer
+      /// </summary>
+      static void Main(string[] args)
+      {
+         RunAsync().Wait();
+      }
+      static async Task RunAsync()
+      {
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetRequest request = new MailjetRequest
+         {
+            Resource = Csvimport.Resource,
+         }
+            .Property(Csvimport.DataID, "$ID_DATA")
+            .Property(Csvimport.Method, "excludemarketing");
+         MailjetResponse response = await client.PostAsync(request);
+         if (response.IsSuccessStatusCode)
+         {
+            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+            Console.WriteLine(response.GetData());
+         }
+         else
+         {
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+         }
+      }
+   }
 }
 ```
 

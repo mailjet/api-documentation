@@ -146,6 +146,48 @@ public class MyClass {
     }
 }
 ```
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+   class Program
+   {
+      /// <summary>
+      /// Create a grouped handler for the open event
+      /// </summary>
+      static void Main(string[] args)
+      {
+         RunAsync().Wait();
+      }
+      static async Task RunAsync()
+      {
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetRequest request = new MailjetRequest
+         {
+            Resource = Eventcallbackurl.Resource,
+         }
+            .Property(Eventcallbackurl.EventType, "open")
+            .Property(Eventcallbackurl.Url, "https://mydomain.com/event_handler")
+            .Property(Eventcallbackurl.Version, "2");
+         MailjetResponse response = await client.PostAsync(request);
+         if (response.IsSuccessStatusCode)
+         {
+            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+            Console.WriteLine(response.GetData());
+         }
+         else
+         {
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+         }
+      }
+   }
+}
+```
 
 
 The endpoint is an URL our server will call for each event (it can lead to a lot of hits !). You can use the API to setup a new endpoint using the <code>[/eventcallbackurl](/email-api/v3/eventcallbackurl/)</code> resource. Alternatively, you can configure this in your account preferences, in the <a href="https://app.mailjet.com/account/triggers" target="_blank">Event Tracking</a> section.

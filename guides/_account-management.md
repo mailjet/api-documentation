@@ -64,6 +64,22 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Apikey.create(name: "MynewKEY")
 ```
+```python
+"""
+Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Name': 'MynewKEY'
+}
+result = mailjet.apikey.create(data=data)
+print result.status_code
+print result.json()
+```
 ``` go
 /*
 Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
@@ -121,21 +137,45 @@ public class MyClass {
     }
 }
 ```
-```python
-"""
-Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Name': 'MynewKEY'
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+   class Program
+   {
+      /// <summary>
+      /// Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+      /// </summary>
+      static void Main(string[] args)
+      {
+         RunAsync().Wait();
+      }
+      static async Task RunAsync()
+      {
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetRequest request = new MailjetRequest
+         {
+            Resource = Apikey.Resource,
+         }
+            .Property(Apikey.Name, "MynewKEY");
+         MailjetResponse response = await client.PostAsync(request);
+         if (response.IsSuccessStatusCode)
+         {
+            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+            Console.WriteLine(response.GetData());
+         }
+         else
+         {
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+         }
+      }
+   }
 }
-result = mailjet.apikey.create(data=data)
-print result.status_code
-print result.json()
 ```
 
 
@@ -220,6 +260,19 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Apikey.all()
 ```
+```python
+"""
+View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+result = mailjet.apikey.get()
+print result.status_code
+print result.json()
+```
 ``` go
 /*
 View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
@@ -267,18 +320,44 @@ public class MyClass {
     }
 }
 ```
-```python
-"""
-View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.apikey.get()
-print result.status_code
-print result.json()
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+   class Program
+   {
+      /// <summary>
+      /// View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+      /// </summary>
+      static void Main(string[] args)
+      {
+         RunAsync().Wait();
+      }
+      static async Task RunAsync()
+      {
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetRequest request = new MailjetRequest
+         {
+            Resource = Apikey.Resource,
+         }
+         MailjetResponse response = await client.GetAsync(request);
+         if (response.IsSuccessStatusCode)
+         {
+            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+            Console.WriteLine(response.GetData());
+         }
+         else
+         {
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+         }
+      }
+   }
+}
 ```
 
 

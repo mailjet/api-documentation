@@ -34,6 +34,27 @@ curl -s \
 		"Url":"https://www.mydomain.com/mj_parse.php"
 	}'
 ```
+```javascript
+/**
+ *
+ * Create : ParseRoute description
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.post("parseroute")
+	.request({
+		"Url":"https://www.mydomain.com/mj_parse.php"
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
 ```ruby
 # Create : ParseRoute description
 Mailjet.configure do |config|
@@ -58,27 +79,6 @@ data = {
 result = mailjet.parseroute.create(data=data)
 print result.status_code
 print result.json()
-```
-```javascript
-/**
- *
- * Create : ParseRoute description
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.post("parseroute")
-	.request({
-		"Url":"https://www.mydomain.com/mj_parse.php"
-	})
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
 ```
 ``` go
 /*
@@ -135,6 +135,46 @@ public class MyClass {
       System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
+}
+```
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+   class Program
+   {
+      /// <summary>
+      /// Create : ParseRoute description
+      /// </summary>
+      static void Main(string[] args)
+      {
+         RunAsync().Wait();
+      }
+      static async Task RunAsync()
+      {
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetRequest request = new MailjetRequest
+         {
+            Resource = Parseroute.Resource,
+         }
+            .Property(Parseroute.Url, "https://www.mydomain.com/mj_parse.php");
+         MailjetResponse response = await client.PostAsync(request);
+         if (response.IsSuccessStatusCode)
+         {
+            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+            Console.WriteLine(response.GetData());
+         }
+         else
+         {
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+         }
+      }
+   }
 }
 ```
 
@@ -328,18 +368,6 @@ $response = $mj->post(Resources::$Parseroute, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
-# Create : ParseRoute description
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/parseroute \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Url":"https://www.mydomain.com/mj_parse.php",
-		"Email":"mjparse@mydomain.com"
-	}'
-```
 ```javascript
 /**
  *
@@ -362,6 +390,27 @@ request
 		console.log(err.statusCode)
 	})
 ```
+```bash
+# Create : ParseRoute description
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/parseroute \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Url":"https://www.mydomain.com/mj_parse.php",
+		"Email":"mjparse@mydomain.com"
+	}'
+```
+```ruby
+# Create : ParseRoute description
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
+  config.default_from = 'your default sending address'
+end
+variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php",email: "mjparse@mydomain.com")
+```
 ```python
 """
 Create : ParseRoute description
@@ -378,15 +427,6 @@ data = {
 result = mailjet.parseroute.create(data=data)
 print result.status_code
 print result.json()
-```
-```ruby
-# Create : ParseRoute description
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php",email: "mjparse@mydomain.com")
 ```
 ``` go
 /*
@@ -445,6 +485,47 @@ public class MyClass {
       System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
+}
+```
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+   class Program
+   {
+      /// <summary>
+      /// Create : ParseRoute description
+      /// </summary>
+      static void Main(string[] args)
+      {
+         RunAsync().Wait();
+      }
+      static async Task RunAsync()
+      {
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetRequest request = new MailjetRequest
+         {
+            Resource = Parseroute.Resource,
+         }
+            .Property(Parseroute.Url, "https://www.mydomain.com/mj_parse.php")
+            .Property(Parseroute.Email, "mjparse@mydomain.com");
+         MailjetResponse response = await client.PostAsync(request);
+         if (response.IsSuccessStatusCode)
+         {
+            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+            Console.WriteLine(response.GetData());
+         }
+         else
+         {
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+         }
+      }
+   }
 }
 ```
 

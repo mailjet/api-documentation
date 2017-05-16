@@ -8,6 +8,7 @@ Mailjet maintains several wrappers and resources to make your life easier:
  - Python : <a href="https://github.com/mailjet/mailjet-apiv3-python" target="_blank">github</a>
  - Golang : <a href="https://github.com/mailjet/mailjet-apiv3-go" target="_blank">github</a>
  - Java : <a href="https://github.com/mailjet/mailjet-apiv3-java" target="_blank">github</a>
+ - C# / .NET : <a href="https://github.com/mailjet/mailjet-apiv3-dotnet" target="_blank">github</a>
 
 You can find even more usefull tools and plugins on the <a href="https://github.com/mailjet" target="_blank">Mailjet GitHub</a>
 
@@ -43,13 +44,5 @@ Check out a simple example of NodeJS implementation.
  - <a href="https://nodejs-wrapper-demo.mailjet.com/" target="_blank">Online Demo</a>
  - <a href="https://github.com/GuillaumeBadi/mailjet-js-tutorial" target="_blank">Sources on GitHub</a>
 
-## Reply by email, messaging app
 
-This is a messaging app example which lets a group of people communicate together. If a user tagged in a message is currently offline, he’ll receive an email notification so that he won’t miss a beat and can reply (directly by email) even if he wants to stay offline.
-
-This demo uses Mailjet Parse API, ReactJS and NodeJS. 
-
- - <a href="https://reply-by-email-demo.mailjet.com/" target="_blank">Online Demo</a>
- - <a href="https://github.com/shubs/simple_chat_email" target="_blank">Sources on GitHub</a> 
- - <a href="https://www.mailjet.com/blog/how-to-increase-retention-with-the-parse-api-app/" target="_blank">Blog Post</a>
 
