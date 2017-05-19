@@ -1029,8 +1029,8 @@ func main () {
           Email: "passenger@mailjet.com",
         },
       },
-      Attachments: []MailjetAttachment {
-        MailjetAttachment {
+      Attachments: []Attachment {
+        Attachment {
           ContentType: "text/plain",
           Filename: "test.txt",
           Content: "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK",
