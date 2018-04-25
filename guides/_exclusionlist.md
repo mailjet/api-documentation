@@ -23,7 +23,7 @@ $response = $mj->put(Resources::$Contact, ['id' => $id, 'body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Call to add contact to exclusion list
 curl -s \
 	-X PUT \
@@ -33,6 +33,35 @@ curl -s \
 	-d '{
 		"IsExcludedFromCampaigns":"true"
 	}'
+```
+```ruby
+# Call to add contact to exclusion list
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+target = Mailjet::Contact.find($ID_OR_EMAIL)
+target.update_attributes(is_excluded_from_campaigns: "true"
+)
+p variable.attributes['Data']
+```
+```python
+"""
+Call to add contact to exclusion list
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$ID_OR_EMAIL'
+data = {
+  'IsExcludedFromCampaigns': 'true'
+}
+result = mailjet.contact.update(id=id, data=data)
+print result.status_code
+print result.json()
 ```
 ```javascript
 /**
@@ -56,33 +85,6 @@ request
 		console.log(err.statusCode)
 	})
 ```
-```ruby
-# Call to add contact to exclusion list
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-target = Mailjet::Contact.find($ID_OR_EMAIL)
-target.update_attributes(is_excluded_from_campaigns: "true")
-```
-```python
-"""
-Call to add contact to exclusion list
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$ID_OR_EMAIL'
-data = {
-  'IsExcludedFromCampaigns': 'true'
-}
-result = mailjet.contact.update(id=id, data=data)
-print result.status_code
-print result.json()
-```
 ``` go
 /*
 Call to add contact to exclusion list
@@ -90,9 +92,10 @@ Call to add contact to exclusion list
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -132,7 +135,7 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Contact.resource, ID)
-						.property(Contact.ISEXCLUDEDFROMCAMPAIGNS, "true");
+			.property(Contact.ISEXCLUDEDFROMCAMPAIGNS, "true");
       response = client.put(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -174,6 +177,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -248,7 +252,7 @@ $response = $mj->post(Resources::$ContactManagemanycontacts, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Create : Manage the details of a Contact.
 curl -s \
 	-X POST \
@@ -536,7 +540,7 @@ $response = $mj->post(Resources::$Csvimport, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Create: A wrapper for the CSV importer
 curl -s \
 	-X POST \
@@ -572,12 +576,15 @@ request
 ```
 ```ruby
 # Create: A wrapper for the CSV importer
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Csvimport.create(data_id: "$ID_DATA",method: "excludemarketing")
+variable = Mailjet::Csvimport.create(data_id: "$ID_DATA",
+method: "excludemarketing"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -603,9 +610,10 @@ Create: A wrapper for the CSV importer
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -647,8 +655,8 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Csvimport.resource)
-						.property(Csvimport.DATAID, "$ID_DATA")
-						.property(Csvimport.METHOD, "excludemarketing");
+			.property(Csvimport.DATAID, "$ID_DATA")
+			.property(Csvimport.METHOD, "excludemarketing");
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -690,6 +698,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }

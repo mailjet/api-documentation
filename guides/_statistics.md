@@ -1,814 +1,120 @@
-#Statistics
+# Statistics
 
-##Messages
+The Mailjet API allows you to retrieve statistics for your sendings. Several endpoints have been designed for this purpose:
 
-The Mailjet API offers resources to extract information for every message you send. You can also filter through the message statistics to view specific metrics for your messages.
+* [Key Performance Statistics](#key-performance-statistics)
+* [Statistics Per Recipient](#statistics-for-specific-recipient)
+* [Clicked Links Statistics](#stats-for-clicked-links)
+* [Mailbox Providers Statistics](#mailbox-provider-statistics)
+* [Geographical Statistics](#geographical-statistics)
+* [Additional Stats Resources](#additional-stats-resources)
 
-### Information about a message
+## Migration Guide
 
-The response payload of a Send API call will provide you with the <code>MessageID</code> of your messages. You can use this <code>MessageID</code> to access information and statistics about the message. 
+On April 5th the API endpoints used for retrieving stats were revamped in a major way. Stats for any account migrated or created after April 5th 2018 can be retrieved with the newly created endpoints.
 
-```php
-<?php
-/*
-View : Details of a specific Message (e-mail) processed by Mailjet
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Message, ['id' => $id]);
-$response->success() && var_dump($response->getData());
-?>
-```
-```bash
-# View : Details of a specific Message (e-mail) processed by Mailjet
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/message/$ID_MESSAGE 
-```
-```javascript
-/**
- *
- * View : Details of a specific Message (e-mail) processed by Mailjet
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("message")
-	.id($ID_MESSAGE)
-	.request()
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
-```ruby
-# View : Details of a specific Message (e-mail) processed by Mailjet
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Message.find($ID_MESSAGE)
-```
-```python
-"""
-View : Details of a specific Message (e-mail) processed by Mailjet
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$ID_MESSAGE'
-result = mailjet.message.get(id=id)
-print result.status_code
-print result.json()
-```
-``` go
-/*
-View : Details of a specific Message (e-mail) processed by Mailjet
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Message
-	mr := &Request{
-	  Resource: "message",
-	  ID: RESOURCE_ID,
-	}
-	err := mailjetClient.Get(mr, &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Message;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : Details of a specific Message (e-mail) processed by Mailjet
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Message.resource, ID);
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
-```csharp
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using System;
-using Newtonsoft.Json.Linq;
-namespace Mailjet.ConsoleApplication
-{
-   class Program
-   {
-      /// <summary>
-      /// View : Details of a specific Message (e-mail) processed by Mailjet
-      /// </summary>
-      static void Main(string[] args)
-      {
-         RunAsync().Wait();
-      }
-      static async Task RunAsync()
-      {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
-         MailjetRequest request = new MailjetRequest
-         {
-            Resource = Message.Resource,
-            ResourceId = ResourceId.Numeric(ID)
-         }
-         MailjetResponse response = await client.GetAsync(request);
-         if (response.IsSuccessStatusCode)
-         {
-            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
-            Console.WriteLine(response.GetData());
-         }
-         else
-         {
-            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
-            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
-            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
-         }
-      }
-   }
-}
-```
+The main improvements of the new system include:
 
+- Streamlined API endpoints, combining several legacy resources into one to ease the retrieval of key performance stats
+- Detailed stats on clicked links, including number of unique and total clicks, URL position etc.
+- Statistics based on Mailbox providers, which allow you to easily identify issues with deliverability / engagement based on the recipients' mailbox providers
 
-> API response:
+| Legacy statistics endpoints | New statistics endpoints |
+|---|---|
+| [`/apikeytotals`](/email-api/v3/apikeytotals/)  | [`/statcounters`](/email-api/v3/statcounters/) |
+| [`/domainstatistics`](/email-api/v3/domainstatistics/) | [`/statistics/recipient-esp`](/email-api/v3/statistics/recipient-esp/) |
+| [`/graphstatistics`](/email-api/v3/graphstatistics/) | [`/statcounters`](/email-api/v3/statcounters/) |
+| [`/listrecipientstatistics`](/email-api/v3/listrecipientstatistics/) | [`/statcounters`](/email-api/v3/statcounters/) |
+| [`/liststatistics`](/email-api/v3/liststatistics/) | [`/statcounters`](/email-api/v3/statcounters/) |
+| [`/openstatistics`](/email-api/v3/openstatistics/) | [`/statcounters`](/email-api/v3/statcounters/) |
+| --- | [`/statistics/link-click`](/email-api/v3/statistics/link-click/) |
 
-```json
-{
-	"Count": 1,
-	"Data": [
-		{
-			"ArrivedAt": "2015-07-06T07:10:24Z",
-			"AttachmentCount": "0",
-			"AttemptCount": "0",
-			"CampaignID": "51",
-			"ContactID": "45",
-			"Delay": "0",
-			"DestinationID": "14",
-			"FilterTime": "61",
-			"FromID": "1",
-			"ID": "16888509234525280",
-			"IsClickTracked": "false",
-			"IsHTMLPartIncluded": "false",
-			"IsOpenTracked": "false",
-			"IsTextPartIncluded": "false",
-			"IsUnsubTracked": "false",
-			"MessageSize": "20248",
-			"SpamassassinScore": "0",
-			"SpamassRules": "",
-			"StateID": "0",
-			"StatePermanent": "false",
-			"Status": "sent"
-		}
-	],
-	"Total": 1
-}
-```
+In this guide we will focus on resources that are available for new / migrated users.
 
+## Key Performance Statistics
 
-Perform a GET on <code>[/message](/email-api/v3/message/)</code> to get basic information about a message such as the contact it was sent to, who it was sent by, if there were any attachments and how large the message was.
+The <code>[/statcounters](/email-api/v3/statcounters/)</code> resource is a multifunctional tool that allows you to view stats through various prisms while varying the Source (API Key, Campaign or List), the Timing (Event-based or Message-based counters' timestamp), or the Timeframe (Lifetime, Day, Hour, 5 Minutes).
 
-The <code>StateID</code> property shows the current status the message is in. To get the full listing of <code>StateId</code> and their meaning, use the <code>[/messagestate](/email-api/v3/messagestate/)</code> resource.
+The response will provide statistics that you can display in different ways:
 
+* [Delivery Rates Statistics](#delivery-statistics)
+* [Contact Engagement Statistics](#contact-engagement-statistics)
+* [Additional Metrics](#additional-metrics)
+
+### Stats at Campaign, List or APIKey Level
+
+The [`/statcounters`](/email-api/v3/statcounters/) code samples available in the following sections are done at a campaign level, which is indicated by the use of the following filters in the calls:
+
+- `SourceId=$Campaign_ID` - Substitute `$CampaignID` with the ID of the Campaign you are interested in.
+- `CounterSource=Campaign`
+
+If you want to retrieve these key statistics but at a **List** level, make the same request but use the **$ListID** as the value of the <code>SourceID</code> filter and enter **List** as the <code>CounterSource</code>.
+
+Similarly, if you need the stats at an **Account** level, make the request with `ApiKey` as the <code>CounterSource</code> value. Keep in mind that you can only retrieve data for the ApiKey with which you are authenticated.
+
+### Event-based vs Message-based Stats Timing
+
+The [`/statcounters`](/email-api/v3/statcounters/) resource allows you to retrieve information both based on the message sending time (message-based) and on the timing of the event occurrence (event-based).
+
+Message-based stats allow you to easily view the success of your sending by having the delivery rates / contact engagement details linked to the sending time.
+
+Event-based stats allow you to view the spread of events over time after the initial sending, helping you identify when recipients were most active / engaged with your campaigns.
+
+**Example:** A campaign is sent on Day1. There are 10 opens on Day2 and another 20 on Day3. If you use `CounterTiming=Message` in the call, the returned result will be for the messages that were opened, thus showing 30 opens on Day1. If you use `CounterTiming=Event`, [`/statcounters`](/email-api/v3/statcounters/) will return the information on the open events, showing 10 opens on Day2 and 20 on Day3.
+
+To specify which details you need, use the `CounterTiming` filter.
+
+- `CounterTiming=Message` - retrieves the stats based on the message sending time.
+- `CounterTiming=Event` - retrieves details based on the event occurrence.
 
 <div></div>
 
-```php
-<?php
-/*
-View : information for a specific message
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Messageinformation, ['id' => $id]);
-$response->success() && var_dump($response->getData());
-?>
-```
-```bash
-# View : information for a specific message
+### Delivery Statistics
+
+Delivery statistics tell you whether your messages reached your recipients’ inboxes.
+
+![delivery_rates](../images/stats-delivery-rates.png)
+
+```shell
+# View : Retrieve Key Delivery statistics for a Specific Campaign
 curl -s \
 	-X GET \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/messageinformation/$ID_MESSAGE 
+	https://api.mailjet.com/v3/REST/statcounters?SourceId=$Campaign_ID\&CounterSource=Campaign\&CounterTiming=Message\&CounterResolution=Lifetime 
 ```
-```javascript
-/**
- *
- * View : information for a specific message
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("messageinformation")
-	.id($ID_MESSAGE)
-	.request()
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
-```ruby
-# View : information for a specific message
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Messageinformation.find($ID_MESSAGE)
-```
-```python
-"""
-View : information for a specific message
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$ID_MESSAGE'
-result = mailjet.messageinformation.get(id=id)
-print result.status_code
-print result.json()
-```
-``` go
-/*
-View : information for a specific message
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Messageinformation
-	mr := &Request{
-	  Resource: "messageinformation",
-	  ID: RESOURCE_ID,
-	}
-	err := mailjetClient.Get(mr, &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Messageinformation;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : information for a specific message
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Messageinformation.resource, ID);
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
-```csharp
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using System;
-using Newtonsoft.Json.Linq;
-namespace Mailjet.ConsoleApplication
-{
-   class Program
-   {
-      /// <summary>
-      /// View : information for a specific message
-      /// </summary>
-      static void Main(string[] args)
-      {
-         RunAsync().Wait();
-      }
-      static async Task RunAsync()
-      {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
-         MailjetRequest request = new MailjetRequest
-         {
-            Resource = Messageinformation.Resource,
-            ResourceId = ResourceId.Numeric(ID)
-         }
-         MailjetResponse response = await client.GetAsync(request);
-         if (response.IsSuccessStatusCode)
-         {
-            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
-            Console.WriteLine(response.GetData());
-         }
-         else
-         {
-            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
-            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
-            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
-         }
-      }
-   }
-}
-```
-
-
-> API response:
-
-```json
-{
-	"Count": 1,
-	"Data": [
-		{
-			"CampaignID": "51",
-			"ClickTrackedCount": "0",
-			"ContactID": "45",
-			"CreatedAt": "2015-07-06T07:10:24Z",
-			"ID": "16888509234525280",
-			"MessageSize": "20248",
-			"OpenTrackedCount": "0",
-			"QueuedCount": "0",
-			"SendEndAt": "2015-07-06T07:10:24Z",
-			"SentCount": "1",
-			"SpamAssassinRules": "",
-			"SpamAssassinScore": "0"
-		}
-	],
-	"Total": 1
-}
-```
-
-
-The <code>[/messageinformation](/email-api/v3/messageinformation/)</code> resource provides a complement of information to the <code>/message</code>.
-
-The <code>ID</code> property in the response is the <code>MessageID</code>. 
-
-<div></div>
-
 ```php
 <?php
 /*
-View : Event history of a message.
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Messagehistory, ['id' => $id]);
-$response->success() && var_dump($response->getData());
-?>
-```
-```bash
-# View : Event history of a message.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/messagehistory/$ID_MESSAGE 
-```
-```javascript
-/**
- *
- * View : Event history of a message.
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("messagehistory")
-	.id($ID_MESSAGE)
-	.request()
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
-```ruby
-# View : Event history of a message.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Messagehistory.find($ID_MESSAGE)
-```
-```python
-"""
-View : Event history of a message.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$ID_MESSAGE'
-result = mailjet.messagehistory.get(id=id)
-print result.status_code
-print result.json()
-```
-``` go
-/*
-View : Event history of a message.
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Messagehistory
-	mr := &Request{
-	  Resource: "messagehistory",
-	  ID: RESOURCE_ID,
-	}
-	err := mailjetClient.Get(mr, &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Messagehistory;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : Event history of a message.
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Messagehistory.resource, ID);
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
-```csharp
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using System;
-using Newtonsoft.Json.Linq;
-namespace Mailjet.ConsoleApplication
-{
-   class Program
-   {
-      /// <summary>
-      /// View : Event history of a message.
-      /// </summary>
-      static void Main(string[] args)
-      {
-         RunAsync().Wait();
-      }
-      static async Task RunAsync()
-      {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
-         MailjetRequest request = new MailjetRequest
-         {
-            Resource = Messagehistory.Resource,
-            ResourceId = ResourceId.Numeric(ID)
-         }
-         MailjetResponse response = await client.GetAsync(request);
-         if (response.IsSuccessStatusCode)
-         {
-            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
-            Console.WriteLine(response.GetData());
-         }
-         else
-         {
-            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
-            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
-            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
-         }
-      }
-   }
-}
-```
-
-
-> API response:
-
-```json
-{
-    "Count": 2,
-    "Data": [
-        {
-            "Comment": "",
-            "EventAt": 1441112238,
-            "EventType": "sent",
-            "State": "",
-            "Useragent": ""
-        },
-        {
-            "Comment": "",
-            "EventAt": 1441116490,
-            "EventType": "opened",
-            "State": "",
-            "Useragent": "Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko Firefox/11.0 (via ggpht.com GoogleImageProxy)"
-        }
-    ],
-    "Total": 2
-}
-```
-
-The <code>[/messagehistory](/email-api/v3/messagehistory/)</code> resource in conjonction with the <code>MessageId</code> of your message allows to list the events for a particular message.
-
-This resource provides a polling alternative to [Event API](#event-api-real-time-notifications).
-
-<div></div>
-
-```php
-<?php
-/*
-View : statuses and events summary for a specific message
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Messagesentstatistics, ['id' => $id]);
-$response->success() && var_dump($response->getData());
-?>
-```
-```bash
-# View : statuses and events summary for a specific message
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/messagesentstatistics/$ID_MESSAGE 
-```
-```javascript
-/**
- *
- * View : statuses and events summary for a specific message
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("messagesentstatistics")
-	.id($ID_MESSAGE)
-	.request()
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
-```ruby
-# View : statuses and events summary for a specific message
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Messagesentstatistics.find($ID_MESSAGE)
-```
-```python
-"""
-View : statuses and events summary for a specific message
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$ID_MESSAGE'
-result = mailjet.messagesentstatistics.get(id=id)
-print result.status_code
-print result.json()
-```
-``` go
-/*
-View : statuses and events summary for a specific message
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Messagesentstatistics
-	mr := &Request{
-	  Resource: "messagesentstatistics",
-	  ID: RESOURCE_ID,
-	}
-	err := mailjetClient.Get(mr, &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Messagesentstatistics;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : statuses and events summary for a specific message
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Messagesentstatistics.resource, ID);
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
-```csharp
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using System;
-using Newtonsoft.Json.Linq;
-namespace Mailjet.ConsoleApplication
-{
-   class Program
-   {
-      /// <summary>
-      /// View : statuses and events summary for a specific message
-      /// </summary>
-      static void Main(string[] args)
-      {
-         RunAsync().Wait();
-      }
-      static async Task RunAsync()
-      {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
-         MailjetRequest request = new MailjetRequest
-         {
-            Resource = Messagesentstatistics.Resource,
-            ResourceId = ResourceId.Numeric(ID)
-         }
-         MailjetResponse response = await client.GetAsync(request);
-         if (response.IsSuccessStatusCode)
-         {
-            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
-            Console.WriteLine(response.GetData());
-         }
-         else
-         {
-            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
-            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
-            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
-         }
-      }
-   }
-}
-```
-
-
-> API response:
-
-```json
-{
-	"Count": 1,
-	"Data": [
-		{
-			"ArrivalTs": "2015-07-06T07:10:26Z",
-			"Blocked": "false",
-			"Bounce": "false",
-			"BounceDate": "",
-			"BounceReason": "",
-			"CampaignID": "51",
-			"Click": "false",
-			"CntRecipients": "1",
-			"ComplaintDate": "",
-			"ContactID": "45",
-			"Details": "",
-			"FBLSource": "",
-			"MessageID": "16888509234525280",
-			"Open": "false",
-			"Queued": "false",
-			"Sent": "false",
-			"Spam": "false",
-			"StateID": "",
-			"StatePermanent": "false",
-			"Status": "opened",
-			"ToEmail": "passenger@mailjet.com",
-			"Unsub": "false"
-		}
-	],
-	"Total": 1
-}
-```
-
-
-The <code>[/messagesentstatistics](/email-api/v3/messagesentstatistics/)</code> resource shows a summary of the statuses and events of the message. 
-
-<div></div>
-
-### Information about campaign messages
-
-```php
-<?php
-/*
-View : Details of Messages in a campaign
+View : Retrieve Key Delivery statistics for a Specific Campaign
 */
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
 $filters = [
-  'Campaign' => '$CAMPAIGN_ID'
+  'SourceId' => '$Campaign_ID',
+  'CounterSource' => 'Campaign',
+  'CounterTiming' => 'Message',
+  'CounterResolution' => 'Lifetime'
 ];
-$response = $mj->get(Resources::$Message, ['filters' => $filters]);
+$response = $mj->get(Resources::$Statcounters, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# View : Details of Messages in a campaign
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/message?Campaign=$CAMPAIGN_ID 
 ```
 ```javascript
 /**
  *
- * View : Details of Messages in a campaign
+ * View : Retrieve Key Delivery statistics for a Specific Campaign
  *
  */
 const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
 const request = mailjet
-	.get("message")
+	.get("statcounters")
 	.request({
-		"Campaign":"$CAMPAIGN_ID"
+		"SourceId":"$Campaign_ID",
+		"CounterSource":"Campaign",
+		"CounterTiming":"Message",
+		"CounterResolution":"Lifetime"
 	})
 request
 	.then((result) => {
@@ -819,38 +125,22 @@ request
 	})
 ```
 ```ruby
-# View : Details of Messages in a campaign
+# View : Retrieve Key Delivery statistics for a Specific Campaign
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Message.all(campaign: "$CAMPAIGN_ID")
-```
-``` go
-/*
-View : Details of Messages in a campaign
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
+variable = Mailjet::Statcounters.all(source_id: "$Campaign_ID",
+counter_source: "Campaign",
+counter_timing: "Message",
+counter_resolution: "Lifetime"
 )
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Message
-	_, _, err := mailjetClient.List("message", &data, Filter("Campaign", "$CAMPAIGN_ID"))
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
+p variable.attributes['Data']
 ```
 ```python
 """
-View : Details of Messages in a campaign
+View : Retrieve Key Delivery statistics for a Specific Campaign
 """
 from mailjet_rest import Client
 import os
@@ -858,164 +148,31 @@ api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
 filters = {
-  'Campaign': '$CAMPAIGN_ID'
+  'SourceId': '$Campaign_ID',
+  'CounterSource': 'Campaign',
+  'CounterTiming': 'Message',
+  'CounterResolution': 'Lifetime'
 }
-result = mailjet.message.get(filters=filters)
+result = mailjet.statcounters.get(filters=filters)
 print result.status_code
 print result.json()
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Message;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : Details of Messages in a campaign
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Message.resource)
-                  .filter(Message.CAMPAIGN, "$CAMPAIGN_ID");
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
-```csharp
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using System;
-using Newtonsoft.Json.Linq;
-namespace Mailjet.ConsoleApplication
-{
-   class Program
-   {
-      /// <summary>
-      /// View : Details of Messages in a campaign
-      /// </summary>
-      static void Main(string[] args)
-      {
-         RunAsync().Wait();
-      }
-      static async Task RunAsync()
-      {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
-         MailjetRequest request = new MailjetRequest
-         {
-            Resource = Message.Resource,
-         }
-         .Filter(Message.Campaign, "$CAMPAIGN_ID");
-         MailjetResponse response = await client.GetAsync(request);
-         if (response.IsSuccessStatusCode)
-         {
-            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
-            Console.WriteLine(response.GetData());
-         }
-         else
-         {
-            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
-            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
-            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
-         }
-      }
-   }
-}
-```
-
-
-When working with campaigns, you can list your messages by using the filter <code>Campaign</code> on <code>[/message](/email-api/v3/message/)</code> resource or <code>CampaignID</code> on <code>[/messagesentstatistics](/email-api/v3/messagesentstatistics/)</code> and <code>[/messageinformation](/email-api/v3/messageinformation/)</code> resources.
-
-If you don't specify any filter on the above resources, the current day messages will be shown. To access the full list, you can use the filter <code>FromTS</code> and <code>ToTS</code> (Unix timestamp)
-
-<div></div>
-
-###Message Statistics
-
-```php
-<?php
-/*
-View : API key Campaign/Message statistics.
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Messagestatistics);
-$response->success() && var_dump($response->getData());
-?>
-```
-```bash
-# View : API key Campaign/Message statistics.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/messagestatistics 
-```
-```javascript
-/**
- *
- * View : API key Campaign/Message statistics.
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("messagestatistics")
-	.request()
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
-```python
-"""
-View : API key Campaign/Message statistics.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.messagestatistics.get()
-print result.status_code
-print result.json()
-```
-```ruby
-# View : API key Campaign/Message statistics.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Messagestatistics.all()
 ```
 ``` go
 /*
-View : API key Campaign/Message statistics.
+View : Retrieve Key Delivery statistics for a Specific Campaign
 */
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Messagestatistics
-	_, _, err := mailjetClient.List("messagestatistics", &data)
+	var data []resources.Statcounters
+	_, _, err := mailjetClient.List("statcounters", &data, Filter("SourceId", "$Campaign_ID"), Filter("CounterSource", "Campaign"), Filter("CounterTiming", "Message"), Filter("CounterResolution", "Lifetime"))
 	if err != nil {
 	  fmt.Println(err)
 	}
@@ -1029,19 +186,23 @@ import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Messagestatistics;
+import com.mailjet.client.resource.Statcounters;
 import org.json.JSONArray;
 import org.json.JSONObject;
 public class MyClass {
     /**
-     * View : API key Campaign/Message statistics.
+     * View : Retrieve Key Delivery statistics for a Specific Campaign
      */
     public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Messagestatistics.resource);
+      request = new MailjetRequest(Statcounters.resource)
+                  .filter(Statcounters.SOURCEID, "$Campaign_ID")
+                  .filter(Statcounters.COUNTERSOURCE, "Campaign")
+                  .filter(Statcounters.COUNTERTIMING, "Message")
+                  .filter(Statcounters.COUNTERRESOLUTION, "Lifetime");
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -1058,7 +219,7 @@ namespace Mailjet.ConsoleApplication
    class Program
    {
       /// <summary>
-      /// View : API key Campaign/Message statistics.
+      /// View : Retrieve Key Delivery statistics for a Specific Campaign
       /// </summary>
       static void Main(string[] args)
       {
@@ -1069,8 +230,12 @@ namespace Mailjet.ConsoleApplication
          MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
          MailjetRequest request = new MailjetRequest
          {
-            Resource = Messagestatistics.Resource,
+            Resource = Statcounters.Resource,
          }
+         .Filter(Statcounters.Sourceid, "$Campaign_ID")
+         .Filter(Statcounters.Countersource, "Campaign")
+         .Filter(Statcounters.Countertiming, "Message")
+         .Filter(Statcounters.Counterresolution, "Lifetime");
          MailjetResponse response = await client.GetAsync(request);
          if (response.IsSuccessStatusCode)
          {
@@ -1081,6 +246,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -1089,95 +255,140 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
+Use the endpoint <code>[/statcounters](/email-api/v3/statcounters/)</code> to receive the counters needed to calculate the following rates:
+
 > API response:
 
 ```json
 {
-	"Count": 1,
-	"Data": [
-		{
-			"AverageClickDelay": "48",
-			"AverageClickedCount": "1",
-			"AverageOpenDelay": "475.3404",
-			"AverageOpenedCount": "1.1702",
-			"BlockedCount": "20",
-			"BouncedCount": "5",
-			"CampaignCount": "213",
-			"ClickedCount": "3",
-			"DeliveredCount": "262",
-			"OpenedCount": "94",
-			"ProcessedCount": "287",
-			"QueuedCount": "0",
-			"SpamComplaintCount": "0",
-			"TotalClicksCount": "",
-			"TotalOpensCount": "",
-			"TransactionalCount": "187",
-			"UnsubscribedCount": "0"
-		}
-	],
-	"Total": 1
+    "Count": 1,
+    "Data": [
+        {
+            "APIKeyID": 123456,
+            "EventClickDelay": 322,
+            "EventClickedCount": 6,
+            "EventOpenDelay": 739,
+            "EventOpenedCount": 11,
+            "EventSpamCount": 0,
+            "EventUnsubscribedCount": 2,
+            "EventWorkflowExitedCount": 0,
+            "MessageBlockedCount": 12,
+            "MessageClickedCount": 3,
+            "MessageDeferredCount": 0,
+            "MessageHardBouncedCount": 5,
+            "MessageOpenedCount": 8,
+            "MessageQueuedCount": 0,
+            "MessageSentCount": 15,
+            "MessageSoftBouncedCount": 0,
+            "MessageSpamCount": 0,
+            "MessageUnsubscribedCount": 2,
+            "MessageWorkFlowExitedCount": 0,
+            "SourceID": 654321,
+            "Timeslice": "",
+            "Total": 32
+        }
+    ],
+    "Total": 1
 }
 ```
 
-
-The <code>[/messagestatistics](/email-api/v3/messagestatistics/)</code> resource aggregates statistics on your selected filter. It is showing a count of each event attached to the messages you filtered on. 
-
-By default, if no filter is defined, this resource will aggregate today's messages statistics. You can use the filters <code>FromTS</code> and <code>ToTS</code> (Unix timestamp) to specify the period of extraction.  
-
-Visit the <code>[/messagestatistics](/email-api/v3/messagestatistics/)</code> resource reference for a full list of available filters.
+<table class="tg">
+  <tr>
+    <th class="tg-baqh" colspan="3"><strong><center>Delivery Rates</strong></center></th>
+  </tr>
+  <tr>
+    <td class="tg-yw4l"><i>Stat</i></td>
+    <td class="tg-yw4l"><i>Description</i></td>
+    <td class="tg-yw4l"><i>Equals</i></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Email Total</td>
+    <td class="tg-yw4l">The total number of processed emails for the campaign.</td>
+    <td class="tg-yw4l"><code>Total</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Delivered count</td>
+    <td class="tg-yw4l">The number of emails that were successfully sent by Mailjet and accepted by the recipient’s server.</td>
+    <td class="tg-yw4l"><code>MessageSentCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">% Delivered</td>
+    <td class="tg-yw4l">Delivered emails as a percentage of processed emails.</td>
+    <td class="tg-yw4l"><code>MessageSentCount</code> / <code>Total</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">% Blocked</td>
+    <td class="tg-yw4l">Blocked emails as a percentage of processed emails.</td>
+    <td class="tg-yw4l"><code>MessageBlockedCount</code> / <code>Total</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">% Soft-bounced</td>
+    <td class="tg-yw4l">Soft-bounced emails as a percentage of processed emails.</td>
+    <td class="tg-yw4l"><code>MessageSoftBouncedCount</code> / <code>Total</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">% Hard-bounced</td>
+    <td class="tg-yw4l">Hard-bounced emails as a percentage of processed emails.</td>
+    <td class="tg-yw4l"><code>MessageHardBouncedCount</code> / <code>Total</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">% Retrying</td>
+    <td class="tg-yw4l">Retrying emails as a percentage of processed emails.</td>
+    <td class="tg-yw4l"><code>MessageDeferredCount</code> / <code>Total</code></td>
+  </tr>
+</table>
 
 <div></div>
-###Troubleshooting missing messages
 
-Please note that sometimes, messages may not be traceable with the <code>MessageID</code> returned from our SEND API. There could be few reasons behind that:
+### Contact Engagement Statistics
 
- - <code>Message was sent from non-validated sender.</code> When this happens, the message remains in queue for 5 days. If in the meantime the sender is validated, the message will be released. Otherwise, it will be discarded in 5 days.
- - <code>Sending limits reached.</code> Messages above the quota allowed will be stored in queue for 5 days and will be retried later. To increase your quota, please  upgrade your billing plan.
- - <code>Processing in process.</code> Sometimes it may take some time for the messages to appear in your statistics, especially for big campaigns. Please try again later.
+Engagement statistics allow you to measure your campaign performance.
 
+The information is retrieved with the same <code>[/statcounters](/email-api/v3/statcounters/)</code> request as when retrieving Delivery Statistics, but you will be looking at different .
 
-##Event Statistics
+![contact_engagement](../images/stats-contact-engage.png)
 
-The following statistic resources will allow you to view information about the events on your messages. 
-By default, they will show the current day statistics. To show more information, we advise you to use the <code>FromTS</code> and <code>ToTS</code> filters to increase the range of extraction. Visit each resource reference for even more filters allowing you to navigate through these statistics.  
-
-### list per event types
-
-The following resources will allow you to filter by events. 
-
-To explore the messages with sent event, you can use the <code>[/messagesentstatistics](/email-api/v3/messagesentstatistics/)</code> resource described above.
-
-<div></div>
+```shell
+# View : Retrieve Key Delivery statistics for a Specific Campaign
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/statcounters?SourceId=$Campaign_ID\&CounterSource=Campaign\&CounterTiming=Message\&CounterResolution=Lifetime 
+```
 ```php
 <?php
 /*
-View : Retrieve informations about messages opened at least once by their recipients.
+View : Retrieve Key Delivery statistics for a Specific Campaign
 */
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Openinformation);
+$filters = [
+  'SourceId' => '$Campaign_ID',
+  'CounterSource' => 'Campaign',
+  'CounterTiming' => 'Message',
+  'CounterResolution' => 'Lifetime'
+];
+$response = $mj->get(Resources::$Statcounters, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# View : Retrieve informations about messages opened at least once by their recipients.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/openinformation 
 ```
 ```javascript
 /**
  *
- * View : Retrieve informations about messages opened at least once by their recipients.
+ * View : Retrieve Key Delivery statistics for a Specific Campaign
  *
  */
 const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
 const request = mailjet
-	.get("openinformation")
-	.request()
+	.get("statcounters")
+	.request({
+		"SourceId":"$Campaign_ID",
+		"CounterSource":"Campaign",
+		"CounterTiming":"Message",
+		"CounterResolution":"Lifetime"
+	})
 request
 	.then((result) => {
 		console.log(result.body)
@@ -1187,42 +398,54 @@ request
 	})
 ```
 ```ruby
-# View : Retrieve informations about messages opened at least once by their recipients.
+# View : Retrieve Key Delivery statistics for a Specific Campaign
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Openinformation.all()
+variable = Mailjet::Statcounters.all(source_id: "$Campaign_ID",
+counter_source: "Campaign",
+counter_timing: "Message",
+counter_resolution: "Lifetime"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
-View : Retrieve informations about messages opened at least once by their recipients.
+View : Retrieve Key Delivery statistics for a Specific Campaign
 """
 from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.openinformation.get()
+filters = {
+  'SourceId': '$Campaign_ID',
+  'CounterSource': 'Campaign',
+  'CounterTiming': 'Message',
+  'CounterResolution': 'Lifetime'
+}
+result = mailjet.statcounters.get(filters=filters)
 print result.status_code
 print result.json()
 ```
 ``` go
 /*
-View : Retrieve informations about messages opened at least once by their recipients.
+View : Retrieve Key Delivery statistics for a Specific Campaign
 */
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Openinformation
-	_, _, err := mailjetClient.List("openinformation", &data)
+	var data []resources.Statcounters
+	_, _, err := mailjetClient.List("statcounters", &data, Filter("SourceId", "$Campaign_ID"), Filter("CounterSource", "Campaign"), Filter("CounterTiming", "Message"), Filter("CounterResolution", "Lifetime"))
 	if err != nil {
 	  fmt.Println(err)
 	}
@@ -1236,19 +459,23 @@ import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Openinformation;
+import com.mailjet.client.resource.Statcounters;
 import org.json.JSONArray;
 import org.json.JSONObject;
 public class MyClass {
     /**
-     * View : Retrieve informations about messages opened at least once by their recipients.
+     * View : Retrieve Key Delivery statistics for a Specific Campaign
      */
     public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Openinformation.resource);
+      request = new MailjetRequest(Statcounters.resource)
+                  .filter(Statcounters.SOURCEID, "$Campaign_ID")
+                  .filter(Statcounters.COUNTERSOURCE, "Campaign")
+                  .filter(Statcounters.COUNTERTIMING, "Message")
+                  .filter(Statcounters.COUNTERRESOLUTION, "Lifetime");
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -1265,7 +492,7 @@ namespace Mailjet.ConsoleApplication
    class Program
    {
       /// <summary>
-      /// View : Retrieve informations about messages opened at least once by their recipients.
+      /// View : Retrieve Key Delivery statistics for a Specific Campaign
       /// </summary>
       static void Main(string[] args)
       {
@@ -1276,8 +503,12 @@ namespace Mailjet.ConsoleApplication
          MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
          MailjetRequest request = new MailjetRequest
          {
-            Resource = Openinformation.Resource,
+            Resource = Statcounters.Resource,
          }
+         .Filter(Statcounters.Sourceid, "$Campaign_ID")
+         .Filter(Statcounters.Countersource, "Campaign")
+         .Filter(Statcounters.Countertiming, "Message")
+         .Filter(Statcounters.Counterresolution, "Lifetime");
          MailjetResponse response = await client.GetAsync(request);
          if (response.IsSuccessStatusCode)
          {
@@ -1288,6 +519,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -1296,62 +528,158 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
+By setting appropriate value for the <code>CounterSource</code>, <code>CounterResolution</code>, and <code>CounterTiming</code> filters you can generate an array of responses allowing to calculate the campaign statistics [as displayed in your Mailjet account](https://www.mailjet.com/docs/statistics#stats-overview).
+
+Use the following filters values:
+
+`SourceID=$CampaignID`
+
+`CounterSource=Campaign`
+
+`CounterResolution=Lifetime`
+
+`CounterTiming=Message`
+
+
 > API response:
 
 ```json
 {
-	"Count": 1,
-	"Data": [
-		{
-			"ArrivedAt": "2015-07-07T07:10:26Z",
-			"CampaignID": "51",
-			"ContactID": "45",
-			"ID": "-1",
-			"MessageID": "",
-			"OpenedAt": "2015-09-03T11:46:55Z",
-			"UserAgentID": "1",
-			"UserAgentFull": "Mozilla/5.0 (Windows NT 5.1; rv:11.0) Gecko Firefox/11.0 (via ggpht.com GoogleImageProxy)"
-		}
-	],
-	"Total": 1
+    "Count": 1,
+    "Data": [
+        {
+            "APIKeyID": 123456,
+            "EventClickDelay": 322,
+            "EventClickedCount": 6,
+            "EventOpenDelay": 739,
+            "EventOpenedCount": 11,
+            "EventSpamCount": 0,
+            "EventUnsubscribedCount": 2,
+            "EventWorkflowExitedCount": 0,
+            "MessageBlockedCount": 12,
+            "MessageClickedCount": 3,
+            "MessageDeferredCount": 0,
+            "MessageHardBouncedCount": 5,
+            "MessageOpenedCount": 8,
+            "MessageQueuedCount": 0,
+            "MessageSentCount": 15,
+            "MessageSoftBouncedCount": 0,
+            "MessageSpamCount": 0,
+            "MessageUnsubscribedCount": 2,
+            "MessageWorkFlowExitedCount": 0,
+            "SourceID": 654321,
+            "Timeslice": "",
+            "Total": 32
+        }
+    ],
+    "Total": 1
 }
 ```
 
+In the below table you will find the rules to retrieve and calculate the respective statistics.
 
-The <code>[/openinformation](/email-api/v3/openinformation/)</code> resource shows the log of the open events on your messages during the selected period.
+<table class="tg">
+  <tr>
+    <th class="tg-amwm"colspan="3"><strong><center>Contact Engagement</strong></center></th>
+  </tr>
+  <tr>
+    <td class="tg-jogk"><i>Stat</i></td>
+    <td class="tg-jogk"><i>Description</i></td>
+    <td class="tg-jogk"><i>Equals</i></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Opened Count</td>
+    <td class="tg-yw4l">The unique email opens based on the total number of delivered emails.</td>
+    <td class="tg-yw4l"><code>MessageOpenedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">% Opened</td>
+    <td class="tg-yw4l">Unique opens as a percentage of the total number of delivered emails</td>
+    <td class="tg-yw4l"><code>MessageOpenedCount</code> / <code>MessageSentCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Clicked Count</td>
+    <td class="tg-yw4l">The number of opened emails that have at least one click. This does not include any unsubscribe clicks.</td>
+    <td class="tg-yw4l"><code>MessageClickedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">% Clicked</td>
+    <td class="tg-yw4l">Clicked emails as a percentage of the total number of opened emails (also called click-through rate)</td>
+    <td class="tg-yw4l"><code>MessageClickedCount</code> / <code>MessageOpenedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Unsubscribed Count</td>
+    <td class="tg-yw4l">Number of unsubscriptions</td>
+    <td class="tg-yw4l"><code>MessageUnsubscribedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">% Unsubscribed</td>
+    <td class="tg-yw4l">Unsubscriptions as a percentage of delivered emails</td>
+    <td class="tg-yw4l"><code>MessageUnsubscribedCount</code> / <code>MessageSentCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Spam Count</td>
+    <td class="tg-yw4l">Number of messages marked as Spam</td>
+    <td class="tg-yw4l"><code>MessageSpamCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">% Marked as Spam</td>
+    <td class="tg-yw4l">Emails marked as Spam as a percentage of delivered emails</td>
+    <td class="tg-yw4l"><code>MessageSpamCount</code> / <code>MessageSentCount</code></td>
+  </tr>
+</table>
 
-<div></div>
+### Evolution / Graph Statistics
+
+By using <code>[/statcounters](/email-api/v3/statcounters/)</code> and setting appropriate values for the <code>CounterSource</code>, <code>CounterResolution</code>, and <code>CounterTiming</code> filters you can generate an array of responses over a period of time. With this information you will be able to see the evolution of the campaign events over the selected time period.
+
+![stats_graph](../images/stats-campaign-graph.png)
 
 ```php
 <?php
 /*
-View : Click statistics for messages.
+View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
 */
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Clickstatistics);
+$filters = [
+  'SourceId' => '$Campaign_ID',
+  'CounterSource' => 'Campaign',
+  'CounterTiming' => 'Event',
+  'CounterResolution' => 'Day',
+  'FromTS' => '123',
+  'ToTS' => '456'
+];
+$response = $mj->get(Resources::$Statcounters, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
-# View : Click statistics for messages.
+```shell
+# View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
 curl -s \
 	-X GET \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/clickstatistics 
+	https://api.mailjet.com/v3/REST/statcounters?SourceId=$Campaign_ID\&CounterSource=Campaign\&CounterTiming=Event\&CounterResolution=Day\&FromTS=123\&ToTS=456 
 ```
 ```javascript
 /**
  *
- * View : Click statistics for messages.
+ * View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
  *
  */
 const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
 const request = mailjet
-	.get("clickstatistics")
-	.request()
+	.get("statcounters")
+	.request({
+		"SourceId":"$Campaign_ID",
+		"CounterSource":"Campaign",
+		"CounterTiming":"Event",
+		"CounterResolution":"Day",
+		"FromTS":123,
+		"ToTS":456
+	})
 request
 	.then((result) => {
 		console.log(result.body)
@@ -1361,42 +689,58 @@ request
 	})
 ```
 ```ruby
-# View : Click statistics for messages.
+# View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Clickstatistics.all()
+variable = Mailjet::Statcounters.all(source_id: "$Campaign_ID",
+counter_source: "Campaign",
+counter_timing: "Event",
+counter_resolution: "Day",
+from_ts: "123",
+to_ts: "456"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
-View : Click statistics for messages.
+View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
 """
 from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.clickstatistics.get()
+filters = {
+  'SourceId': '$Campaign_ID',
+  'CounterSource': 'Campaign',
+  'CounterTiming': 'Event',
+  'CounterResolution': 'Day',
+  'FromTS': '123',
+  'ToTS': '456'
+}
+result = mailjet.statcounters.get(filters=filters)
 print result.status_code
 print result.json()
 ```
 ``` go
 /*
-View : Click statistics for messages.
+View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
 */
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Clickstatistics
-	_, _, err := mailjetClient.List("clickstatistics", &data)
+	var data []resources.Statcounters
+	_, _, err := mailjetClient.List("statcounters", &data, Filter("SourceId", "$Campaign_ID"), Filter("CounterSource", "Campaign"), Filter("CounterTiming", "Event"), Filter("CounterResolution", "Day"), Filter("FromTS", "123"), Filter("ToTS", "456"))
 	if err != nil {
 	  fmt.Println(err)
 	}
@@ -1410,19 +754,25 @@ import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Clickstatistics;
+import com.mailjet.client.resource.Statcounters;
 import org.json.JSONArray;
 import org.json.JSONObject;
 public class MyClass {
     /**
-     * View : Click statistics for messages.
+     * View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
      */
     public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Clickstatistics.resource);
+      request = new MailjetRequest(Statcounters.resource)
+                  .filter(Statcounters.SOURCEID, "$Campaign_ID")
+                  .filter(Statcounters.COUNTERSOURCE, "Campaign")
+                  .filter(Statcounters.COUNTERTIMING, "Event")
+                  .filter(Statcounters.COUNTERRESOLUTION, "Day")
+                  .filter(Statcounters.FROMTS, "123")
+                  .filter(Statcounters.TOTS, "456");
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -1439,7 +789,7 @@ namespace Mailjet.ConsoleApplication
    class Program
    {
       /// <summary>
-      /// View : Click statistics for messages.
+      /// View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
       /// </summary>
       static void Main(string[] args)
       {
@@ -1450,8 +800,14 @@ namespace Mailjet.ConsoleApplication
          MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
          MailjetRequest request = new MailjetRequest
          {
-            Resource = Clickstatistics.Resource,
+            Resource = Statcounters.Resource,
          }
+         .Filter(Statcounters.Sourceid, "$Campaign_ID")
+         .Filter(Statcounters.Countersource, "Campaign")
+         .Filter(Statcounters.Countertiming, "Event")
+         .Filter(Statcounters.Counterresolution, "Day")
+         .Filter(Statcounters.Fromts, "123")
+         .Filter(Statcounters.Tots, "456");
          MailjetResponse response = await client.GetAsync(request);
          if (response.IsSuccessStatusCode)
          {
@@ -1462,178 +818,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
-            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
-         }
-      }
-   }
-}
-```
-
-
-> API response:
-
-```json
-{
-	"Count": 1,
-	"Data": [
-		{
-			"ClickedAt": "2015-07-07T07:10:28Z",
-			"ClickedDelay": "6",
-			"ContactID": "45",
-			"ID": "-1",
-			"MessageID": "16888509234525280",
-			"Url": "http://www.example.com",
-			"UserAgentID": "692"
-		}
-	],
-	"Total": 1
-}
-```
-
-
-The <code>[/clickstatistics](/email-api/v3/clickstatistics/)</code> resource shows the log of the click events on your messages during the selected period.
-
-<div></div>
-```php
-<?php
-/*
-View : Statistics on the bounces generated by emails sent on a given API Key.
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Bouncestatistics);
-$response->success() && var_dump($response->getData());
-?>
-```
-```bash
-# View : Statistics on the bounces generated by emails sent on a given API Key.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/bouncestatistics 
-```
-```javascript
-/**
- *
- * View : Statistics on the bounces generated by emails sent on a given API Key.
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("bouncestatistics")
-	.request()
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
-```ruby
-# View : Statistics on the bounces generated by emails sent on a given API Key.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Bouncestatistics.all()
-```
-```python
-"""
-View : Statistics on the bounces generated by emails sent on a given API Key.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.bouncestatistics.get()
-print result.status_code
-print result.json()
-```
-``` go
-/*
-View : Statistics on the bounces generated by emails sent on a given API Key.
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Bouncestatistics
-	_, _, err := mailjetClient.List("bouncestatistics", &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Bouncestatistics;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : Statistics on the bounces generated by emails sent on a given API Key.
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Bouncestatistics.resource);
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
-```csharp
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using System;
-using Newtonsoft.Json.Linq;
-namespace Mailjet.ConsoleApplication
-{
-   class Program
-   {
-      /// <summary>
-      /// View : Statistics on the bounces generated by emails sent on a given API Key.
-      /// </summary>
-      static void Main(string[] args)
-      {
-         RunAsync().Wait();
-      }
-      static async Task RunAsync()
-      {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
-         MailjetRequest request = new MailjetRequest
-         {
-            Resource = Bouncestatistics.Resource,
-         }
-         MailjetResponse response = await client.GetAsync(request);
-         if (response.IsSuccessStatusCode)
-         {
-            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
             Console.WriteLine(response.GetData());
-         }
-         else
-         {
-            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
-            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -1642,392 +827,187 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-> API response:
+Use the following filter settings:
 
-```json
-{
-	"Count": 1,
-	"Data": [
-		{
-			"BouncedAt": "2015-07-07T07:10:28Z",
-			"CampaignID": "51",
-			"ContactID": "46",
-			"ID": "16888509234525280",
-			"IsBlocked": "false",
-			"IsStatePermanent": "false",
-			"StateID": "1"
-		}
-	],
-	"Total": 1
-}
-```
+`CounterSource=Campaign`
 
+`CounterResolution=Day`
 
-The <code>[/bouncestatistics](/email-api/v3/bouncestatistics/)</code> resource shows the log of the bounce events on your messages during the selected period. 
+`CounterTiming=Event`
 
 <div></div>
-
-### statistics per event types
-
-```php
-<?php
-/*
-View : Retrieve statistics on e-mails opened at least once by their recipients.
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Openstatistics);
-$response->success() && var_dump($response->getData());
-?>
-```
-```bash
-# View : Retrieve statistics on e-mails opened at least once by their recipients.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/openstatistics 
-```
-```javascript
-/**
- *
- * View : Retrieve statistics on e-mails opened at least once by their recipients.
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("openstatistics")
-	.request()
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
-```ruby
-# View : Retrieve statistics on e-mails opened at least once by their recipients.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Openstatistics.all()
-```
-```python
-"""
-View : Retrieve statistics on e-mails opened at least once by their recipients.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.openstatistics.get()
-print result.status_code
-print result.json()
-```
-``` go
-/*
-View : Retrieve statistics on e-mails opened at least once by their recipients.
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Openstatistics
-	_, _, err := mailjetClient.List("openstatistics", &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Openstatistics;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : Retrieve statistics on e-mails opened at least once by their recipients.
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Openstatistics.resource);
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
-```csharp
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using System;
-using Newtonsoft.Json.Linq;
-namespace Mailjet.ConsoleApplication
-{
-   class Program
-   {
-      /// <summary>
-      /// View : Retrieve statistics on e-mails opened at least once by their recipients.
-      /// </summary>
-      static void Main(string[] args)
-      {
-         RunAsync().Wait();
-      }
-      static async Task RunAsync()
-      {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
-         MailjetRequest request = new MailjetRequest
-         {
-            Resource = Openstatistics.Resource,
-         }
-         MailjetResponse response = await client.GetAsync(request);
-         if (response.IsSuccessStatusCode)
-         {
-            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
-            Console.WriteLine(response.GetData());
-         }
-         else
-         {
-            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
-            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
-            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
-         }
-      }
-   }
-}
-```
-
 
 > API response:
 
-```json
-{
-	"Count": 1,
-	"Data": [
-		{
-			"OpenedCount": "2",
-			"OpenedDelay": "7",
-			"ProcessedCount": "2"
-		}
-	],
-	"Total": 1
-}
-```
-
-
-The <code>[/openstatistics](/email-api/v3/openstatistics/)</code> resource shows statistics about the opened messages. You can easily see your ratio of opened email compared to the number of processed messages. The number of processed messages include all statuses types (blocked, bounce, spam, sent...)
-
-<div></div>
-
-```php
-<?php
-/*
-View : Top links clicked historgram.
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Toplinkclicked);
-$response->success() && var_dump($response->getData());
-?>
-```
-```bash
-# View : Top links clicked historgram.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/toplinkclicked 
-```
-```javascript
-/**
- *
- * View : Top links clicked historgram.
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("toplinkclicked")
-	.request()
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
-```ruby
-# View : Top links clicked historgram.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Toplinkclicked.all()
-```
-```python
-"""
-View : Top links clicked historgram.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.toplinkclicked.get()
-print result.status_code
-print result.json()
-```
-``` go
-/*
-View : Top links clicked historgram.
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Toplinkclicked
-	_, _, err := mailjetClient.List("toplinkclicked", &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Toplinkclicked;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : Top links clicked historgram.
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Toplinkclicked.resource);
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
-```csharp
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using System;
-using Newtonsoft.Json.Linq;
-namespace Mailjet.ConsoleApplication
-{
-   class Program
-   {
-      /// <summary>
-      /// View : Top links clicked historgram.
-      /// </summary>
-      static void Main(string[] args)
-      {
-         RunAsync().Wait();
-      }
-      static async Task RunAsync()
-      {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
-         MailjetRequest request = new MailjetRequest
-         {
-            Resource = Toplinkclicked.Resource,
-         }
-         MailjetResponse response = await client.GetAsync(request);
-         if (response.IsSuccessStatusCode)
-         {
-            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
-            Console.WriteLine(response.GetData());
-         }
-         else
-         {
-            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
-            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
-            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
-         }
-      }
-   }
-}
-```
-
-
-> API response:
 
 ```json
 {
-	"Count": 1,
-	"Data": [
-		{
-			"ClickedCount": "3",
-			"LinkId": "1",
-			"Url": "www.example.com"
-		}
-	],
-	"Total": 1
+  "StatCounters": {
+    "Count": 1,
+    "Data": [
+        {
+        "APIKeyID": "320046",
+        "EventClickDelay": "200",
+        "EventClickCount": "3",
+        "EventOpenDelay": "20",
+        "EventOpenedCount": "4",
+        "EventSpamCount": "4",
+        "EventUnsubscribedCount": "5",
+        "EventWorkflowExitedCount": "5",
+        "MessageBlockedCount": "7",
+        "MessageClickedCount": "3",
+        "MessageDeferredCount": "2",
+        "MessageHardBouncedCount": "5",
+        "MessageOpenedCount": "5",
+        "MessageQueuedCount": "3",
+        "MessageSentCount": "2",
+        "MessageSoftBouncedCount": "7",
+        "MessageSpamCount": "5",
+        "MessageUnsubscribedCount": "1",
+        "MessageWorkflowExitedCount": "8",
+        "SourceID": "123456789",
+        "Timeslice": "456",
+        "Total": "50000",
+        }
+        {
+        "APIKeyID": "320046",
+        "EventClickDelay": "113",
+        "EventClickCount": "2",
+        "EventOpenDelay": "15",
+        "EventOpenedCount": "2",
+        "EventSpamCount": "0",
+        "EventUnsubscribedCount": "1",
+        "EventWorkflowExitedCount": "2",
+        "MessageBlockedCount": "3",
+        "MessageClickedCount": "1",
+        "MessageDeferredCount": "2",
+        "MessageHardBouncedCount": "2",
+        "MessageOpenedCount": "2",
+        "MessageQueuedCount": "3",
+        "MessageSentCount": "2",
+        "MessageSoftBouncedCount": "7",
+        "MessageSpamCount": "5",
+        "MessageUnsubscribedCount": "1",
+        "MessageWorkflowExitedCount": "8",
+        "SourceID": "123456789",
+        "Timeslice": "123",
+        "Total": "50000",
+        }
+    ]
+  },
+		"Total": 2
 }
 ```
 
+The response will produce results for a campaign, for message counters, with a daily time slice. You can use the response results to generate a graph similar to the one available in the Stats Dashboard on the front-end.
 
-The <code>[/toplinkclicked](/email-api/v3/toplinkclicked/)</code> resource shows a ranking of your most clicked url. 
-
-<div></div>
-
-##Resource Statistics
-
-Mailjet captures a number of statistics for each resource, such as the number of messages that were delivered, opened and blocked. Each of the following resource groups the statistics per resource.
-
-By default, these resources will show you statistics on the full history of the account. When <code>FromTS</code> and <code>ToTS</code> filter are available, they will refer to the campaign start date. Please visit these resource references for more information on available filters.  
+Using multiple such calls with different CampaignID values for the `SourceID` filter, then overlaying them on the same graph, will allow you to compare the evolution of the different campaigns. Comparing campaigns in such a fashion is useful when evaluating their performance.
 
 <div></div>
 
-```php
-<?php
-/*
-View : View message statistics for a given contact.
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Contactstatistics);
-$response->success() && var_dump($response->getData());
-?>
-```
-```bash
+### Additional metrics
+
+Using the same <code>[/statcounters](/email-api/v3/statcounters/)</code> resource, if you want to dig a little deeper, you will be able to get more detailed metrics.
+
+They can help with thoroughly analyzing your contacts engagement indicators.
+
+![additional_metrics](../images/stats-additional-metrics.png)
+
+See the below table for details on how to calculate the respective statistics.
+
+<table class="tg">
+  <tr>
+    <th class="tg-amwm" colspan="3"><strong><center>Additional metrics</strong></center></th>
+  </tr>
+  <tr>
+    <td class="tg-jogk"><i>Stat</i></td>
+    <td class="tg-jogk"><i>Description</i></td>
+    <td class="tg-jogk"><i>Equals</i></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Total Opens</td>
+    <td class="tg-yw4l">The total amount of times a marketing campaign email has been opened. This includes instances when an already read message is opened again.</td>
+    <td class="tg-yw4l"><code>EventOpenedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Messages Opened</td>
+    <td class="tg-yw4l">The number of unique marketing emails that were opened by the recipients.</td>
+    <td class="tg-yw4l"><code>MessageOpenedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Average opens per message</td>
+    <td class="tg-yw4l">How many times on average the recipient opens a campaign message.</td>
+    <td class="tg-yw4l"><code>EventOpenedCount</code> / <code>MessageOpenedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Delivered message opened</td>
+    <td class="tg-yw4l">The percentage of delivered messages that were opened.</td>
+    <td class="tg-yw4l"><code>MessageOpenedCount</code> / <code>MessageSentCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Average open delay</td>
+    <td class="tg-yw4l">Average time spent between the message being delivered and it being opened.</td>
+    <td class="tg-yw4l"><code>EventOpenDelay</code> / <code>MessageOpenedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Total clicks</td>
+    <td class="tg-yw4l">The number of times any link in the campaign email was clicked.</td>
+    <td class="tg-yw4l"><code>EventClickedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Messages clicked</td>
+    <td class="tg-yw4l">Number of messages that had a link clicked.</td>
+    <td class="tg-yw4l"><code>MessageClickedCount</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Average clicks per message</td>
+    <td class="tg-yw4l">How many times on average a contact clicks on a link for each clicked message.</td>
+    <td class="tg-yw4l"><code>EventClickedCount</code> / <code>MessageClickedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Open messages clicked</td>
+    <td class="tg-yw4l">Percentage of opened messages that received a click.</td>
+    <td class="tg-yw4l"><code>MessageClickedCount</code> / <code>MessageOpenedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Delivered messages clicked</td>
+    <td class="tg-yw4l">The percentage of delivered messages that were clicked.</td>
+    <td class="tg-yw4l"><code>MessageClickedCount</code> / <code>MessageSentCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Average click delay</td>
+    <td class="tg-yw4l">Average time spent between opening an email and clicking on a link in it.</td>
+    <td class="tg-yw4l"><code>EventClickDelay</code> / <code>MessageOpenedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Total unsubscribed</td>
+    <td class="tg-yw4l">Total number of unsubs for the campaign.</td>
+    <td class="tg-yw4l"><code>EventUnsubscribedCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Delivered messages unsubscribed</td>
+    <td class="tg-yw4l">Unsubscribe events as a percentage of delivered messages</td>
+    <td class="tg-yw4l"><code>EventUnsubscribedCount</code> / <code>MessageSentCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Total marked as spam</td>
+    <td class="tg-yw4l">Unsubscribe events as a percentage of delivered messages</td>
+    <td class="tg-yw4l"><code>EventSpamCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Delivered messages marked as spam</td>
+    <td class="tg-yw4l">Spam events as a percentage of delivered messages</td>
+    <td class="tg-yw4l"><code>EventSpamCount</code> / <code>MessageSentCount</code></td>
+  </tr>
+</table>
+
+## Statistics for Specific Recipient
+
+The Mailjet API allows you to easily access statistics for a specific recipient. This is useful when you need to review the delivery and engagement indicators for specific contacts.
+
+![recipient_stats](../images/stats-contact.png)
+
+```shell
 # View : View message statistics for a given contact.
 curl -s \
 	-X GET \
@@ -2053,14 +1033,27 @@ request
 		console.log(err.statusCode)
 	})
 ```
+```php
+<?php
+/*
+View : View message statistics for a given contact.
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->get(Resources::$Contactstatistics);
+$response->success() && var_dump($response->getData());
+?>
+```
 ```ruby
 # View : View message statistics for a given contact.
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
 variable = Mailjet::Contactstatistics.all()
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -2082,9 +1075,10 @@ View : View message statistics for a given contact.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -2155,6 +1149,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -2190,47 +1185,52 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-Available statistic resources:
+Use [`/contactstatistics`](/email-api/v3/contactstatistics/) to retrieve the respective information:
 
- - [/contactstatistics](/email-api/v3/contactstatistics/) :  grouped by contacts
- - [/campaignstatistics](/email-api/v3/campaignstatistics/) :  grouped by campaigns
- - [/domainstatistics](/email-api/v3/domainstatistics/) :  grouped by domains
- - [/liststatistics](/email-api/v3/liststatistics/) :  grouped by contact lists
- - [/listrecipientstatistics](/email-api/v3/listrecipientstatistics/) :  grouped by subscription of contact to a list
- - [/senderstatistics](/email-api/v3/senderstatistics/) :  grouped by senders
+<div></div>
 
-##API Key Totals
+## Stats for Clicked Links
+
+Clicked links can help optimize you email engagement rate by showing you how different Sections, images or Calls-to-action affect how your recipients interact with your emails.
+
+![stats_clicked_links](../images/stats-linkclick.png)
 
 ```php
 <?php
 /*
-View : Global counts for an API Key, since its creation.
+View : View statistics for total and unique clicks for each clicked URL in a campaign email
 */
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Apikeytotals);
+$filters = [
+  'CampaignId' => '$Campaign_ID'
+];
+$response = $mj->get(Resources::$StatisticsLinkClick, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
-# View : Global counts for an API Key, since its creation.
+```shell
+# View : View statistics for total and unique clicks for each clicked URL in a campaign email
 curl -s \
 	-X GET \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/apikeytotals 
+	https://api.mailjet.com/v3/REST/statistics/link-click?CampaignId=$Campaign_ID 
 ```
 ```javascript
 /**
  *
- * View : Global counts for an API Key, since its creation.
+ * View : View statistics for total and unique clicks for each clicked URL in a campaign email
  *
  */
 const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
 const request = mailjet
-	.get("apikeytotals")
-	.request()
+	.get("statistics")
+	.action("link-click")
+	.request({
+		"CampaignId":"$Campaign_ID"
+	})
 request
 	.then((result) => {
 		console.log(result.body)
@@ -2240,42 +1240,240 @@ request
 	})
 ```
 ```ruby
-# View : Global counts for an API Key, since its creation.
+# View : View statistics for total and unique clicks for each clicked URL in a campaign email
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Apikeytotals.all()
+variable = Mailjet::Statistics_link-click.all(campaign_id: "$Campaign_ID"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
-View : Global counts for an API Key, since its creation.
+View : View statistics for total and unique clicks for each clicked URL in a campaign email
 """
 from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.apikeytotals.get()
+filters = {
+  'CampaignId': '$Campaign_ID'
+}
+result = mailjet.statistics_link-click.get(filters=filters)
+print result.status_code
+print result.json()
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.StatisticsLinkclick;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : View statistics for total and unique clicks for each clicked URL in a campaign email
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(StatisticsLinkclick.resource)
+                  .filter(StatisticsLinkclick.CAMPAIGNID, "$Campaign_ID");
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
+``` go
+/*
+View : View statistics for total and unique clicks for each clicked URL in a campaign email
+*/
+package main
+import (
+	"fmt"
+	"log"
+	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.StatisticsLinkClick
+	_, _, err := mailjetClient.List("statistics", &data, Filter("CampaignId", "$Campaign_ID"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+   class Program
+   {
+      /// <summary>
+      /// View : View statistics for total and unique clicks for each clicked URL in a campaign email
+      /// </summary>
+      static void Main(string[] args)
+      {
+         RunAsync().Wait();
+      }
+      static async Task RunAsync()
+      {
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetRequest request = new MailjetRequest
+         {
+            Resource = StatisticsLinkclick.Resource,
+         }
+         .Filter(StatisticsLinkclick.Campaignid, "$Campaign_ID");
+         MailjetResponse response = await client.GetAsync(request);
+         if (response.IsSuccessStatusCode)
+         {
+            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+            Console.WriteLine(response.GetData());
+         }
+         else
+         {
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
+            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+         }
+      }
+   }
+}
+```
+
+
+> API response:
+
+```json  
+  {
+    "Count": 1,
+    "Data": [
+        {
+            "URL": "https://www.google.fr/",
+            "PositionIndex": 1,
+            "ClickedMessagesCount": 2,
+            "ClickedEventsCount": 2
+        }
+    ],
+    "Total": 1
+}
+```
+
+As a result, you may want to use [`/statistics/link-click`](/email-api/v3/statistics/link-click/) to retrieve activity information based on the links in your campaign templates. With this endpoint you can track both unique clicks and total click events, as well as retrieve the URL and its position within the template. It gives you valuable insight into what links are used more often than others, possibly showing correlation between position / design and link popularity.
+
+<div></div>
+
+## Mailbox Provider Statistics
+
+The mailbox provider statistics highlight how your emails perform across all the major providers you are sending to - Hotmail, Yahoo, Gmail etc.
+
+In this section of the guide, we will explain which call you need to make to retrieve and calculate the key performance indicators displayed in your Mailjet user interface.
+
+![mailbox_providers](../images/stats-providers.png)
+
+```shell
+# View : View delivery and contact engagement statistics for a campaign across different Mailbox providers
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/statistics/recipient-esp?CampaignId=$Campaign_ID 
+```
+```php
+<?php
+/*
+View : View delivery and contact engagement statistics for a campaign across different Mailbox providers
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$filters = [
+  'CampaignId' => '$Campaign_ID'
+];
+$response = $mj->get(Resources::$StatisticsRecipientEsp, ['filters' => $filters]);
+$response->success() && var_dump($response->getData());
+?>
+```
+```javascript
+/**
+ *
+ * View : View delivery and contact engagement statistics for a campaign across different Mailbox providers
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("statistics")
+	.action("recipient-esp")
+	.request({
+		"CampaignId":"$Campaign_ID"
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```ruby
+# View : View delivery and contact engagement statistics for a campaign across different Mailbox providers
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Statistics_recipient-esp.all(campaign_id: "$Campaign_ID"
+)
+p variable.attributes['Data']
+```
+```python
+"""
+View : View delivery and contact engagement statistics for a campaign across different Mailbox providers
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'CampaignId': '$Campaign_ID'
+}
+result = mailjet.statistics_recipient-esp.get(filters=filters)
 print result.status_code
 print result.json()
 ```
 ``` go
 /*
-View : Global counts for an API Key, since its creation.
+View : View delivery and contact engagement statistics for a campaign across different Mailbox providers
 */
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Apikeytotals
-	_, _, err := mailjetClient.List("apikeytotals", &data)
+	var data []resources.StatisticsRecipientEsp
+	_, _, err := mailjetClient.List("statistics", &data, Filter("CampaignId", "$Campaign_ID"))
 	if err != nil {
 	  fmt.Println(err)
 	}
@@ -2289,19 +1487,20 @@ import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Apikeytotals;
+import com.mailjet.client.resource.StatisticsRecipientesp;
 import org.json.JSONArray;
 import org.json.JSONObject;
 public class MyClass {
     /**
-     * View : Global counts for an API Key, since its creation.
+     * View : View delivery and contact engagement statistics for a campaign across different Mailbox providers
      */
     public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Apikeytotals.resource);
+      request = new MailjetRequest(StatisticsRecipientesp.resource)
+                  .filter(StatisticsRecipientesp.CAMPAIGNID, "$Campaign_ID");
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -2318,7 +1517,7 @@ namespace Mailjet.ConsoleApplication
    class Program
    {
       /// <summary>
-      /// View : Global counts for an API Key, since its creation.
+      /// View : View delivery and contact engagement statistics for a campaign across different Mailbox providers
       /// </summary>
       static void Main(string[] args)
       {
@@ -2329,7 +1528,257 @@ namespace Mailjet.ConsoleApplication
          MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
          MailjetRequest request = new MailjetRequest
          {
-            Resource = Apikeytotals.Resource,
+            Resource = StatisticsRecipientesp.Resource,
+         }
+         .Filter(StatisticsRecipientesp.Campaignid, "$Campaign_ID");
+         MailjetResponse response = await client.GetAsync(request);
+         if (response.IsSuccessStatusCode)
+         {
+            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+            Console.WriteLine(response.GetData());
+         }
+         else
+         {
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
+            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+         }
+      }
+   }
+}
+```
+
+
+The [`/statistics/recipient-esp`](/email-api/v3/statistics//recipient-esp) resource can be used to view statistics based on the Email Service Providers of the recipients of your campaign.
+
+<div></div>
+
+You must provide a `$CampaignID` in the `Campaign` filter in order to retrieve data.
+
+> API response:
+
+```json  
+  {
+    "Count": 1,
+    "Data": [
+        {
+            "ESPName": "others",
+            "DeliveredMessagesCount": 3,
+            "AttemptedMessagesCount": 3,
+            "OpenedMessagesCount": 3,
+            "ClickedMessagesCount": 2,
+            "DeferredMessagesCount": 0,
+            "SoftBouncedMessagesCount": 0,
+            "HardBouncedMessagesCount": 0,
+            "UnsubscribedMessagesCount": 0,
+            "SpamReportsCount": 0,
+            "OpenRate": 1,
+            "ClickThroughRate": 0.6667,
+            "SoftBouncedRate": 0,
+            "HardBouncedRate": 0,
+            "UnsubscribedRate": 0,
+            "SpamReportsRate": 0,
+            "DeferredRate": 0
+        }
+    ],
+    "Total": 1
+}
+```
+
+Below you can see how to calculate stats by ESP as displayed in the Email Providers section in the front-end, and which properties are used to calculate the stats.
+
+<table class="tg">
+  <tr>
+    <th class="tg-amwm" colspan="3"><strong><center>Email Providers</strong></center></th>
+  </tr>
+  <tr>
+    <td class="tg-jogk"><i>Stat</i></td>
+    <td class="tg-jogk"><i>Description</i></td>
+    <td class="tg-jogk"><i>Equals</i></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Email Provider</td>
+    <td class="tg-yw4l">Name of the ESP</td>
+    <td class="tg-yw4l"><code>ESPName</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Attempted</td>
+    <td class="tg-yw4l">Number of messages attempted to be delivered to the ESP domain at least once. Excludes blocked messages</td>
+    <td class="tg-yw4l"><code>AttemptedMessagesCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Open Rate</td>
+    <td class="tg-yw4l">Messages a recipient in the ESP opened as a percentage of Attempted messages</td>
+    <td class="tg-yw4l"><code>OpenedMessagesCount</code> / <code>AttemptedMessagesCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Click Rate</td>
+    <td class="tg-yw4l">Messages a recipient in the ESP clicked as a percentage of Opened messages</td>
+    <td class="tg-yw4l"><code>ClickedMessagesCount</code> / <code>OpenedMessagesCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Unsubscribed</td>
+    <td class="tg-yw4l">Messages a recipient in the ESP unsubscribed as a percentage of delivered messages</td>
+    <td class="tg-yw4l"><code>SoftBouncedMessagesCount</code> / <code>DeliveredMessagesCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Spam</td>
+    <td class="tg-yw4l">Messages a recipient in the ESP marked as Spam as a percentage of delivered messages</td>
+    <td class="tg-yw4l"><code>SpamReportsCount</code> / <code>DeliveredMessagesCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Soft-bounce</td>
+    <td class="tg-yw4l">Messages that were soft-bounced from the ESP as a percentage of Attempted messages</td>
+    <td class="tg-yw4l"><code>SoftBouncedMessagesCount</code> / <code>AttemptedMessagesCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Hard-bounce</td>
+    <td class="tg-yw4l">Messages that were hard-bounced from the ESP as a percentage of Attempted messages</td>
+    <td class="tg-yw4l"><code>HardBouncedMessagesCount</code> / <code>AttemptedMessagesCount</code></td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Retrying</td>
+    <td class="tg-yw4l">Messages that were deferred from the ESP as a percentage of Attempted messages. Mailjet will continue trying to send these messages in the next 5 days, after which, if not successfully delivered, they will become Soft-Bounced</td>
+    <td class="tg-yw4l"><code>DeferredMessagesCount</code> / <code>AttemptedMessagesCount</code></td>
+  </tr>
+</table>
+
+## Geographical Statistics
+
+Geographical stats provide information on email opens and clicks, broken down by country. This helps you identify possible engagement issues with recipients from specific regions. With those details in mind, you can update your sendings to focus on countries that are performing well, or address issues with markets that are underperforming.
+
+```shell
+# View : View message statistics for a given contact.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contactstatistics 
+```
+```javascript
+/**
+ *
+ * View : View message statistics for a given contact.
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("contactstatistics")
+	.request()
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```php
+<?php
+/*
+View : View message statistics for a given contact.
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->get(Resources::$Contactstatistics);
+$response->success() && var_dump($response->getData());
+?>
+```
+```ruby
+# View : View message statistics for a given contact.
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Contactstatistics.all()
+p variable.attributes['Data']
+```
+```python
+"""
+View : View message statistics for a given contact.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+result = mailjet.contactstatistics.get()
+print result.status_code
+print result.json()
+```
+``` go
+/*
+View : View message statistics for a given contact.
+*/
+package main
+import (
+	"fmt"
+	"log"
+	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contactstatistics
+	_, _, err := mailjetClient.List("contactstatistics", &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contactstatistics;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : View message statistics for a given contact.
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Contactstatistics.resource);
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+   class Program
+   {
+      /// <summary>
+      /// View : View message statistics for a given contact.
+      /// </summary>
+      static void Main(string[] args)
+      {
+         RunAsync().Wait();
+      }
+      static async Task RunAsync()
+      {
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetRequest request = new MailjetRequest
+         {
+            Resource = Contactstatistics.Resource,
          }
          MailjetResponse response = await client.GetAsync(request);
          if (response.IsSuccessStatusCode)
@@ -2341,6 +1790,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -2356,16 +1806,9 @@ namespace Mailjet.ConsoleApplication
 	"Count": 1,
 	"Data": [
 		{
-			"BlockedCount": "20",
-			"BouncedCount": "5",
-			"ClickedCount": "3",
-			"DeliveredCount": "262",
-			"LastActivity": "1441280806",
-			"OpenedCount": "94",
-			"ProcessedCount": "287",
-			"QueuedCount": "0",
-			"SpamcomplaintCount": "0",
-			"UnsubscribedCount": "0"
+			"ClickedCount": "",
+			"Country": "",
+			"OpenedCount": ""
 		}
 	],
 	"Total": 1
@@ -2373,5 +1816,14 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-Like with the other statistics methods, you can use the <code>[/apikeytotals](/email-api/v3/apikeytotals/)</code> resource to retrieve total counts for the account associated with this API key, such as the number of messages delivered and opened.
+Use the [/geostatistics](/email-api/v3/geostatistics/) resource to get information on opens and clicks by country.
 
+<div></div>
+
+## Additional Stats Resources
+
+The following statistic resources will allow you to view information about the events on your messages. They will show a log of events on your messages for a selected time period. By default, the payload response will include the log for the current day, but you can specify a timeframe with the `FromTS` and `ToTS` filters.
+
+- [/openinformation](/email-api/v3/openinformation/) : Will give you details on opens, including useful information like timestamp for each open event, UserAgent, CampaignID and UserID.
+- [/clickstatistics](/email-api/v3/clickstatistics/) : Shows information on click events, including timestamp for the click, URL, UserAgent and delay between sending and the click event.
+- [/bouncestatistics](/email-api/v3/bouncestatistics/) : Displays details for bounces, including bounce timestamp, campaign ID and contact ID, whether bounce is permanent or not.

@@ -22,7 +22,7 @@ $response = $mj->post(Resources::$Eventcallbackurl, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Create a grouped handler for the open event
 curl -s \
 	-X POST \
@@ -32,7 +32,7 @@ curl -s \
 	-d '{
 		"EventType":"open",
 		"Url":"https://mydomain.com/event_handler",
-		"Version":"2"
+		"Version":2
 	}'
 ```
 ```javascript
@@ -48,7 +48,7 @@ const request = mailjet
 	.request({
 		"EventType":"open",
 		"Url":"https://mydomain.com/event_handler",
-		"Version":"2"
+		"Version":2
 	})
 request
 	.then((result) => {
@@ -60,12 +60,16 @@ request
 ```
 ```ruby
 # Create a grouped handler for the open event
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Eventcallbackurl.create(event_type: "open",url: "https://mydomain.com/event_handler",version: "2")
+variable = Mailjet::Eventcallbackurl.create(event_type: "open",
+url: "https://mydomain.com/event_handler",
+version: "2"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -79,7 +83,6 @@ mailjet = Client(auth=(api_key, api_secret))
 data = {
   'EventType': 'open',
   'Url': 'https://mydomain.com/event_handler',
-  'Version': '2'
 }
 result = mailjet.eventcallbackurl.create(data=data)
 print result.status_code
@@ -92,9 +95,10 @@ Create a grouped handler for the open event
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -137,9 +141,9 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Eventcallbackurl.resource)
-						.property(Eventcallbackurl.EVENTTYPE, "open")
-						.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler")
-						.property(Eventcallbackurl.VERSION, "2");
+			.property(Eventcallbackurl.EVENTTYPE, "open")
+			.property(Eventcallbackurl.URL, "https://mydomain.com/event_handler")
+			.property(Eventcallbackurl.VERSION, "2");
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -182,6 +186,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }

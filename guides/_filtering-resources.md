@@ -8,22 +8,15 @@ The Mailjet API provides a set of general filters that can be applied to a <code
 
 To use a filter in a <code>GET</code>, you can amend the resource URL with a standard query string (<code>?filter1=this&filter2=that&filter3=it</code>).
 
-Mailjet API supports filter combination following these rules: 
+Mailjet API supports filter combination following these rules:
 
- - Only the first occurrence of a filter is taken in account: "?Name=foo&Name=bar&Name=foobar" will only filter on  Name=foo. No error will be returned, all additional occurrences will be skipped. 
- - Combining filter using the query string syntax, "&" results in an AND operator behavior.
- - Some filters support OR and use a "," syntax. Example: MessageStatus on <code>[/messagesentstatistics](/email-api/v3/messagesentstatistics/)</code> resource accepts MessageStatus=3,4 format. 
+ - Only the first occurrence of a filter is taken in account: `?Name=foo&Name=bar&Name=foobar` will only filter on  Name=foo. No error will be returned, all additional occurrences will be skipped.
+ - Combining filter using the query string syntax, `&` results in an AND operator behavior.
+ - Some filters support OR and use a `,` syntax. Example: `MessageStatus` on <code>[/openinformation](/email-api/v3/openinformation/)</code> resource accepts `MessageStatus=3,4` format.
 
 
 ##The Limit Filter
 
-```bash
-# View : List of 150 contacts
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact?Limit=150 
-```
 ```php
 <?php
 /*
@@ -39,6 +32,13 @@ $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
+```shell
+# View : List of 150 contacts
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact?Limit=150 
+```
 ```javascript
 /**
  *
@@ -50,7 +50,7 @@ const mailjet = require ('node-mailjet')
 const request = mailjet
 	.get("contact")
 	.request({
-		"Limit":"150"
+		"Limit":150
 	})
 request
 	.then((result) => {
@@ -59,6 +59,17 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
+```
+```ruby
+# View : List of 150 contacts
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Contact.all(limit: "150"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -76,15 +87,6 @@ result = mailjet.contact.get(filters=filters)
 print result.status_code
 print result.json()
 ```
-```ruby
-# View : List of 150 contacts
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Contact.all(limit: "150")
-```
 ``` go
 /*
 View : List of 150 contacts
@@ -92,9 +94,10 @@ View : List of 150 contacts
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -167,6 +170,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -175,7 +179,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-You can limit the number of results by applying the <code>Limit</code> filter. The default value is 10 and the maximum value is 1000. 'Limit=0' delivers the maximum amount of results - 1000.
+You can limit the number of results by applying the <code>Limit</code> filter. The default value is 10 and the maximum value is 1000. `Limit=0` delivers the maximum amount of results - 1000.
 
 
 ##The Offset Filter
@@ -195,7 +199,7 @@ $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
 curl -s \
 	-X GET \
@@ -213,7 +217,7 @@ const mailjet = require ('node-mailjet')
 const request = mailjet
 	.get("contact")
 	.request({
-		"Offset":"25000"
+		"Offset":25000
 	})
 request
 	.then((result) => {
@@ -225,12 +229,14 @@ request
 ```
 ```ruby
 # View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Contact.all(offset: "25000")
+variable = Mailjet::Contact.all(offset: "25000"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -247,6 +253,28 @@ filters = {
 result = mailjet.contact.get(filters=filters)
 print result.status_code
 print result.json()
+```
+``` go
+/*
+View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
+*/
+package main
+import (
+	"fmt"
+	"log"
+	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Contact
+	_, _, err := mailjetClient.List("contact", &data, Filter("Offset", "25000"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```java
 package com.my.project;
@@ -309,31 +337,11 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
    }
-}
-```
-``` go
-/*
-View : List of contact with Offset, delivers 10 contacts, starting with the 25000th contact
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Contact
-	_, _, err := mailjetClient.List("contact", &data, Filter("Offset", "25000"))
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
 }
 ```
 
@@ -356,7 +364,7 @@ $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
 curl -s \
 	-X GET \
@@ -374,8 +382,8 @@ const mailjet = require ('node-mailjet')
 const request = mailjet
 	.get("contact")
 	.request({
-		"Limit":"150",
-		"Offset":"25000"
+		"Limit":150,
+		"Offset":25000
 	})
 request
 	.then((result) => {
@@ -385,32 +393,6 @@ request
 		console.log(err.statusCode)
 	})
 ```
-```ruby
-# View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Contact.all(limit: "150",offset: "25000")
-```
-```python
-"""
-View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-filters = {
-  'Limit': '150',
-  'Offset': '25000'
-}
-result = mailjet.contact.get(filters=filters)
-print result.status_code
-print result.json()
-```
 ``` go
 /*
 View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
@@ -418,9 +400,10 @@ View : List of contacts with Limit and Offset, retrieves a list of 150 contacts 
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -495,14 +478,44 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
    }
 }
 ```
+```ruby
+# View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Contact.all(limit: "150",
+offset: "25000"
+)
+p variable.attributes['Data']
+```
+```python
+"""
+View : List of contacts with Limit and Offset, retrieves a list of 150 contacts starting with the 25000th contact
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'Limit': '150',
+  'Offset': '25000'
+}
+result = mailjet.contact.get(filters=filters)
+print result.status_code
+print result.json()
+```
 
-The <code>Offset</code> filter can be combined with the <code>Limit</code> filter. 
+The <code>Offset</code> filter can be combined with the <code>Limit</code> filter.
 
 
 ##The Sort Filter
@@ -522,7 +535,7 @@ $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # View : List of contact ordered by email in an ascending order
 curl -s \
 	-X GET \
@@ -550,6 +563,17 @@ request
 		console.log(err.statusCode)
 	})
 ```
+```ruby
+# View : List of contact ordered by email in an ascending order
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Contact.all(sort: "email"
+)
+p variable.attributes['Data']
+```
 ```python
 """
 View : List of contact ordered by email in an ascending order
@@ -566,15 +590,6 @@ result = mailjet.contact.get(filters=filters)
 print result.status_code
 print result.json()
 ```
-```ruby
-# View : List of contact ordered by email in an ascending order
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Contact.all(sort: "email")
-```
 ``` go
 /*
 View : List of contact ordered by email in an ascending order
@@ -582,9 +597,10 @@ View : List of contact ordered by email in an ascending order
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -657,6 +673,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -682,7 +699,7 @@ $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # View : List of contact ordered by email in reverse order
 curl -s \
 	-X GET \
@@ -844,7 +861,7 @@ $response = $mj->get(Resources::$Contact, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # View : Contacts in ContactsList
 curl -s \
 	-X GET \
@@ -874,12 +891,14 @@ request
 ```
 ```ruby
 # View : Contacts in ContactsList
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Contact.all(contacts_list: "$ContactsListID")
+variable = Mailjet::Contact.all(contacts_list: "$ContactsListID"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -904,9 +923,10 @@ View : Contacts in ContactsList
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -979,6 +999,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -991,6 +1012,13 @@ On each resource, the API provide specific filters. Visit the [reference](/email
 
 ## Unique Key Filters
 
+```shell
+# View : Contact from email address
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact/$EMAIL_ADDRESS_OR_CONTACT_ID 
+```
 ```php
 <?php
 /*
@@ -1002,13 +1030,6 @@ $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'
 $response = $mj->get(Resources::$Contact, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# View : Contact from email address
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contact/$EMAIL_ADDRESS_OR_CONTACT_ID 
 ```
 ```javascript
 /**
@@ -1032,12 +1053,13 @@ request
 ```
 ```ruby
 # View : Contact from email address
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
 variable = Mailjet::Contact.find($EMAIL_ADDRESS_OR_CONTACT_ID)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -1060,9 +1082,10 @@ View : Contact from email address
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -1076,32 +1099,6 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contact;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : Contact from email address
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Contact.resource, ID);
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
 }
 ```
 ```csharp
@@ -1138,10 +1135,37 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
    }
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : Contact from email address
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Contact.resource, ID);
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 
@@ -1149,6 +1173,13 @@ namespace Mailjet.ConsoleApplication
 You can access each unique element using unique key filter. Visit the [reference](/email-api/v3/) to see the keys available for each resource.
 
 <div></div>
+```shell
+# View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/eventcallbackurl/$EventType|$isBackup 
+```
 ```php
 <?php
 /*
@@ -1160,13 +1191,6 @@ $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'
 $response = $mj->get(Resources::$Eventcallbackurl, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/eventcallbackurl/$EventType|$isBackup 
 ```
 ```javascript
 /**
@@ -1190,26 +1214,13 @@ request
 ```
 ```ruby
 # View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
 variable = Mailjet::Eventcallbackurl.find($EventType|$isBackup)
-```
-```python
-"""
-View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$EventType|$isBackup'
-result = mailjet.eventcallbackurl.get(id=id)
-print result.status_code
-print result.json()
+p variable.attributes['Data']
 ```
 ``` go
 /*
@@ -1218,9 +1229,10 @@ View : event-driven callback URLs, also called webhooks, used by the Mailjet pla
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -1235,6 +1247,20 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
+```
+```python
+"""
+View : event-driven callback URLs, also called webhooks, used by the Mailjet platform when a specific action is triggered
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$EventType|$isBackup'
+result = mailjet.eventcallbackurl.get(id=id)
+print result.status_code
+print result.json()
 ```
 ```java
 package com.my.project;
@@ -1296,168 +1322,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
-            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
-         }
-      }
-   }
-}
-```
-
-
-In some case the unique key consist of several informations, you can call this unique key combination by using the seperator <code>|</code>.
-
-## Like and Case Sensitive Filters
-
-```php
-<?php
-/*
-View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$filters = [
-  'NameLike' => '$Name'
-];
-$response = $mj->get(Resources::$Liststatistics, ['filters' => $filters]);
-$response->success() && var_dump($response->getData());
-?>
-```
-```bash
-# View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/liststatistics?NameLike=$Name 
-```
-```javascript
-/**
- *
- * View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("liststatistics")
-	.request({
-		"NameLike":"$Name"
-	})
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
-```ruby
-# View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
-end
-variable = Mailjet::Liststatistics.all(name_like: "$Name")
-```
-```python
-"""
-View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-filters = {
-  'NameLike': '$Name'
-}
-result = mailjet.liststatistics.get(filters=filters)
-print result.status_code
-print result.json()
-```
-``` go
-/*
-View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Liststatistics
-	_, _, err := mailjetClient.List("liststatistics", &data, Filter("NameLike", "$Name"))
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Liststatistics;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Liststatistics.resource)
-                  .filter(Liststatistics.NAMELIKE, "$Name");
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
-```csharp
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using System;
-using Newtonsoft.Json.Linq;
-namespace Mailjet.ConsoleApplication
-{
-   class Program
-   {
-      /// <summary>
-      /// View : View Campaign/message/click statistics grouped by ContactsList with Like filter on Name.
-      /// </summary>
-      static void Main(string[] args)
-      {
-         RunAsync().Wait();
-      }
-      static async Task RunAsync()
-      {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
-         MailjetRequest request = new MailjetRequest
-         {
-            Resource = Liststatistics.Resource,
-         }
-         .Filter(Liststatistics.Namelike, "$Name");
-         MailjetResponse response = await client.GetAsync(request);
-         if (response.IsSuccessStatusCode)
-         {
-            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
             Console.WriteLine(response.GetData());
-         }
-         else
-         {
-            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
-            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -1466,15 +1331,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-The Mailjet API allows Like and Case Sensitive filtering on selected properties. Visit the [reference](/email-api/v3/) to see if a filter allows this functionality. 
-
-This fonctionality works by adding predefined keywords at the end of a filter: 
-
- - <code>CI</code> : case insensitive filter
- - <code>Like</code> : like filter similar to a <code>%String%</code> 
- - <code>LikeCI</code> : case insensitive like filter  
-
-Example : <code>Name</code> filter on <code>[/contact/liststatistics](/email-api/v3/liststatistics/)</code> resource. You can use <code>Name</code>, <code>NameCI</code>, <code>NameLike</code> and <code>NameLikeCI</code>.
+Whenever the unique key consists of several pieces of information, you can call this unique key combination by using the separator <code>|</code>.
 
 ##The Count Filter
 
@@ -1511,7 +1368,7 @@ request
 		console.log(err.statusCode)
 	})
 ```
-```bash
+```shell
 # View : Total number of contact
 curl -s \
 	-X GET \
@@ -1643,15 +1500,10 @@ namespace Mailjet.ConsoleApplication
 }
 ```
 
-Use the filter <code>countOnly</code> to retrieve the number of records a resource will return. This filter will not extract any list of results but only count them. 
+Use the filter <code>countOnly</code> to retrieve the number of records a resource will return. This filter will not extract any list of results but only count them.
 
 <aside class="notice">When you call a resource without the filter <code>countOnly</code>, <code>Count</code> and <code>Total</code> will only show you the number of elements extracted and not the global number.</aside>
 
 ##Navigation through results
 
-To navigate on a full set of results, we advise you to either use the filter <code>countOnly</code> to know how many pages of results you will need to extract or to simply loop with a change of <code>Offset</code> until you reach an empty set of results. 
-
-
-
-
-
+To navigate on a full set of results, we advise you to either use the filter <code>countOnly</code> to know how many pages of results you will need to extract or to simply loop with a change of <code>Offset</code> until you reach an empty set of results.

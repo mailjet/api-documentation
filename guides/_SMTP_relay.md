@@ -99,7 +99,7 @@ The header manage the different types of email by defining up to four priority l
 
 ###X-MJ-TemplateLanguage
 
-This hearder is related to the processing of the template language. It activate the template language processing. By default the template language processing is deactivated. Use <code>True</code> to activate.
+This header is related to the processing of the template language. It activate the template language processing. By default the template language processing is deactivated. Use <code>True</code> to activate.
 
 [More information on transactional templating](#transactional-templating)
 
@@ -111,19 +111,25 @@ This header allows to pass the ID of the template stored on the Mailjet system.
 
 ###X-MJ-Vars
 
-This hearder allows to pass a JSON encoded array of variables that can be used with the templating language.
+This header allows to pass a JSON encoded array of variables that can be used with the templating language.
 
 Example: {"varname1": "value1","varname2": "value2", "varname3": "value3"}
 
 ###X-MJ-TemplateErrorReporting
 
-This hearder is related to the processing of the template language. This header defines the email address where a carbon copy with error message is sent to.
+This header is related to the processing of the template language. This header defines the email address where a carbon copy with error message is sent to.
 
 [More information on transactional templating](#transactional-templating)
 
 ###X-MJ-TemplateErrorDeliver
 
-This hearder is related to the processing of the template language. This header defines if the message is delivered when an error is discovered in the templating language. By default the delivery is deactivated. Use <code>deliver</code> to let the message be delivered to the recipient, <code>0</code> to stop it. 
+This header is related to the processing of the template language. This header defines if the message is delivered when an error is discovered in the templating language. By default the delivery is deactivated. Use <code>deliver</code> to let the message be delivered to the recipient, <code>0</code> to stop it. 
 
 [More information on transactional templating](#transactional-templating)
+
+###X-MJ-MonitoringCategory
+
+This header is related to the real-time monitoring. This header defines the name of the monitoring category the message will be attached to. 
+
+[More information on real-time monitoring](#real-time-monitoring)
 

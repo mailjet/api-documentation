@@ -36,7 +36,7 @@ $response = $mj->post(Resources::$Template, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Create : 
 curl -s \
 	-X POST \
@@ -70,12 +70,14 @@ request
 ```
 ```ruby
 # Create : 
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Template.create(name: "First Template")
+variable = Mailjet::Template.create(name: "First Template"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -100,9 +102,10 @@ Create :
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -143,7 +146,7 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Template.resource)
-						.property(Template.NAME, "First Template");
+			.property(Template.NAME, "First Template");
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -184,6 +187,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -245,7 +249,7 @@ $response = $mj->post(Resources::$TemplateDetailcontent, ['id' => $id, 'body' =>
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Create : Template content
 curl -s \
 	-X POST \
@@ -283,30 +287,15 @@ request
 ```
 ```ruby
 # Create : Template content
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Template_detailcontent.create(id: $ID_TEMPLATE, , html_part: "<html><body><p>Hello {{var:name}}</p></body></html>",text_part: "Hello {{var:name}}")
-```
-```python
-"""
-Create : Template content
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$ID_TEMPLATE'
-data = {
-  'Html-part': '<html><body><p>Hello {{var:name}}</p></body></html>',
-  'Text-part': 'Hello {{var:name}}'
-}
-result = mailjet.template_detailcontent.create(id=id, data=data)
-print result.status_code
-print result.json()
+variable = Mailjet::Template_detailcontent.create(id: $ID_TEMPLATE, , html_part: "<html><body><p>Hello {{var:name}}</p></body></html>",
+text_part: "Hello {{var:name}}"
+)
+p variable.attributes['Data']
 ```
 ``` go
 /*
@@ -315,9 +304,10 @@ Create : Template content
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -341,6 +331,24 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```python
+"""
+Create : Template content
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$ID_TEMPLATE'
+data = {
+  'Html-part': '<html><body><p>Hello {{var:name}}</p></body></html>',
+  'Text-part': 'Hello {{var:name}}'
+}
+result = mailjet.template_detailcontent.create(id=id, data=data)
+print result.status_code
+print result.json()
+```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
@@ -361,8 +369,8 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(TemplateDetailcontent.resource, ID)
-						.property(TemplateDetailcontent.HTMLPART, "<html><body><p>Hello {{var:name}}</p></body></html>")
-						.property(TemplateDetailcontent.TEXTPART, "Hello {{var:name}}");
+			.property(TemplateDetailcontent.HTMLPART, "<html><body><p>Hello {{var:name}}</p></body></html>")
+			.property(TemplateDetailcontent.TEXTPART, "Hello {{var:name}}");
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -405,6 +413,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -465,77 +474,60 @@ You must set the <code>Mj-TemplateLanguage</code> property in the payload provid
 
 ### Send a stored template
 
-```java
-package MyClass;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.errors.MailjetClient;
-import com.mailjet.client.errors.MailjetRequest;
-import com.mailjet.client.errors.MailjetResponse;
-import com.mailjet.client.resource.Email;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * This calls sends a message based on a template.
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Email.resource)
-						.property(Email.FROMEMAIL, "pilot@mailjet.com")
-						.property(Email.FROMNAME, "Mailjet Pilot")
-						.property(Email.MJTEMPLATEID, 1)
-						.property(Email.MJTEMPLATELANGUAGE, true)
-						.property(Email.SUBJECT, "Your email flight plan!")
-						.property(Email.RECIPIENTS, new JSONArray()
-                .put(new JSONObject()
-                    .put("Email", "passenger@mailjet.com")))
-						.property(Email.MJEVENTPAYLOAD, "Eticket,1234,row,15,seat,B");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
 ```php
 <?php
 /*
-This calls sends a message based on a template.
+This call sends a message based on a template.
 */
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'),true,['version' => 'v3.1']);
 $body = [
-    'FromEmail' => "pilot@mailjet.com",
-    'FromName' => "Mailjet Pilot",
-    'Subject' => "Your email flight plan!",
-    'MJ-TemplateID' => 1,
-    'MJ-TemplateLanguage' => true,
-    'Recipients' => [['Email' => "passenger@mailjet.com"]]
+    'Messages' => [
+        [
+            'From' => [
+                'Email' => "pilot@mailjet.com",
+                'Name' => "Mailjet Pilot"
+            ],
+            'To' => [
+                [
+                    'Email' => "passenger1@mailjet.com",
+                    'Name' => "passenger 1"
+                ]
+            ],
+            'TemplateID' => 1,
+            'TemplateLanguage' => true,
+            'Subject' => "Your email flight plan!"
+        ]
+    ]
 ];
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
-# This calls sends a message based on a template.
+```shell
+# This call sends a message based on a template.
 curl -s \
 	-X POST \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/send \
+	https://api.mailjet.com/v3.1/send \
 	-H 'Content-Type: application/json' \
 	-d '{
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"MJ-TemplateID":"1",
-		"MJ-TemplateLanguage":true,
-		"Recipients":[
+		"Messages":[
 				{
-						"Email": "passenger@mailjet.com"
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"TemplateID": 1,
+						"TemplateLanguage": true,
+						"Subject": "Your email flight plan!"
 				}
 		]
 	}'
@@ -543,67 +535,91 @@ curl -s \
 ```javascript
 /**
  *
- * This calls sends a message based on a template.
+ * This call sends a message based on a template.
  *
  */
-var mailjet = require ('node-mailjet')
+const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.post("send")
+const request = mailjet
+	.post("send", {'version': 'v3.1'})
 	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"MJ-TemplateID":"1",
-		"MJ-TemplateLanguage":"true",
-		"Recipients":[
+		"Messages":[
 				{
-						"Email": "passenger@mailjet.com"
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"TemplateID": 1,
+						"TemplateLanguage": true,
+						"Subject": "Your email flight plan!"
 				}
 		]
-	});
+	})
 request
-	.then(result => {
+	.then((result) => {
 		console.log(result.body)
 	})
-	.catch(err => {
+	.catch((err) => {
 		console.log(err.statusCode)
 	})
 ```
 ```ruby
-# This calls sends a message based on a template.
+# This call sends a message based on a template.
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+  config.api_version = "v3.1"
 end
-variable = Mailjet::Send.create(
-  from_email: "pilot@mailjet.com",
-  from_name: "Mailjet Pilot",
-  subject: "Your email flight plan!",
-  "Mj-TemplateID": "1",
-  "Mj-TemplateLanguage": true,
-  recipients: [{ 'Email'=> 'passenger@mailjet.com'}]
+variable = Mailjet::Send.create(messages: [{
+    'From'=> {
+        'Email'=> 'pilot@mailjet.com',
+        'Name'=> 'Mailjet Pilot'
+    },
+    'To'=> [
+        {
+            'Email'=> 'passenger1@mailjet.com',
+            'Name'=> 'passenger 1'
+        }
+    ],
+    'TemplateID'=> 1,
+    'TemplateLanguage'=> true,
+    'Subject'=> 'Your email flight plan!'
+}]
 )
+p variable.attributes['Messages']
 ```
 ```python
 """
-This calls sends a message based on a template.
+This call sends a message based on a template.
 """
 from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
 data = {
-  'FromEmail': 'pilot@mailjet.com',
-  'FromName': 'Mailjet Pilot',
-  'Subject': 'Your email flight plan!',
-  'MJ-TemplateID': '1',
-  'MJ-TemplateLanguage': 'true',
-  'Recipients': [
+  'Messages': [
 				{
-						"Email": "passenger@mailjet.com"
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"TemplateID": 1,
+						"TemplateLanguage": True,
+						"Subject": "Your email flight plan!"
 				}
 		]
 }
@@ -613,35 +629,79 @@ print result.json()
 ```
 ``` go
 /*
-This calls sends a message based on a template.
+This call sends a message based on a template.
 */
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	email := &InfoSendMail {
-      FromEmail: "pilot@mailjet.com",
-      FromName: "Mailjet Pilot",
-      Subject: "Your email flight plan!",
-      MjTemplateID: "1",
-      MjTemplateLanguage: "true",
-      Recipients: []Recipient {
-        Recipient {
-          Email: "passenger@mailjet.com",
+	messagesInfo := []mailjet.InfoMessagesV31 {
+      mailjet.InfoMessagesV31{
+        From: &mailjet.RecipientV31{
+          Email: "pilot@mailjet.com",
+          Name: "Mailjet Pilot",
         },
+        To: &mailjet.RecipientsV31{
+          mailjet.RecipientV31 {
+            Email: "passenger1@mailjet.com",
+            Name: "passenger 1",
+          },
+        },
+        TemplateID: 1,
+        TemplateLanguage: true,
+        Subject: "Your email flight plan!",
       },
     }
-	res, err := mailjetClient.SendMail(email)
+	messages := mailjet.MessagesV31{Info: messagesInfo }
+	res, err := m.SendMailV31(&messages)
 	if err != nil {
-			fmt.Println(err)
-	} else {
-			fmt.Println("Success")
-			fmt.Println(res)
+		log.Fatal(err)
 	}
+	fmt.Printf("Data: %+v\n", res)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.ClientOptions;
+import com.mailjet.client.resource.Emailv31;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * This call sends a message based on a template.
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"), new ClientOptions("v3.1"));
+      request = new MailjetRequest(Emailv31.resource)
+			.property(Emailv31.MESSAGES, new JSONArray()
+                .put(new JSONObject()
+                    .put(Emailv31.Message.FROM, new JSONObject()
+                        .put("Email", "pilot@mailjet.com")
+                        .put("Name", "Mailjet Pilot"))
+                    .put(Emailv31.Message.TO, new JSONArray()
+                        .put(new JSONObject()
+                            .put("Email", "passenger1@mailjet.com")
+                            .put("Name", "passenger 1")))
+                    .put(Emailv31.Message.TEMPLATEID, "1")
+                    .put(Emailv31.Message.TEMPLATELANGUAGE, true)
+                    .put(Emailv31.Message.SUBJECT, "Your email flight plan!")));
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 ```csharp
@@ -654,7 +714,7 @@ namespace Mailjet.ConsoleApplication
    class Program
    {
       /// <summary>
-      /// This calls sends a message based on a template.
+      /// This call sends a message based on a template.
       /// </summary>
       static void Main(string[] args)
       {
@@ -662,19 +722,29 @@ namespace Mailjet.ConsoleApplication
       }
       static async Task RunAsync()
       {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"))
+         {
+            Version = ApiVersion.V3_1,
+         };
          MailjetRequest request = new MailjetRequest
          {
             Resource = Send.Resource,
          }
-            .Property(Send.FromEmail, "pilot@mailjet.com")
-            .Property(Send.FromName, "Mailjet Pilot")
-            .Property(Send.Subject, "Your email flight plan!")
-            .Property(Send.MjTemplateID, "1")
-            .Property(Send.MjTemplateLanguage, "True")
-            .Property(Send.Recipients, new JArray {
+            .Property(Send.Messages, new JArray {
                 new JObject {
-                 {"Email", "passenger@mailjet.com"}
+                 {"From", new JObject {
+                  {"Email", "pilot@mailjet.com"},
+                  {"Name", "Mailjet Pilot"}
+                  }},
+                 {"To", new JArray {
+                  new JObject {
+                   {"Email", "passenger1@mailjet.com"},
+                   {"Name", "passenger 1"}
+                   }
+                  }},
+                 {"TemplateID", 1},
+                 {"TemplateLanguage", true},
+                 {"Subject", "Your email flight plan!"}
                  }
                 });
          MailjetResponse response = await client.PostAsync(request);
@@ -687,6 +757,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -719,13 +790,6 @@ $response = $mj->get(Resources::$Template, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
-# View : Find your personal templates
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/template?OwnerType=user\&Limit=100 
-```
 ```javascript
 /**
  *
@@ -738,7 +802,7 @@ const request = mailjet
 	.get("template")
 	.request({
 		"OwnerType":"user",
-		"Limit":"100"
+		"Limit":100
 	})
 request
 	.then((result) => {
@@ -748,14 +812,46 @@ request
 		console.log(err.statusCode)
 	})
 ```
+```shell
+# View : Find your personal templates
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/template?OwnerType=user\&Limit=100 
+```
 ```ruby
 # View : Find your personal templates
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Template.all(owner_type: "user",limit: "100")
+variable = Mailjet::Template.all(owner_type: "user",
+limit: "100"
+)
+p variable.attributes['Data']
+```
+``` go
+/*
+View : Find your personal templates
+*/
+package main
+import (
+	"fmt"
+	"log"
+	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Template
+	_, _, err := mailjetClient.List("template", &data, Filter("OwnerType", "user"), Filter("Limit", "100"))
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
 ```
 ```python
 """
@@ -773,27 +869,6 @@ filters = {
 result = mailjet.template.get(filters=filters)
 print result.status_code
 print result.json()
-```
-``` go
-/*
-View : Find your personal templates
-*/
-package main
-import (
-	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-	"os"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Template
-	_, _, err := mailjetClient.List("template", &data, Filter("OwnerType", "user"), Filter("Limit", "100"))
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
 ```
 ```java
 package com.my.project;
@@ -858,6 +933,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -882,7 +958,7 @@ $response = $mj->get(Resources::$Template, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # View : Find your templates, created in Passport
 curl -s \
 	-X GET \
@@ -901,7 +977,7 @@ const request = mailjet
 	.get("template")
 	.request({
 		"EditMode":"tool",
-		"Limit":"100",
+		"Limit":100,
 		"OwnerType":"user"
 	})
 request
@@ -914,12 +990,16 @@ request
 ```
 ```ruby
 # View : Find your templates, created in Passport
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Template.all(edit_mode: "tool",limit: "100",owner_type: "user")
+variable = Mailjet::Template.all(edit_mode: "tool",
+limit: "100",
+owner_type: "user"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -946,9 +1026,10 @@ View : Find your templates, created in Passport
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -958,35 +1039,6 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Template;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : Find your templates, created in Passport
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Template.resource)
-                  .filter(Template.EDITMODE, "tool")
-                  .filter(Template.LIMIT, "100")
-                  .filter(Template.OWNERTYPE, "user");
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
 }
 ```
 ```csharp
@@ -1025,10 +1077,40 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
    }
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Template;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : Find your templates, created in Passport
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Template.resource)
+                  .filter(Template.EDITMODE, "tool")
+                  .filter(Template.LIMIT, "100")
+                  .filter(Template.OWNERTYPE, "user");
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 

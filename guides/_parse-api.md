@@ -2,6 +2,11 @@
 <div id="#parse-api-process-inbound-emails"></div>
 #Parse API: inbound emails
 
+<aside class="warning">
+Parse API is now available only for users on paid Mailjet plans (Crystal and above). Upgrade now to keep using Parse API.
+<br>Check <a href="https://app.mailjet.com/subscription" target="_blank">plans</a> and <a href="https://www.mailjet.com/pricing/" target="_blank">pricing</a>.
+</aside>
+
 The Parse API allows you to have inbound emails parsed and their content delivered to a webhook of your choice. 
 
 It will make the processing of inbound messages easier as Mailjet will do all the job of sifting through and organising all the information in headers, content and attachments. What's left to do is just to save the information in your CRM or database. 
@@ -23,7 +28,7 @@ $response = $mj->post(Resources::$Parseroute, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Create : ParseRoute description
 curl -s \
 	-X POST \
@@ -57,12 +62,14 @@ request
 ```
 ```ruby
 # Create : ParseRoute description
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php")
+variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -87,9 +94,10 @@ Create : ParseRoute description
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -130,7 +138,7 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Parseroute.resource)
-						.property(Parseroute.URL, "https://www.mydomain.com/mj_parse.php");
+			.property(Parseroute.URL, "https://www.mydomain.com/mj_parse.php");
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -171,6 +179,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -368,6 +377,18 @@ $response = $mj->post(Resources::$Parseroute, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
+```shell
+# Create : ParseRoute description
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/parseroute \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Url":"https://www.mydomain.com/mj_parse.php",
+		"Email":"mjparse@mydomain.com"
+	}'
+```
 ```javascript
 /**
  *
@@ -390,26 +411,17 @@ request
 		console.log(err.statusCode)
 	})
 ```
-```bash
-# Create : ParseRoute description
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/parseroute \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Url":"https://www.mydomain.com/mj_parse.php",
-		"Email":"mjparse@mydomain.com"
-	}'
-```
 ```ruby
 # Create : ParseRoute description
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php",email: "mjparse@mydomain.com")
+variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php",
+email: "mjparse@mydomain.com"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -435,9 +447,10 @@ Create : ParseRoute description
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -479,8 +492,8 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Parseroute.resource)
-						.property(Parseroute.URL, "https://www.mydomain.com/mj_parse.php")
-						.property(Parseroute.EMAIL, "mjparse@mydomain.com");
+			.property(Parseroute.URL, "https://www.mydomain.com/mj_parse.php")
+			.property(Parseroute.EMAIL, "mjparse@mydomain.com");
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -522,6 +535,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }

@@ -24,18 +24,25 @@ Second, you need to find your credentials, the API Key and the API Private Key, 
 curl -s \
 	-X POST \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/send \
+	https://api.mailjet.com/v3.1/send \
 	-H "Content-Type: application/json" \
 	-d '{
-		"FromEmail":"$SENDER_EMAIL",
-		"FromName":"Me",
-		"Recipients": [ 
-			{
-			"Email":"$RECIPIENT_EMAIL"
-			}
-		],
-		"Subject":"My first Mailjet Email!",
-		"Text-part":"Greetings from Mailjet."
+		"Messages":[
+		        {
+		                "From": {
+		                        "Email": "$SENDER_EMAIL",
+		                        "Name": "Me"
+		                },
+		                "To": [
+		                        {
+		                                "Email": "$RECIPIENT_EMAIL",
+		                                "Name": 
+		                        }
+		                ],
+		                "Subject": "My first Mailjet Email!",
+		                "TextPart": "Greetings from Mailjet."
+		        }
+		]
 	}'
 ```
 

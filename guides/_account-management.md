@@ -23,7 +23,7 @@ $response = $mj->post(Resources::$Apikey, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
 curl -s \
 	-X POST \
@@ -57,12 +57,14 @@ request
 ```
 ```ruby
 # Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Apikey.create(name: "MynewKEY")
+variable = Mailjet::Apikey.create(name: "MynewKEY"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -87,9 +89,10 @@ Create : Manage your Mailjet API Keys. API keys are used as credentials to acces
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -130,7 +133,7 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Apikey.resource)
-						.property(Apikey.NAME, "MynewKEY");
+			.property(Apikey.NAME, "MynewKEY");
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -171,6 +174,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -225,7 +229,7 @@ $response = $mj->get(Resources::$Apikey);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
 curl -s \
 	-X GET \
@@ -253,12 +257,13 @@ request
 ```
 ```ruby
 # View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
 variable = Mailjet::Apikey.all()
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -280,9 +285,10 @@ View : Manage your Mailjet API Keys. API keys are used as credentials to access 
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -353,6 +359,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }

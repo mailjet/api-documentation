@@ -51,7 +51,7 @@ $response = $mj->post(Resources::$ContactManagecontactslists, ['id' => $id, 'bod
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Create : Manage a contact subscription to a list
 curl -s \
 	-X POST \
@@ -105,12 +105,20 @@ request
 ```
 ```ruby
 # Create : Manage a contact subscription to a list
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Contact_managecontactslists.create(id: $ID, contacts_lists: [{ 'ListID'=> '$ListID_1', 'Action'=> 'addnoforce'}, { 'ListID'=> '$ListID_2', 'Action'=> 'addforce'}])
+variable = Mailjet::Contact_managecontactslists.create(id: $ID, contacts_lists: [{
+    'ListID'=> '$ListID_1',
+    'Action'=> 'addnoforce'
+}, {
+    'ListID'=> '$ListID_2',
+    'Action'=> 'addforce'
+}]
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -138,56 +146,6 @@ result = mailjet.contact_managecontactslists.create(id=id, data=data)
 print result.status_code
 print result.json()
 ```
-```csharp
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using System;
-using Newtonsoft.Json.Linq;
-namespace Mailjet.ConsoleApplication
-{
-   class Program
-   {
-      /// <summary>
-      /// Create : Manage a contact subscription to a list
-      /// </summary>
-      static void Main(string[] args)
-      {
-         RunAsync().Wait();
-      }
-      static async Task RunAsync()
-      {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
-         MailjetRequest request = new MailjetRequest
-         {
-            Resource = ContactManagecontactslists.Resource,
-            ResourceId = ResourceId.Numeric(ID)
-         }
-            .Property(ContactManagecontactslists.ContactsLists, new JArray {
-                new JObject {
-                 {"ListID", "$ListID_1"},
-                 {"Action", "addnoforce"}
-                 },
-                new JObject {
-                 {"ListID", "$ListID_2"},
-                 {"Action", "addforce"}
-                 }
-                });
-         MailjetResponse response = await client.PostAsync(request);
-         if (response.IsSuccessStatusCode)
-         {
-            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
-            Console.WriteLine(response.GetData());
-         }
-         else
-         {
-            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
-            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
-            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
-         }
-      }
-   }
-}
-```
 ``` go
 /*
 Create : Manage a contact subscription to a list
@@ -195,9 +153,10 @@ Create : Manage a contact subscription to a list
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -249,17 +208,68 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(ContactManagecontactslists.resource, ID)
-						.property(ContactManagecontactslists.CONTACTSLISTS, new JSONArray()
-                                                                .put(new JSONObject()
-                                                                    .put("ListID", "$ListID_1")
-                                                                    .put("Action", "addnoforce"))
-                                                                .put(new JSONObject()
-                                                                    .put("ListID", "$ListID_2")
-                                                                    .put("Action", "addforce")));
+			.property(ContactManagecontactslists.CONTACTSLISTS, new JSONArray()
+                .put(new JSONObject()
+                    .put("ListID", "$ListID_1")
+                    .put("Action", "addnoforce"))
+                .put(new JSONObject()
+                    .put("ListID", "$ListID_2")
+                    .put("Action", "addforce")));
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
+}
+```
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+   class Program
+   {
+      /// <summary>
+      /// Create : Manage a contact subscription to a list
+      /// </summary>
+      static void Main(string[] args)
+      {
+         RunAsync().Wait();
+      }
+      static async Task RunAsync()
+      {
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetRequest request = new MailjetRequest
+         {
+            Resource = ContactManagecontactslists.Resource,
+            ResourceId = ResourceId.Numeric(ID)
+         }
+            .Property(ContactManagecontactslists.ContactsLists, new JArray {
+                new JObject {
+                 {"ListID", "$ListID_1"},
+                 {"Action", "addnoforce"}
+                 },
+                new JObject {
+                 {"ListID", "$ListID_2"},
+                 {"Action", "addforce"}
+                 }
+                });
+         MailjetResponse response = await client.PostAsync(request);
+         if (response.IsSuccessStatusCode)
+         {
+            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+            Console.WriteLine(response.GetData());
+         }
+         else
+         {
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
+            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+         }
+      }
+   }
 }
 ```
 
@@ -379,7 +389,7 @@ $response = $mj->post(Resources::$ContactManagemanycontacts, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Create : Manage the details of a Contact.
 curl -s \
 	-X POST \
@@ -468,12 +478,35 @@ request
 ```
 ```ruby
 # Create : Manage the details of a Contact.
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Contact_managemanycontacts.create(contacts_lists: [{ 'ListID'=> 1, 'action'=> 'addnoforce'}, { 'ListID'=> 2, 'action'=> 'addforce'}],contacts: [{ 'Email'=> 'jimsmith@example.com', 'Name'=> 'Jim', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}, { 'Email'=> 'janetdoe@example.com', 'Name'=> 'Janet', 'Properties'=> { 'Property1'=> 'value', 'Property2'=> 'value2' }}])
+variable = Mailjet::Contact_managemanycontacts.create(contacts_lists: [{
+    'ListID'=> 1,
+    'action'=> 'addnoforce'
+}, {
+    'ListID'=> 2,
+    'action'=> 'addforce'
+}],
+contacts: [{
+    'Email'=> 'jimsmith@example.com',
+    'Name'=> 'Jim',
+    'Properties'=> {
+        'Property1'=> 'value',
+        'Property2'=> 'value2'
+    }
+}, {
+    'Email'=> 'janetdoe@example.com',
+    'Name'=> 'Janet',
+    'Properties'=> {
+        'Property1'=> 'value',
+        'Property2'=> 'value2'
+    }
+}]
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -525,9 +558,10 @@ Create : Manage the details of a Contact.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -596,26 +630,26 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(ContactManagemanycontacts.resource)
-						.property(ContactManagemanycontacts.CONTACTSLISTS, new JSONArray()
-                                                                .put(new JSONObject()
-                                                                    .put("ListID", "1")
-                                                                    .put("action", "addnoforce"))
-                                                                .put(new JSONObject()
-                                                                    .put("ListID", "2")
-                                                                    .put("action", "addforce")))
-						.property(ContactManagemanycontacts.CONTACTS, new JSONArray()
-                                                                .put(new JSONObject()
-                                                                    .put("Email", "jimsmith@example.com")
-                                                                    .put("Name", "Jim")
-                                                                    .put("Properties", new JSONObject()
-                                                                        .put("Property1", "value")
-                                                                        .put("Property2", "value2")))
-                                                                .put(new JSONObject()
-                                                                    .put("Email", "janetdoe@example.com")
-                                                                    .put("Name", "Janet")
-                                                                    .put("Properties", new JSONObject()
-                                                                        .put("Property1", "value")
-                                                                        .put("Property2", "value2"))));
+			.property(ContactManagemanycontacts.CONTACTSLISTS, new JSONArray()
+                .put(new JSONObject()
+                    .put("ListID", "1")
+                    .put("action", "addnoforce"))
+                .put(new JSONObject()
+                    .put("ListID", "2")
+                    .put("action", "addforce")))
+			.property(ContactManagemanycontacts.CONTACTS, new JSONArray()
+                .put(new JSONObject()
+                    .put("Email", "jimsmith@example.com")
+                    .put("Name", "Jim")
+                    .put("Properties", new JSONObject()
+                        .put("Property1", "value")
+                        .put("Property2", "value2")))
+                .put(new JSONObject()
+                    .put("Email", "janetdoe@example.com")
+                    .put("Name", "Janet")
+                    .put("Properties", new JSONObject()
+                        .put("Property1", "value")
+                        .put("Property2", "value2"))));
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -647,11 +681,11 @@ namespace Mailjet.ConsoleApplication
          }
             .Property(ContactManagemanycontacts.ContactsLists, new JArray {
                 new JObject {
-                 {"ListID", "1"},
+                 {"ListID", 1},
                  {"action", "addnoforce"}
                  },
                 new JObject {
-                 {"ListID", "2"},
+                 {"ListID", 2},
                  {"action", "addforce"}
                  }
                 })
@@ -683,6 +717,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -783,7 +818,7 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Contact_managemanycontacts.find($JOBID)
 ```
-```bash
+```shell
 # View: Job information
 curl -s \
 	-X GET \
@@ -916,11 +951,11 @@ Not available in Python, please refer to Curl
 ``` ruby
 # Not available in Ruby, please refer to Curl
 ```
-```bash
+```shell
 curl -s \
 	-X GET \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/batchjob/$JOBID/JSONError/application:json/LAST
+	https://api.mailjet.com/v3/DATA/batchjob/$JOBID/JSONError/application:json/LAST
 ```
 ```javascript
 /**
@@ -969,7 +1004,7 @@ $response = $mj->post(Resources::$ContactslistManagemanycontacts, ['id' => $id, 
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Create : Manage your contact lists. One Contact might be associated to one or more ContactsList.
 curl -s \
 	-X POST \
@@ -1311,7 +1346,7 @@ api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
 result = mailjet.contactslist_managemanycontacts.get(id='$ID', actionid='$JOBID')
 ```
-```bash
+```shell
 # View: Job information
 curl -s \
 	-X GET \
@@ -1452,11 +1487,11 @@ Not available in Python, please refer to Curl
 ``` ruby
 # Not available in Ruby, please refer to Curl
 ```
-```bash
+```shell
 curl -s \
 	-X GET \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/batchjob/$JOBID/JSONError/application:json/LAST
+	https://api.mailjet.com/v3/DATA/batchjob/$JOBID/JSONError/application:json/LAST
 ```
 ```javascript
 /**
@@ -1548,7 +1583,7 @@ $response = $mj->post(Resources::$ContactslistCsvdata, ['body' => $CSVContent, '
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Import the CSV file through the DATA API
 curl --user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 https://api.mailjet.com/v3/DATA/contactslist/$ID_CONTACTLIST/CSVData/text:plain \
@@ -1648,7 +1683,7 @@ $response = $mj->post(Resources::$Csvimport, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Create: A wrapper for the CSV importer
 curl -s \
 	-X POST \
@@ -1686,12 +1721,16 @@ request
 ```
 ```ruby
 # Create: A wrapper for the CSV importer
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Csvimport.create(contacts_list_id: "$ID_CONTACTLIST",data_id: "$ID_DATA",method: "addnoforce")
+variable = Mailjet::Csvimport.create(contacts_list_id: "$ID_CONTACTLIST",
+data_id: "$ID_DATA",
+method: "addnoforce"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -1718,9 +1757,10 @@ Create: A wrapper for the CSV importer
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -1763,9 +1803,9 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Csvimport.resource)
-						.property(Csvimport.CONTACTSLISTID, "$ID_CONTACTLIST")
-						.property(Csvimport.DATAID, "$ID_DATA")
-						.property(Csvimport.METHOD, "addnoforce");
+			.property(Csvimport.CONTACTSLISTID, "$ID_CONTACTLIST")
+			.property(Csvimport.DATAID, "$ID_DATA")
+			.property(Csvimport.METHOD, "addnoforce");
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -1808,6 +1848,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -1858,6 +1899,13 @@ Method's possible values are:
 <div></div>
 ###Monitoring the process
 
+```shell
+# View: CSV upload Batch job running on the Mailjet infrastructure.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/csvimport/$ID_JOB 
+```
 ```php
 <?php
 /*
@@ -1869,13 +1917,6 @@ $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'
 $response = $mj->get(Resources::$Csvimport, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# View: CSV upload Batch job running on the Mailjet infrastructure.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/csvimport/$ID_JOB 
 ```
 ```javascript
 /**
@@ -1899,12 +1940,13 @@ request
 ```
 ```ruby
 # View: CSV upload Batch job running on the Mailjet infrastructure.
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
 variable = Mailjet::Csvimport.find($ID_JOB)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -1927,9 +1969,10 @@ View: CSV upload Batch job running on the Mailjet infrastructure.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -2005,6 +2048,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -2085,7 +2129,7 @@ Not available in Python, please refer to Curl
 ``` ruby
 # Not available in Ruby, please refer to Curl
 ```
-```bash
+```shell
 curl --user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 https://api.mailjet.com/v3/DATA/BatchJob/$job_id/CSVError/text:csv
 ```

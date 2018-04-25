@@ -6,6 +6,17 @@ You will also need to verify your sender addresses and domain names. The validat
 
 ##Create DNS entry
 
+```shell
+# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/sender \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Email":"anothersender@example.com"
+	}'
+```
 ```php
 <?php
 /*
@@ -20,17 +31,6 @@ $body = [
 $response = $mj->post(Resources::$Sender, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/sender \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Email":"anothersender@example.com"
-	}'
 ```
 ```javascript
 /**
@@ -55,12 +55,14 @@ request
 ```
 ```ruby
 # Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Sender.create(email: "anothersender@example.com")
+variable = Mailjet::Sender.create(email: "anothersender@example.com"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -85,9 +87,10 @@ Create : Manage an email sender for a single API key. An e-mail address or a com
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -128,7 +131,7 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Sender.resource)
-						.property(Sender.EMAIL, "anothersender@example.com");
+			.property(Sender.EMAIL, "anothersender@example.com");
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -169,6 +172,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -206,6 +210,13 @@ In order to create new sending address, you have to use the resource <code>[/sen
 
 To see the SPF and DKIM for your domain, use a GET request on the <code>[/dns/$id_or_domain](/email-api/v3/dns/)</code> resource using either the <code>DNSID</code> or domain name.
 
+```shell
+# View : Sender Domain properties.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/dns/$ID_OR_DOMAINNAME 
+```
 ```php
 <?php
 /*
@@ -217,13 +228,6 @@ $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'
 $response = $mj->get(Resources::$Dns, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# View : Sender Domain properties.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/dns/$ID_OR_DOMAINNAME 
 ```
 ```javascript
 /**
@@ -247,12 +251,13 @@ request
 ```
 ```ruby
 # View : Sender Domain properties.
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
 variable = Mailjet::Dns.find($ID_OR_DOMAINNAME)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -275,9 +280,10 @@ View : Sender Domain properties.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -291,32 +297,6 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Dns;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : Sender Domain properties.
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Dns.resource, ID);
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
 }
 ```
 ```csharp
@@ -353,10 +333,37 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
    }
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Dns;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : Sender Domain properties.
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Dns.resource, ID);
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 
@@ -402,6 +409,16 @@ Follow the <a href="https://www.mailjet.com/docs/spf-dkim-guide" target="_blank"
 
 ##Check your DNS 
 
+```shell
+# Check : Run a check on a domain
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/dns/$ID_OR_DOMAINNAME/check \
+	-H 'Content-Type: application/json' \
+	-d '{
+	}'
+```
 ```php
 <?php
 /*
@@ -413,16 +430,6 @@ $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'
 $response = $mj->post(Resources::$DnsCheck, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# Check : Run a check on a domain
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/dns/$ID_OR_DOMAINNAME/check \
-	-H 'Content-Type: application/json' \
-	-d '{
-	}'
 ```
 ```javascript
 /**
@@ -447,12 +454,13 @@ request
 ```
 ```ruby
 # Check : Run a check on a domain
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
 variable = Mailjet::Dns_check.create(id: $ID_OR_DOMAINNAME)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -475,9 +483,10 @@ Check : Run a check on a domain
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -559,6 +568,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -610,6 +620,17 @@ The check action follows the SPF records in cascade and takes CNAME records into
 
 ###Validate single sending address
 
+```shell
+# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/sender \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Email":"anothersender@example.com"
+	}'
+```
 ```php
 <?php
 /*
@@ -624,17 +645,6 @@ $body = [
 $response = $mj->post(Resources::$Sender, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```bash
-# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/sender \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Email":"anothersender@example.com"
-	}'
 ```
 ```javascript
 /**
@@ -659,12 +669,14 @@ request
 ```
 ```ruby
 # Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Sender.create(email: "anothersender@example.com")
+variable = Mailjet::Sender.create(email: "anothersender@example.com"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -689,9 +701,10 @@ Create : Manage an email sender for a single API key. An e-mail address or a com
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -732,7 +745,7 @@ public class MyClass {
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
       request = new MailjetRequest(Sender.resource)
-						.property(Sender.EMAIL, "anothersender@example.com");
+			.property(Sender.EMAIL, "anothersender@example.com");
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -773,6 +786,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
@@ -822,7 +836,7 @@ $response = $mj->post(Resources::$SenderValidate, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```bash
+```shell
 # Validate : check if the Ownership token has been properly setup on the website or DNS
 curl -s \
 	-X POST \
@@ -855,12 +869,13 @@ request
 ```
 ```ruby
 # Validate : check if the Ownership token has been properly setup on the website or DNS
+require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']
-  config.default_from = 'your default sending address'
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
 variable = Mailjet::Sender_validate.create(id: $ID)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -883,9 +898,10 @@ Validate : check if the Ownership token has been properly setup on the website o
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	"log"
 	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -967,6 +983,7 @@ namespace Mailjet.ConsoleApplication
          {
             Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
             Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
             Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
          }
       }
