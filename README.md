@@ -31,7 +31,7 @@ This repository contains the <a href="http://dev.mailjet.com/guides/">Mailjet AP
 - <a href="http://dev.mailjet.com/guides-sms/#filtering-resources">Filtering Resources</a> : <a href="https://github.com/mailjet/api-documentation/blob/master/guides-sms/_filtering-resources.md">_filtering-resources.md</a>
 - <a href="http://dev.mailjet.com/guides-sms/#payment-and-billing">Payment and billing</a> : <a href="https://github.com/mailjet/api-documentation/blob/master/guides-sms/_payment.md">_payment.md</a>
 - <a href="http://dev.mailjet.com/guides-sms/#send-sms-api">Send SMS API</a> : <a href="https://github.com/mailjet/api-documentation/blob/master/guides-sms/_send-sms-api.md">_send-sms-api.md</a>
-- <a href="http://dev.mailjet.com/guides-sms/#concatenation-and-encoding">Concatenation and Encoding</a> : <a href="https://github.com/mailjet/api-documentation/blob/master/guides-sms/_encoding.md.md">_encoding.md.md</a>
+- <a href="http://dev.mailjet.com/guides-sms/#concatenation-and-encoding">Concatenation and Encoding</a> : <a href="https://github.com/mailjet/api-documentation/blob/master/guides-sms/_encoding.md">_encoding.md</a>
 - <a href="http://dev.mailjet.com/guides-sms/#limitations">Limitations</a> : <a href="https://github.com/mailjet/api-documentation/blob/master/guides-sms/_limitation.md">_limitation.md</a>
 - <a href="http://dev.mailjet.com/guides-sms/#sms-statistics">SMS Statistics</a> : <a href="https://github.com/mailjet/api-documentation/blob/master/guides-sms/_sms-stats.md">_sms-stats.md</a>
 - <a href="http://dev.mailjet.com/guides-sms/#export-sms-statistics">Export SMS Statistics</a> : <a href="https://github.com/mailjet/api-documentation/blob/master/guides-sms/_export-sms_stats.md">_export-sms_stats.md</a>
