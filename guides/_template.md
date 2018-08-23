@@ -1,6 +1,7 @@
 <div id="template-api"></div>
 <div id="transactional-templating"></div>
-#Template API
+
+# Template API
 ## Overview
 
 Template API allows for the storage and access to your templates on the Mailjet system. 
@@ -16,6 +17,7 @@ Template API will also allow you to leverage Mailjet template language for your 
 </aside>
 
 <div></div>
+
 ## Storing a template
 
 Store your templates on your Mailjet account by using the `/template` API resource. These templates can also be edited directly in [Passport](https://www.mailjet.com/passport), our WYSIWYG template editor.
@@ -460,6 +462,7 @@ Note: From Septembre 2016, the JSON format of the <code>Headers</code> has been 
 </aside>
 
 <div></div>
+
 ## Use the Template in Send API
 
 The templates and templating languages can be used in multiple ways with Send API:
