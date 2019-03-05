@@ -62,7 +62,7 @@ Use `FromTS` and `ToTS` to specify a timeframe - if no timeframe is selected, Ma
 
 <div></div>
 
-## Stats by Recipient
+## Filter by Recipient
 
 ```shell
 # View : Retrieve a list of SMS messages sent to a specific recipient
@@ -114,7 +114,7 @@ https://api.mailjet.com/v4/sms?To=+33600000000
 }
 ```
 
-If you want to view the stats for a specific recipient, simply use the `To` property with your request.
+If you want to view the stats for a specific recipient, simply use the `To` filter with your request.
 
 Keep in mind that the complete phone number should be entered, as described in the [Send SMS API section](#send-transactional-sms).
 
@@ -172,7 +172,7 @@ https://api.mailjet.com/v4/sms?StatusCode=1,2
 }
 ```
 
-Use the `StatusCode` property with your request to see only messages with specific statuses - e.g. Rejected ones because of an invalid phone number.
+Use the `StatusCode` filter with your request to see only messages with specific statuses - e.g. Rejected ones because of an invalid phone number.
 
 For more information on Status Codes and what they correspond to, please see the [list of status codes](#list-of-status-codes).
 
@@ -199,6 +199,45 @@ For more information on Status Codes and what they correspond to, please see the
 | 14   | invalid_phone_number         | The phone number specified is invalid.                                                       |
 | 15   | rejected_insufficent_funds   | Message is rejected as you have not enough funds to send the message.                        |
 | 16   | rejected_daily_limit_reached | Message is rejected as you have reached your maximum number of messages sent for today.      |
+
+## Retrieve Single SMS message
+
+```shell
+# View : Retrieve a specific SMS Message
+curl -s -X GET \
+-H "Authorization: Bearer $MJ_TOKEN" \
+https://api.mailjet.com/v4/sms/744ecf8c-9fed-4ec9-acd0-9b326671f5df
+```
+
+>API Response
+
+```json
+{
+  "Data":[
+    {
+      "From": "MJPilot",
+      "To":"+33600000000",
+      "Status": {
+        "Code": 2,
+        "Name": "sent",
+        "Description": "Message sent"
+      },
+      "MessageId":"744ecf8c-9fed-4ec9-acd0-9b326671f5df",
+      "CreationTS": 1033552800,
+      "SentTS": 1033552802,
+      "SMSCount":1,
+      "Cost": {
+        "Value": 0.04,
+        "Currency": "EUR"
+      }
+    }
+  ]
+}
+```
+
+Use `GET /sms/{id}`, if you need to retrieve a specific SMS message. Substitute `{id}` with the `MessageID` of the SMS you are interested in.
+
+<div></div>
 
 ## Retrieve SMS Count
 
