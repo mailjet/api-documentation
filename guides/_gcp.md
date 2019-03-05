@@ -6,18 +6,14 @@ Within <a href="https://cloud.google.com/appengine/docs/python/mail/mailjet" tar
 
 With servers that are entirely EU-based, Mailjet simultaneously complies with data privacy regulations in Europe and the US. With a global network being one of the key features of Google Cloud Platform, Mailjet and its 360° global emailing solution further support Google’s globally-focused clients.
 
-##Documentations
+## Documentations
 
-Google App Engine : 
+Google App Engine :
 
  - Python : <a href="https://cloud.google.com/appengine/docs/python/mail/mailjet" target="_blank">standard</a> or <a href="https://cloud.google.com/appengine/docs/flexible/python/sending-emails-with-mailjet" target="_blank">flexible</a> environment
- - PHP : <a href="https://cloud.google.com/appengine/docs/php/mail/mailjet" target="_blank">standard</a> environment 
- - Go : <a href="https://cloud.google.com/appengine/docs/go/mail/mailjet" target="_blank">standard</a> or <a href="https://cloud.google.com/appengine/docs/flexible/go/sending-emails-with-mailjet" target="_blank">flexible</a> environment
- - Java : <a href="https://cloud.google.com/appengine/docs/java/mail/mailjet" target="_blank">standard</a> or <a href="https://cloud.google.com/appengine/docs/flexible/java/sending-emails-with-mailjet" target="_blank">flexible</a> environment 
- - Node.js : <a href="https://cloud.google.com/appengine/docs/flexible/nodejs/sending-emails-with-mailjet" target="_blank">flexible</a> environment 
+ - PHP : <a href="https://cloud.google.com/appengine/docs/php/mail/mailjet" target="_blank">standard</a> or <a href="https://cloud.google.com/appengine/docs/flexible/php/sending-emails-with-mailjet" target="_blank">flexible</a> environment
+  - Go : <a href="https://cloud.google.com/appengine/docs/go/mail/mailjet" target="_blank">standard</a> or <a href="https://cloud.google.com/appengine/docs/flexible/go/sending-emails-with-mailjet" target="_blank">flexible</a> environment
+ - Java : <a href="https://cloud.google.com/appengine/docs/java/mail/mailjet" target="_blank">standard</a> or <a href="https://cloud.google.com/appengine/docs/flexible/java/sending-emails-with-mailjet" target="_blank">flexible</a> environment
+ - Node.js : <a href="https://cloud.google.com/appengine/docs/flexible/nodejs/sending-emails-with-mailjet" target="_blank">flexible</a> environment
 
 Google Compute Engine : <a href="https://cloud.google.com/compute/docs/tutorials/sending-mail/using-mailjet" target="_blank">General settings</a>
-
-##Pricing 
-
-Special <a href="https://www.mailjet.com/google#pricing" target="_blank">pricing plans</a> (starting at Free) with enhanced benefits are available to Google Cloud Platform users signing up to Mailjet. Mailjet's REST API, SMTP Relay, Optimized Deliverability, Global Support, Reporting, Email Personalization and more are standard features available to all users. Premium plans include A/X Testing, Segmentation and Campaign Comparison. Silver Plans and above gain additional access to Dedicated IPs and Reputation Monitoring.

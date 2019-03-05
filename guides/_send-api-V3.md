@@ -1,6 +1,6 @@
-#Send API v3
+# Send API v3
 
-<h2 id="sending-a-basic-email-v3">Sending a basic email</h2>
+<h2 id="sending-a-basic-email-v3">Send a basic email</h2>
 
 ``` python
 from mailjet_rest import Client
@@ -219,7 +219,7 @@ To send an email, you need the following mandatory properties:
 
  - <code>FromEmail</code>: a verified Sender address
  - <code>Recipients</code>: list with at least one <code>Email</code> address
- - <code>Text-part</code> or/and <code>Html-part</code>: content of the message sent in text or HTML format. At least one of these content type needs to be specified. When Html-part is the only content provided, Mailjet will not generate a Text-part from the HTML version.   
+ - <code>Text-part</code> and/or <code>Html-part</code>: content of the message sent in text or HTML format. At least one of these content type needs to be specified. When Html-part is the only content provided, Mailjet will not generate a Text-part from the HTML version.   
 
 Optionally, in place of <code>Recipients</code>, you can use <code>To</code>, <code>Cc</code> and <code>Bcc</code> properties. To, Cc and Bcc can't be used in conjunction with <code>Recipients</code>. The properties can contain several recipients separated by comma using the following format <code>john@example.com</code>, <code>&lt;john@example.com&gt;</code> or <code>"John Doe" &lt;john@example.com&gt;</code>.
 
@@ -449,14 +449,16 @@ When using  <code>To</code>, <code>Cc</code> and <code>Bcc</code> instead of <co
 <div></div>
 
 
-<code>MessageID</code> is the internal Mailjet id of your message. You will be able to use this id to get more information about your message. You can find more information in our [Message Statistics Guide](/guides/#messages)
+<code>MessageID</code> is the internal Mailjet ID of your message. You will be able to use this id to get more information about your message. You can find more information in our [Message Statistics Guide](/guides/#messages)
 
 
 <aside class="notice">
 NOTICE: If a recipient does not exist in any of your contact list it will be created from scratch, keep that in mind if you are planning on sending a welcome email and then you're trying to add the email to a list as the contact effectively exists already.
 </aside>
 
-##Sending to multiple recipients
+<div id="sending-to-multiple-recipients"></div>
+
+## Send to multiple recipients
 
 ``` python
 """
@@ -723,7 +725,7 @@ To send the same email to multiple contacts, add <code>Email</code> addresses in
 
 Each recipient will receive a dedicated message.
 
-<h2 id="sending-with-attached-files-v3">Sending with attached files</h2>
+<h2 id="sending-with-attached-files-v3">Send with attached files</h2>
 
 ``` python
 """
@@ -1241,7 +1243,7 @@ When using an inline Attachment, it's possible to insert the file inside the HTM
 Remember to keep the size of your attachements low and not to exceed 15 MB.
 </aside>
 
-<h2 id="sending-in-bulk-v3">Sending in bulk</h2>
+<h2 id="sending-in-bulk-v3">Send in bulk</h2>
 
 ``` python
 """
@@ -1589,7 +1591,8 @@ namespace Mailjet.ConsoleApplication
 ```
 To send messages in bulk, package the multiple messages inside a <code>Messages</code> property. Each message inside this list of message will enjoy the same properties described above.
 
-<h2 id="personalisation-v3">Personalisation</h2>
+<div id="personalisation-v3"></div>
+<h2 id="personalization-v3">Personalization</h2>
 <div></div>
 <h3 id="content-formatting-v3">Content formatting</h3>
 
@@ -1601,11 +1604,11 @@ To do so, use <code>[[DATA_TYPE:DATA_NAME]]</code> where:
 - <code>DATA_NAME</code>: name of the data you want to insert
 
 <div></div>
-<h3 id="using-vars-and-custom-vars-v3">Using vars and custom vars </h3>
+<h3 id="using-vars-and-custom-vars-v3">Use vars and custom vars </h3>
 
 ``` python
 """
-This calls sends an email to 2 given recipient with global personalisation.
+This calls sends an email to 2 given recipient with global personalization.
 """
 from mailjet_rest import Client
 import os
@@ -1648,7 +1651,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 public class MyClass {
     /**
-     * This calls sends an email to 2 given recipient with global personalisation.
+     * This calls sends an email to 2 given recipient with global personalization.
      */
     public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
@@ -1679,7 +1682,7 @@ public class MyClass {
 ```php
 <?php
 /*
-This calls sends an email to 2 given recipient with global personalisation.
+This calls sends an email to 2 given recipient with global personalization.
 */
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
@@ -1728,7 +1731,7 @@ variable = Mailjet::Send.create(
 )
 ```
 ```shell
-# This calls sends an email to 2 given recipient with global personalisation.
+# This calls sends an email to 2 given recipient with global personalization.
 curl -s \
 	-X POST \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
@@ -1747,7 +1750,7 @@ curl -s \
 ```javascript
 /**
  *
- * This calls sends an email to 2 given recipient with global personalisation.
+ * This calls sends an email to 2 given recipient with global personalization.
  *
  */
 const mailjet = require ('node-mailjet')
@@ -1773,7 +1776,7 @@ request
 ```
 ``` go
 /*
-This calls sends an email to 2 given recipient with global personalisation.
+This calls sends an email to 2 given recipient with global personalization.
 */
 package main
 import (
@@ -1825,7 +1828,7 @@ namespace Mailjet.ConsoleApplication
    class Program
    {
       /// <summary>
-      /// This calls sends an email to 2 given recipient with global personalisation.
+      /// This calls sends an email to 2 given recipient with global personalization.
       /// </summary>
       static void Main(string[] args)
       {
@@ -1890,7 +1893,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 public class MyClass {
     /**
-     * This calls sends an email to 2 recipients with global and contact personalisation.
+     * This calls sends an email to 2 recipients with global and contact personalization.
      */
     public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
@@ -1923,7 +1926,7 @@ public class MyClass {
 ```
 ``` python
 """
-This calls sends an email to 2 recipients with global and contact personalisation.
+This calls sends an email to 2 recipients with global and contact personalization.
 """
 from mailjet_rest import Client
 import os
@@ -1961,7 +1964,7 @@ print result.json()
 ```php
 <?php
 /*
-This calls sends an email to 2 recipients with global and contact personalisation.
+This calls sends an email to 2 recipients with global and contact personalization.
 */
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
@@ -2013,7 +2016,7 @@ variable = Mailjet::Send.create(
 )
 ```
 ```shell
-# This calls sends an email to 2 recipients with global and contact personalisation.
+# This calls sends an email to 2 recipients with global and contact personalization.
 curl -s \
 	-X POST \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
@@ -2032,7 +2035,7 @@ curl -s \
 ```javascript
 /**
  *
- * This calls sends an email to 2 recipients with global and contact personalisation.
+ * This calls sends an email to 2 recipients with global and contact personalization.
  *
  */
 var mailjet = require ('node-mailjet')
@@ -2058,7 +2061,7 @@ request
 ```
 ``` go
 /*
-This calls sends an email to 2 recipients with global and contact personalisation.
+This calls sends an email to 2 recipients with global and contact personalization.
 */
 package main
 import (
@@ -2118,7 +2121,7 @@ namespace Mailjet.ConsoleApplication
    class Program
    {
       /// <summary>
-      /// This calls sends an email to 2 recipients with global and contact personalisation.
+      /// This calls sends an email to 2 recipients with global and contact personalization.
       /// </summary>
       static void Main(string[] args)
       {
@@ -2171,11 +2174,11 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-To go further in personalisation <code>Vars</code> is also available for each recipient. The main <code>Vars</code> will be overidden by the recipient <code>Vars</code>
+To go further in personalization <code>Vars</code> is also available for each recipient. The main <code>Vars</code> will be overidden by the recipient <code>Vars</code>
 
 
 <div></div>
-<h3 id="using-contact-properties-v3">Using contact properties</h3>
+<h3 id="using-contact-properties-v3">Use contact properties</h3>
 
 ```java
 package MyClass;
@@ -2411,20 +2414,22 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-If the contact you are sending an email to is already in Mailjet system with some contact datas, you can leverage this information to personalise your email.
+If the contact you are sending an email to is already in Mailjet system with some contact datas, you can leverage this information to personalize your email.
 
 Use <code>[[data:METADATA_NAME]]</code> or <code>[[data:METADATA_NAME:DEFAULT_VALUE]]</code> to insert data in your content.
 
-<code>DEFAULT_VALUE</code>is the default value that will be used if no data found.
+<code>DEFAULT_VALUE</code> is the default value that will be used if no data is found.
 
-[More information](/guides/#personalisation-add-contact-properties) about how to add contact properties.
+Refer to the [Personalization section](/guides/#personalization-add-contact-properties) for more information on how to add contact properties.
 
-###Go further with personalisation
+<div id="go-further-with-personalisation"></div>
 
-Mailjet offers a Templating language that can extend the personalisation of your transactional messages.
-Visit [Transactional templating](/guides/#transactional-templating) guide to learn about additional substitutions, modification functions and conditional statements you can use to personalize messages.
+### Go further with personalization
 
-<h2 id="using-a-template-v3">Using a Template</h2>
+Mailjet offers a Templating language that can extend the personalization of your transactional messages.
+Visit our [Transactional templating](/guides/#transactional-templating) guide to learn about additional substitutions, modification functions and conditional statements you can use to personalize your messages.
+
+<h2 id="using-a-template-v3">Use a Template</h2>
 
 ```java
 package MyClass;
@@ -2438,7 +2443,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 public class MyClass {
     /**
-     * This calls sends a message based on a template.
+     * This call sends a message based on a template.
      */
     public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
@@ -2464,7 +2469,7 @@ public class MyClass {
 ```php
 <?php
 /*
-This calls sends a message based on a template.
+This call sends a message based on a template.
 */
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
@@ -2482,7 +2487,7 @@ $response->success() && var_dump($response->getData());
 ?>
 ```
 ```shell
-# This calls sends a message based on a template.
+# This call sends a message based on a template.
 curl -s \
 	-X POST \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
@@ -2492,8 +2497,8 @@ curl -s \
 		"FromEmail":"pilot@mailjet.com",
 		"FromName":"Mailjet Pilot",
 		"Subject":"Your email flight plan!",
-		"MJ-TemplateID":"1",
-		"MJ-TemplateLanguage":true,
+		"Mj-TemplateID":"1",
+		"Mj-TemplateLanguage":true,
 		"Recipients":[
 				{
 						"Email": "passenger@mailjet.com"
@@ -2504,7 +2509,7 @@ curl -s \
 ```javascript
 /**
  *
- * This calls sends a message based on a template.
+ * This call sends a message based on a template.
  *
  */
 var mailjet = require ('node-mailjet')
@@ -2515,8 +2520,8 @@ var request = mailjet
 		"FromEmail":"pilot@mailjet.com",
 		"FromName":"Mailjet Pilot",
 		"Subject":"Your email flight plan!",
-		"MJ-TemplateID":"1",
-		"MJ-TemplateLanguage":"true",
+		"Mj-TemplateID":"1",
+		"Mj-TemplateLanguage":"true",
 		"Recipients":[
 				{
 						"Email": "passenger@mailjet.com"
@@ -2532,7 +2537,7 @@ request
 	})
 ```
 ```ruby
-# This calls sends a message based on a template.
+# This call sends a message based on a template.
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']
@@ -2549,7 +2554,7 @@ variable = Mailjet::Send.create(
 ```
 ```python
 """
-This calls sends a message based on a template.
+This call sends a message based on a template.
 """
 from mailjet_rest import Client
 import os
@@ -2574,7 +2579,7 @@ print result.json()
 ```
 ``` go
 /*
-This calls sends a message based on a template.
+This call sends a message based on a template.
 */
 package main
 import (
@@ -2615,7 +2620,7 @@ namespace Mailjet.ConsoleApplication
    class Program
    {
       /// <summary>
-      /// This calls sends a message based on a template.
+      /// This call sends a message based on a template.
       /// </summary>
       static void Main(string[] args)
       {
@@ -2658,21 +2663,21 @@ namespace Mailjet.ConsoleApplication
 
 Mailjet offers to store your transactional message templates on its platform. You can use these templates in your transactional API call to remove the need to repeat the content of a transactional message at each Send API call.
 
-You can either create the templates through our online drag and drop tool [Passport](https://www.mailjet.com/feature/passport/) or through the [/template](/email-api/v3/template/) resource.
+You can either create the templates through our online drag and drop tool [Passport](https://www.mailjet.com/feature/passport/) or through the [/template](/reference/email/templates/) resource.
 
 You can learn more about storing your templates through API [here](/guides/#storing-a-template).
 
 You can also follow our [Step by Step guide](/template-language/passport/) to create your first Passport template with templating language.
 
-In the templates, you will be able to use simple [personalisation](/guides/#personalisation) (<code>[[data:property_name]]</code> or <code>[[var:variable_name]]</code>) or advanced [templating language](#template-api) (<code>{{data:property_name}}</code>, <code>{{var:variable_name}}</code>, conditional statements and loop statements)
+In the templates, you will be able to use simple [personalization](/guides/#personalization) (<code>[[data:property_name]]</code> or <code>[[var:variable_name]]</code>) or advanced [templating language](#template-api) (<code>{{data:property_name}}</code>, <code>{{var:variable_name}}</code>, conditional statements and loop statements)
 
-In this sample, <code>Mj-TemplateID</code> will be the Id provided by Passport at the end of your designing process or the Id returned by the <code>/template</code> resource.
+In this sample, <code>Mj-TemplateID</code> will be the ID provided by Passport at the end of your designing process or the ID returned by the <code>/template</code> resource.
 
 <aside class="notice">
-The <code>Mj-TemplateLanguage</code> property in the payload provided to send API is optional but if you want to have the templating language interpreted, it will be mandatory and must have a  <code>true</code> value.
+The <code>Mj-TemplateLanguage</code> property in the payload provided to Send API is optional but if you want to have the templating language interpreted, it will be mandatory and must have a  <code>true</code> value.
 </aside>
 
-<h2 id="using-templating-language-v3">Using Template Language</h2>
+<h2 id="using-templating-language-v3">Use Template Language</h2>
 
 ```java
 package MyClass;
@@ -2745,7 +2750,7 @@ curl -s \
 		"FromEmail":"pilot@mailjet.com",
 		"FromName":"Mailjet Pilot",
 		"Subject":"Your email flight plan!",
-		"MJ-TemplateLanguage":true,
+		"Mj-TemplateLanguage":true,
 		"Text-part":"Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
 		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
 		"Vars":{
@@ -2781,7 +2786,7 @@ const request = mailjet
 		"FromEmail":"pilot@mailjet.com",
 		"FromName":"Mailjet Pilot",
 		"Subject":"Your email flight plan!",
-		"MJ-TemplateLanguage":"true",
+		"Mj-TemplateLanguage":"true",
 		"Text-part":"Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
 		"Html-part":"<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
 		"Vars":{
@@ -2996,12 +3001,12 @@ The Mailjet Template Language include fonctionality for :
  - and a lot more...
 
 <aside class="notice">
-The <code>Mj-TemplateLanguage</code> property in the payload provided to send API is optional but if you want to have the templating language interpreted, it will be mandatory and must have a  <code>true</code> value.
+The <code>Mj-TemplateLanguage</code> property in the payload provided to Send API is optional but if you want to have the templating language interpreted, it will be mandatory and must have a  <code>true</code> value.
 </aside>
 
 Find our dedicated guide [here](/template-language/).
 
-<h2 id="adding-email-headers-v3">Adding Email Headers </h2>
+<h2 id="adding-email-headers-v3">Add Email Headers </h2>
 
 ```java
 package MyClass;
@@ -3233,14 +3238,14 @@ namespace Mailjet.ConsoleApplication
 
 In every message, you can specify your own Email headers using the <code>Headers</code> property. For example, it is possible to specify a <code>Reply-To</code> email address.  
 
-<h2 id="tagging-email-messages-v3">Tagging Email Messages</h2>
+<h2 id="tagging-email-messages-v3">Tag Email Messages</h2>
 
 Mailjet provides 2 properties to tag messages with your own custom information.
 
 These custom pieces of information are returned back in the events you registered to via our [Event API](/guides/#events) and in the messages processed via our [Parse API](/guides/#customid-and-payload).
 
 <div></div>
-<h3 id="sending-an-email-with-a-custom-id-v3">Sending an email with a custom ID</h3>
+<h3 id="sending-an-email-with-a-custom-id-v3">Send an email with a custom ID</h3>
 
 ```java
 package MyClass;
@@ -3623,7 +3628,7 @@ namespace Mailjet.ConsoleApplication
 From then, your <code>CustomID</code> is linked to our own Message ID. You can also retrieve the message later by providing it to the <code>/message</code> resource <code>CustomID</code> filter.
 
 <div></div>
-<h3 id="sending-an-email-with-a-payload-v3">Sending an email with a payload</h3>
+<h3 id="sending-an-email-with-a-payload-v3">Send an email with a payload</h3>
 
 ```java
 package MyClass;
@@ -3847,7 +3852,7 @@ namespace Mailjet.ConsoleApplication
 
 Sometimes, you need more than just an ID to represent the context to what a specific message is attached to. For this purpose, we let you insert a payload in the message which can be of any format (XML, JSON, CSV, etc). To take advantage of this, just pass the payload you want in the <code>Mj-EventPayLoad</code> property.
 
-<h2 id="grouping-into-a-campaign-v3">Grouping into a campaign</h2>
+<h2 id="grouping-into-a-campaign-v3">Group into a campaign</h2>
 
 ``` python
 """
@@ -4328,7 +4333,7 @@ You can create as many alerts as you want under one of our four types of monitor
  - Delivery delay: notifies you when emails are delivered slower than expected.
  - Unusual statistics: sends you an alert when delivery, bounce or open rate are lower or higher than your predefined threshold.
 
-Mailjet’s Real-time monitoring will inform you by email, Slack or even SMS based on alert
+Mailjet’s Real-time monitoring will inform you by email, Slack or even SMS based on the alert configuration.
 
 After creating your categories and alerts in our [user interface](https://app.mailjet.com/monitoring#overview), you can leverage the <code>Mj-MonitoringCategory</code> property to specify which category the message you are sending is related to.
 
@@ -4340,13 +4345,13 @@ FromEmail | Must be a valid, activated and registered sender for this account <b
 FromName | Must be a valid, activated and registered sender for this account <br />May include the name part: <code>john@example.com</code> or <code>&lt;john@example.com&gt;</code> or <code>"John Doe" &lt;john@example.com&gt;</code><br />
 Sender | This can be set only on given API Keys. Contact the <a href="https://app.mailjet.com/support/ticket" target="_blank">support team</a> if you want us to enable this setting on your account.<br />Must be a valid active sender for this account.<br />Perform a simple GET on resource <code>/sender</code> to view a list of allowed senders for your account, or within the Mailjet Account Settings under <a href="https://app.mailjet.com/account/sender" target="_blank">Sender Addresses</a><br />**MAX SENDER: 1**
 Recipients | List of recipients, Must include at least a property <code>Email</code> in each element<br />Sample: <code>[{"Email":"passenger@mailjet.com","Name":"passenger"}]</code><br />**MANDATORY**
-To | May include the name part: <code>john@example.com</code> or <code>&lt;john@example.com&gt;</code> or <code>"John Doe" &lt;john@example.com&gt;</code><br />If a recipient is specified twice (in the to, cc, or bcc), it is counted only once.<br />Can be a magic list @lists.mailjet.com. See the <code>Address</code> [contactslist](/email-api/v3/contactslist/) property.<br />**MAX RECIPIENTS: 50**
-Cc, Bcc | May include the name part: <code>john@example.com</code> or <code>&lt;john@example.com&gt;</code> or <code>"John Doe" &lt;john@example.com&gt;</code><br />If one recipient is specified twice, count as one only (including to, cc, bcc)<br />**MAX RECIPIENTS: 50**<br /> **Cc and Bcc can't be used in conjunction with Recipients property**
+To | May include the name part: <code>john@example.com</code> or <code>&lt;john@example.com&gt;</code> or <code>"John Doe" &lt;john@example.com&gt;</code><br />If a recipient is specified twice (in the to, cc, or bcc), it is counted only once.<br />Can be a magic list @lists.mailjet.com. See the <code>Address</code> [contactslist](/reference/email/contacts/contact-list/) property.<br />**MAX RECIPIENTS: 50**
+Cc, Bcc | May include the name part: <code>john@example.com</code> or <code>&lt;john@example.com&gt;</code> or <code>"John Doe" &lt;john@example.com&gt;</code><br />If one recipient is specified twice, count as one only (including to, cc, bcc)<br />**MAX RECIPIENTS: 50**<br /> **Cc and Bcc can't be used in conjunction with the Recipients property**
 Subject | Maximum length is 255 chars <br />**MAX SUBJECTS: 1**
 Text-part | Provides the Text part of the message<br />Mandatory if the HTML param is not specified<br />**MANDATORY IF NO HTML - MAX PARTS: 1**
 Html-part | Provides the HTML part of the message<br />Mandatory if the text param is not specified<br />**MANDATORY IF NO TEXT - MAX PARTS: 1**
 Mj-TemplateID | The Template ID or Name to use as this email content. Overrides the HTML/Text parts if any.<br />Equivalent to using the X-MJ-TemplateID header through SMTP.<br />**MANDATORY IF NO HTML/TEXT - MAX TEMPLATEID: 1**
-Mj-TemplateLanguage | Activate the template language processing. By default the template language processing is deactivated. Use <code>True</code> to activate.<br />Equivalent to using the X-MJ-TemplateLanguage header through SMTP.<br />[More information](#use-the-template-in-send-api)
+Mj-TemplateLanguage | Activates the template language processing. By default the template language processing is deactivated. Use <code>True</code> to activate.<br />Equivalent to using the X-MJ-TemplateLanguage header through SMTP.<br />[More information](#use-the-template-in-send-api)
 MJ-TemplateErrorReporting | Email Address where a carbon copy with error message is sent to.<br />Equivalent to using the X-MJ-TemplateErrorReporting header through SMTP.<br />[More information](../template-language/sendapi/#templates-error-management)
 MJ-TemplateErrorDeliver | Define if the message is delivered if an error is discovered in the templating language. By default the delivery is deactivated. Use <code>deliver</code> to let the message be delivered to the recipient, <code>0</code> to stop it. <br />Equivalent to using the X-MJ-TemplateErrorDeliver header through SMTP.<br />[More information](../template-language/sendapi/#templates-error-management)
 Attachments | Attach files automatically to this Email<br />Sum of all attachments, including inline may not exceed 15 MB total<br />Sample: [{"Content-type": "MIME TYPE", "Filename": "FILENAME.EXT", "content":"BASE64 ENCODED CONTENT"}]
@@ -4354,13 +4359,13 @@ Inline_attachments | Attach a file for inline use via <code>cid:FILENAME.EXT</co
 Mj-prio | Manage message processing priority inside your account (API key) scheduling queue.<br />Default is <code>2</code> as in the SMTP submission.<br />Equivalent of using <code>X-Mailjet-Prio</code> header through SMTP<br /><a href="https://app.mailjet.com/docs/email-priority-management" target="_blank">More information</a>
 Mj-campaign | Groups multiple messages in one campaign<br />Equivalent of using <code>X-Mailjet-Campaign</code> header through SMTP.<br /><a href="https://app.mailjet.com/docs/emails_headers" target="_blank">More information</a>
 <span style="white-space: nowrap;">Mj-deduplicatecampaign</span> | Block/unblock messages to be sent multiple times inside one campaign to the same contact.<br>- <code>0</code>: unblocked (default behavior)<br />- <code>1</code>: blocked<br />Equivalent of using <code>X-Mailjet-DeduplicateCampaign</code> header through SMTP.<br />Can only be used if mj-campaign is specified.<br /><a href="#custom-headers" target="_blank">More information</a>
-Mj-trackopen | Force or disable open tracking on this message, can overriding account preferences.<br />Can only be used with a HTML part.<br />- <code>0</code>: take the values defined on the account. The ones shown <a href="https://app.mailjet.com/account/settings" target="_blank">here</a><br />- <code>1</code>: disable the tracking <br />- <code>2</code>: enable the tracking<br />A <code>X-Mailjet-TrackOpen</code> SMTP header is also available to modify the tracking behaviour.<br />[More information on custom SMTP headers](/guides/#custom-headers)
-Mj-trackclick | Force or disable click tracking on this message, can overriding account preferences.<br />Can only be specified if the HTML part is provided.<br />- <code>0</code>: take the values defined on the account. The ones shown <a href="https://app.mailjet.com/account/settings" target="_blank">here</a><br />- <code>1</code>: disable the tracking <br />- <code>2</code>: enable the tracking<br />A <code>X-Mailjet-TrackClick</code> SMTP header is also available to modify the tracking behaviour.<br />[More information on custom SMTP headers](/guides/#custom-headers)
+Mj-trackopen | Force or disable open tracking on this message, can override account preferences.<br />Can only be used with a HTML part.<br />- <code>0</code>: take the values defined on the account. The ones shown <a href="https://app.mailjet.com/account/settings" target="_blank">here</a><br />- <code>1</code>: disable the tracking <br />- <code>2</code>: enable the tracking<br />A <code>X-Mailjet-TrackOpen</code> SMTP header is also available to modify the tracking behaviour.<br />[More information on custom SMTP headers](/guides/#custom-headers)
+Mj-trackclick | Force or disable click tracking on this message, can override account preferences.<br />Can only be specified if the HTML part is provided.<br />- <code>0</code>: take the values defined on the account. The ones shown <a href="https://app.mailjet.com/account/settings" target="_blank">here</a><br />- <code>1</code>: disable the tracking <br />- <code>2</code>: enable the tracking<br />A <code>X-Mailjet-TrackClick</code> SMTP header is also available to modify the tracking behaviour.<br />[More information on custom SMTP headers](/guides/#custom-headers)
 Mj-CustomID | Attach a custom ID to the message<br />Equivalent to using the X-MJ-CustomID header through SMTP.<br />[More information](#sending-an-email-with-a-custom-id)
 Mj-EventPayLoad | Attach a payload to the message<br />Equivalent to using the X-MJ-EventPayload header through SMTP.<br />[More information](#sending-an-email-with-a-payload)
 Mj-MonitoringCategory | Category for Real-time Monitoring to which the message will be attached<br />Equivalent of using <code>X-MJ-MonitoringCategory</code> header through SMTP.
 Headers | Add lines to the email's headers<br />List of headers as <code>"property":"value"</code> pairs<br />Notice: overriding values of header properties (ie: subject)<br />Sample: <code>{"X-My-Header":"my own value","X-My-Header-2":"my own value 2"}</code>
-Vars | Global variables used for personalisation<br />Equivalent of using <code>X-MJ-Vars</code> header through SMTP.
+Vars | Global variables used for personalization<br />Equivalent of using <code>X-MJ-Vars</code> header through SMTP.
 Messages | List of messages<br /> Used for bulk emailing.<br />[More information](#sending-in-bulk)
 
 <h2 id="send-api-errors-v3">Send API errors</h2>
@@ -4389,7 +4394,7 @@ To, Cc, Bcc | To, Cc, Bcc | The SMTP style description of the recipients is repl
 Subject | Subject |
 Text-part | TextPart |
 Html-part | HTMLPart |
-Mj-TemplateID | TemplateID | It used to accept string only, now it can accept 2 formats. </br> When an integer is provided, we will search for the ID of the template. </br> When a string is provided, we will search for the Name of the template.
+Mj-TemplateID | TemplateID | When using Send API v3, <code>Mj-TemplateID</code> accepts 2 formats. </br> If an integer is provided, we will search for the ID of the template. If a string is provided, we will search for the Name of the template. </br> When using Send API v3.1, <code>TemplateID</code> only accepts `integer` values, i.e. the ID of the template.
 Mj-TemplateLanguage | TemplateLanguage |
 MJ-TemplateErrorReporting | TemplateErrorReporting | Change of the property type. The destination of the error log should not be provided as string, but as object instead. Correct format: <code> {Email, Name} </code>
 MJ-TemplateErrorDeliver | TemplateErrorDeliver | Change of the property type. It used to accept <code> deliver </code> or <code> 0 </code> as values. Now, it becomes a boolean propery, which accepts <code> true </code> or <code> false </code>
@@ -4449,6 +4454,7 @@ Vars | Variables |
 Send API v3.1 allows only to send messages collection (bulk) no single message like v3 allowed. The message(s) will be encapsulated in a single property <code>Messages</code>  containing a list of messages.
 
 <div></div>
+
 ### Deprecation of the Recipients message property
 
 
@@ -4504,10 +4510,10 @@ Send API v3.1 allows only to send messages collection (bulk) no single message l
 }
 ```
 
-The <code>Recipients</code> property of a message object is not available anymore. To achieve the same behaviour, multiple recipients receiving independently the same message, you will need to create several <code>Messages</code> objects with a "To" property.
+The <code>Recipients</code> property of a message object is not available anymore. To achieve the same behavior, multiple recipients receiving independently the same message, you will need to create several <code>Messages</code> objects with a "To" property.
 
 <div></div>
 
 ### Limitation size of JSON payload
 
-The number of message objects authorised in the payload is now 100, also limiting the number of recipients (<code>"To"</code>) authorised on one single Send API call.
+The number of message objects authorized in the payload for Send API v3 is 100, also limiting the number of recipients (<code>"To"</code>) authorized on one single Send API call. For Send Api v3.1 this limit is set to 50, as specified in its [Message JSON Properties](#message-json-properties) section.

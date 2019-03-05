@@ -1,10 +1,11 @@
-#Event API: real-time notifications
+# Event API: real-time notifications
 
-The Event API offer a real-time notification through http request on any events related to the messages you sent. The main supported events are <code>open</code>, <code>click</code>, <code>bounce</code>, <code>spam</code>, <code>blocked</code>, <code>unsub</code> and <code>sent</code>. This event notification works for transactional and marketing emails. 
+The Event API offer a real-time notification through http request on any events related to the messages you sent. The main supported events are <code>open</code>, <code>click</code>, <code>bounce</code>, <code>spam</code>, <code>blocked</code>, <code>unsub</code> and <code>sent</code>. This event notification works for transactional and marketing emails.
 
 The Event API is a very efficient way to do specific actions on your website (log the marketing messages sent to your customers, generate your own statistics, update the unsubscribed contacts on a CRM...). Instead of polling our API a few times a day, we push new data just as the events happen, almost instantly.
 
-##Endpoint URL
+## Endpoint URL
+
 ```php
 <?php
 /*
@@ -195,27 +196,27 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-The endpoint is an URL our server will call for each event (it can lead to a lot of hits !). You can use the API to setup a new endpoint using the <code>[/eventcallbackurl](/email-api/v3/eventcallbackurl/)</code> resource. Alternatively, you can configure this in your account preferences, in the <a href="https://app.mailjet.com/account/triggers" target="_blank">Event Tracking</a> section.
+The endpoint is a URL our server will call for each event (it can lead to a lot of hits !). You can use the API to setup a new endpoint using the <code>[/eventcallbackurl](/reference/email/webhook/)</code> resource. Alternatively, you can configure this in your account preferences, in the <a href="https://app.mailjet.com/account/triggers" target="_blank">Event Tracking</a> section.
 
-It must return a <code>200 OK</code> HTTP code if all goes well. Any other HTTP code will result in our server retrying the request later. 
+It must return a <code>200 OK</code> HTTP code if all goes well. Any other HTTP code will result in our server retrying the request later.
 
-Our system will retry following these rules : 
+Our system will retry following these rules :
 
  - 10 attempts with 30 seconds between each attempt
  - followed by 10 attempts with 30 minutes between each attempt
- - finally the url is suspended 
+ - finally the URL is suspended
 
-The event API also allows to configure a backup endpoint URL with the property <code>isBackup</code> that will be used in case the primary url is suspended.
+The event API also allows you to configure a backup endpoint URL with the property <code>isBackup</code> that will be used in case the primary URL is suspended.
 
 To reactivate a suspended enpoint URL, you need to update the URL with a new URL.
 
 We strongly recommend using a secure (HTTPS) URL in combination with a basic authentification to make sure data cannot be intercepted, and that only our servers can send you data.
 
-<code>Eg: https://username:password@www.example.com/mailjet_triggers.php</code>
+E.g.: <code>https://username:password@www.example.com/mailjet_triggers.php</code>
 
 You can also specify a port in your webhook URL.
 
-<code>Eg: https://www.example.com:123/mailjet_triggers.php</code>
+E.g.: <code>https://www.example.com:123/mailjet_triggers.php</code>
 
 The event data is sent in the <code>POST</code> request body using a JSON object. Its content depends on the event.
 
@@ -257,19 +258,19 @@ The event data is sent in the <code>POST</code> request body using a JSON object
 
 All the events will be delivered to your webhook in a JSON array of event objects.
 
-Please note that the event types in the collection can be mixed. We group together all the events of the last second for the same webhook url.
+Please note that the event types in the collection can be mixed. We group together all the events of the last second for the same webhook URL.
 
-##Best practice
+## Best practice
 
-The Event API rely on your server being able to handle large amount of POST calls on your webhook(s). 
+The Event API relies on your server being able to handle large amount of POST calls on your webhook(s).
 
 We advise you to follow some basic guidelines for implementation and usage.
 
- - Process the payload received asynchronously : as much as possible, the webhook script should rely on an asynchronous consumer process that will use the data saved by your webhook. You should keep out of your webhook logic all cross matches of the delivered events with other ressources of our API or your internal database. This step will allow your webhook to answer in a timely manner to our calls and avoid it to timeout and being retried by our server. 
- - Check regularly your server logs for any errors : all non 200 errors would be retried and could cause an increasing volume of calls to your system.
+ - Process the payload received asynchronously : as much as possible, the webhook script should rely on an asynchronous consumer process that will use the data saved by your webhook. You should keep out of your webhook logic all cross matches of the delivered events with other ressources of our API or your internal database. This step will allow your webhook to answer our calls in a timely manner  and avoid timing out and being retried by our server.
+ - Check your server logs regularly for any errors : all non 200 errors would be retried and could cause an increasing volume of calls to your system.
  - Leverage the [transactional message tagging](#tagging-email-messages) to simplify reconciliation between the events and your own system.
 
-##Events
+## Events
 
 All JSON event objects contain the following properties:
 
@@ -284,7 +285,8 @@ All JSON event objects contain the following properties:
 - Payload: the event payload, when provided at send time
 
 <div></div>
-###Sent event
+
+### Sent event
 
 > Sample sent event:
 
@@ -304,7 +306,7 @@ All JSON event objects contain the following properties:
 }
 ```
 
-Dispatched when the destination SMTP server (gmail, hotmail, yahoo, etc) has accepted the message. Depending on your volume, it could dispatch a lot of events to your system, please make sure you have checked the Group Events Checkbox in the [Event API user interface](https://app.mailjet.com/account/triggers) or that the <code>[/eventcallbackurl](/email-api/v3/eventcallbackurl/)</code> <code>version</code> property is set at <code>2</code>
+Dispatched when the destination SMTP server (gmail, hotmail, yahoo, etc) has accepted the message. Depending on your volume, it could dispatch a lot of events to your system, please make sure you have checked the Group Events Checkbox in the [Event API user interface](https://app.mailjet.com/account/triggers) or that the <code>[/eventcallbackurl](/reference/email/webhook/)</code> <code>version</code> property is set at <code>2</code>
 
 Sent event additional properties:
 
@@ -312,7 +314,8 @@ Sent event additional properties:
 - smtp_reply: The raw SMTP response message
 
 <div></div>
-###Open event
+
+### Open event
 > Sample open event
 
 ```json
@@ -339,7 +342,8 @@ Open event additional properties:
 - agent : User-Agent
 
 <div></div>
-###Click event
+
+### Click event
 
 > Sample click event
 
@@ -366,7 +370,8 @@ Click event additional properties:
 - url : the link that was clicked
 
 <div></div>
-###Bounce event
+
+### Bounce event
 
 > Sample bounce event
 
@@ -396,11 +401,12 @@ Bounce event additional properties:
 - error : see [error table](#possible-values-for-errors)
 
 <aside class="notice">
-NOTICE: If you consider using this event to modify the status of your recipient subscription or viability , please take into account the value of the <code>hard_bounce</code> and <code>error</code> property. All bounce event may not have the same level of importance. 
+NOTICE: If you consider using this event to modify the status of your recipient subscription or viability , please take into account the value of the <code>hard_bounce</code> and <code>error</code> property. All bounce events may not have the same level of importance.
 </aside>
 
 <div></div>
-###Blocked event
+
+### Blocked event
 
 > Sample blocked event
 
@@ -427,11 +433,12 @@ Blocked event additional properties:
 
 
 <aside class="notice">
-NOTICE: If you consider using this event to modify the status of your recipient subscription, please take into account the value of the <code>error</code> property. All blocked event may not have the same reason and perpetuity on the status of the contact (ie: <code>duplicate in campaign</code> indicates that the recipient message was blocked for the campaign and <code>preblocked</code> indicates that the recipient is blocked for all messages).  
+NOTICE: If you consider using this event to modify the status of your recipient subscription, please take into account the value of the <code>error</code> property. All blocked events may not have the same reason and perpetuity on the status of the contact (ie: <code>duplicate in campaign</code> indicates that the recipient message was blocked for the campaign and <code>preblocked</code> indicates that the recipient is blocked for all messages).  
 </aside>
 
 <div></div>
-###Spam event
+
+### Spam event
 
 > Sample spam event
 
@@ -456,7 +463,8 @@ Spam event additional properties:
 - source : indicates which feedback loop program reported this complaint
 
 <div></div>
-###Unsub event
+
+### Unsub event
 
 > Sample unsub event
 
@@ -485,35 +493,34 @@ Unsub event additional properties:
 - agent : User-Agent
 
 
-##Possible values for errors
+## Possible values for errors
 
 error_related_to | error | What really happened ?
 -------------- | -------------- | --------------
 recipient | user unknown | Email address doesn't exist, double check it for typos !
  | mailbox inactive | Account has been inactive for too long (likely that it doesn't exist anymore).
  | quota exceeded | Even though this is a non-permanent error, most of the time when accounts are over-quota, it means they are inactive.
- | blacklisted | You tried to send to a blacklisted recipient for this account. 
- | spam reporter | You tried to send to a recipient that has reported a previous message from this account as spam. 
+ | blacklisted | You tried to send to a blacklisted recipient for this account.
+ | spam reporter | You tried to send to a recipient that has reported a previous message from this account as spam.
 domain | invalid domain | There's a typo in the domain name part of the address. Or the address is so old that its domain has expired !
  | no mail host | Nobody answers when we knock at the door.
  | relay/access denied | The destination mail server is refusing to talk to us.
  | greylisted | This is a temporary error due to possible unrecognised senders. Delivery will be re-attempted.
  | typofix | The domain part of your recipient email address was not valid.
-content | bad or empty template | You should check that the template you are using has a content or is not corrupted. 
- | error in template language | Your content contain a template language error , you can refer to the [error reporting functionalities](#templates-error-management) to get more information.
+content | bad or empty template | You should check that the template you are using has a content or is not corrupted.
+ | error in template language | Your content contains a template language error, you can refer to the [error reporting functionalities](#templates-error-management) to get more information.
 spam | sender blocked | This is quite bad! You should contact us to investigate this issue.
  | content blocked | Something in your email has triggered an anti-spam filter and your email was rejected. Please contact us so we can review the email content and report any false positives.
  | policy issue | We do our best to avoid these errors with outbound throttling and following best practices. Although we do receive alerts when this happens, make sure to contact us for further information and a workaround
 system | system issue | Something went wrong on our server-side. A temporary error. Please contact us if you receive an event of this type.
  | protocol issue | Something went wrong with our servers. This should not happen, and never be permanent !
  | connection issue | Something went wrong with our servers. This should not happen, and never be permanent !
-mailjet | preblocked | You tried to send an email to an address that recently (or repeatedly) bounced. We didn't try to send it to avoid damaging your reputation. 
+mailjet | preblocked | You tried to send an email to an address that recently (or repeatedly) bounced. We didn't try to send it to avoid damaging your reputation.
  | duplicate in campaign | You used X-Mailjet-DeduplicateCampaign and sent more than one email to a single recipient. Only the first email was sent; the others were blocked.
 
-##Online Demonstration
+## Online Demonstration
 
-You can test the Event API with our <a href="https://live-event-dashboard-demo.mailjet.com/" target="_blank">Mailjet Live Event API Dashboard</a>. 
-After setting up your public and private API key, you can select the events you want to test. This dashboard will update your Endpoint URLs (Make sure that when testing you make a backup of your current Endpoint URLs). You can then send messages and see the event payload appear in the Dashboard. 
+You can test the Event API with our <a href="https://live-event-dashboard-demo.mailjet.com/" target="_blank">Mailjet Live Event API Dashboard</a>.
+After setting up your public and private API key, you can select the events you want to test. This dashboard will update your Endpoint URLs (Make sure that when testing you make a backup of your current Endpoint URLs). You can then send messages and see the event payload appear in the Dashboard.
 
-This demo, built in NodeJS and Golang, is available on <a href="https://github.com/arnaudbreton/mailjet-live-event-dashboard" target="_blank">GitHub</a>. Feel free to reuse or contribute. 
-
+This demo, built in NodeJS and Golang, is available on <a href="https://github.com/arnaudbreton/mailjet-live-event-dashboard" target="_blank">GitHub</a>. Feel free to reuse or contribute.

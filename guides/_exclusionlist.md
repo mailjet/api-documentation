@@ -1,12 +1,12 @@
-#Exclusion List
+# Exclusion List
 
-Exclusion list offers the possibility to block a contact from recieving any marketing email independently from the list it belongs too. 
+The exclusion list offers the possibility to block a contact from receiving any marketing emails independently from the list it belongs too.
 
-The contacts will still receive all transactional emails including transactional emails with campaign tag. 
+The contacts will still receive all transactional emails, including ones with a campaign tag.
 
-It is possible to manage contacts individualy or in bulk. 
+It is possible to manage contacts individually or in bulk.
 
-##Contact exclusion
+## Contact exclusion
 
 ```php
 <?php
@@ -33,6 +33,28 @@ curl -s \
 	-d '{
 		"IsExcludedFromCampaigns":"true"
 	}'
+```
+```javascript
+/**
+ *
+ * Call to add contact to exclusion list
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.put("contact")
+	.id($ID_OR_EMAIL)
+	.request({
+		"IsExcludedFromCampaigns":"true"
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ```ruby
 # Call to add contact to exclusion list
@@ -62,28 +84,6 @@ data = {
 result = mailjet.contact.update(id=id, data=data)
 print result.status_code
 print result.json()
-```
-```javascript
-/**
- *
- * Call to add contact to exclusion list
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.put("contact")
-	.id($ID_OR_EMAIL)
-	.request({
-		"IsExcludedFromCampaigns":"true"
-	})
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
 ```
 ``` go
 /*
@@ -213,13 +213,17 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-You can add a contact in the exclusion list with a <code>PUT</code> with the property <code>IsExcludedFromCampaigns</code> at <code>true</code> on the [\contact](https://dev.mailjet.com/email-api/v3/contact) resource. 
+You can add a contact in the exclusion list with a <code>PUT</code> with the property <code>IsExcludedFromCampaigns</code> at <code>true</code> on the [\contact](/reference/email/contacts/contact/#v3_put_contact_contact_ID) resource.
 
-To remove a contact from the exclusion list, <code>IsExcludedFromCampaigns</code> needs to be set at <code>false</code> with a similar API call. 
+To remove a contact from the exclusion list, <code>IsExcludedFromCampaigns</code> needs to be set at <code>false</code> with a similar API call.
 
-##Bulk exclusion
+<div></div>
 
-###Managing multiple contacts with /contact/managemanycontacts
+## Bulk exclusion
+
+<div id="managing-multiple-contacts-with-contact-managemanycontacts"></div>
+
+### Manage multiple contacts with /contact/managemanycontacts
 
 ```php
 <?php
@@ -519,10 +523,11 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-The same way, you can upload contacts asynchronously in one or more list with <code>/contact/managemanycontacts</code>, you can add/remove contacts from exclusion list by specifying the value of the <code>IsExcludedFromCampaigns</code> contact property.
+The same way, you can upload contacts asynchronously in one or more list with <code>/contact/managemanycontacts</code>. You can add/remove contacts from exclusion list by specifying the value of the <code>IsExcludedFromCampaigns</code> contact property.
 
-<div></div>
-###Managing Contacts exclusion through CSV upload
+<div id="managing-contacts-exclusion-through-csv-upload"></div>
+
+### Manage Contacts exclusion through CSV upload
 
 ```php
 <?php
@@ -707,7 +712,8 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-Using the [Contacts CSV Upload](#csv_upload_contacts) methodology, you can upload a list of contact to add or remove from the exclusion list with the <code>excludemarketing</code> and <code>includemarketing</code>. After uploading your csv file, you just need to <code>POST</code> call the <code>/csvimport</code> resource with the exclusion list Methods. You can then monitor the process with the <code>JobID</code>. 
+Using the [Contacts CSV Upload](#csv_upload_contacts) methodology, you can upload a list of contacts to add or remove from the exclusion list with the <code>excludemarketing</code> and <code>includemarketing</code>. After uploading your CSV file, you just need to <code>POST</code> call the <code>/csvimport</code> resource with the exclusion list Methods. You can then monitor the process with the <code>JobID</code>.
 
-The JSON payload sent to /csvimport should not contain the property ContactsListID. You will receive the following error if you include a ContactsListID: "MJ08 Property ContactsList is invalid: Exclusion of contacts from marketing campaign is a global status and can not be applied to a list"
+The JSON payload sent to `/csvimport` should not contain the property `ContactsListID`. You will receive the following error if you include a `ContactsListID`: "MJ08 Property ContactsList is invalid: Exclusion of contacts from marketing campaign is a global status and can not be applied to a list"
 
+<div></div>

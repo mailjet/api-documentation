@@ -1,13 +1,14 @@
-#Account management
+# Account management
 
-The Mailjet REST API lets you manage multiple API key. Each API key will have its own contacts, lists, newsletters and statistics dedicated database. The contacts and lists will not be shared between API keys (including the main API key). 
+The Mailjet REST API lets you manage multiple API keys. Each API key will have its own dedicated database for contacts, lists, newsletters and statistics. The contacts and lists will not be shared between API keys (including the main API key).
 
 This functionality can be used to create a test or preprod environment and/or seperate your mailing use under seperate environments (transactional/marketing, per websites...).
 
-Be aware that all messaging under these sub API keys will be accounted under your main account payment plan. 
+Be aware that all messaging under these sub API keys will be accounted under your main account payment plan.
 
-##Creating a new API key 
+<div id="creating-a-new-api-key"></div>
 
+## Create a new API key
 ```php
 <?php
 /*
@@ -209,26 +210,18 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-To create a new API key , you just need to do a <code>POST</code> request on the <code>[/apikey](/email-api/v3/apikey/)</code>.
+To create a new API key , you just need to do a <code>POST</code> request on the <code>[/apikey](/reference/email/settings/api-key-configuration/#v3_post_apikey)</code>.
 
-The response will contain a new <code>APIKey</code> and <code>SecretKey</code>. Please allow a few seconds before running any additional API request on this new APIkey as the full setup process of this new sub-account will take longer than the API call. 
+The response will contain a new <code>APIKey</code> and <code>SecretKey</code>. Please allow a few seconds before running any additional API requests on this new APIkey, as the full setup process of this new sub-account will take longer than the API call.
 
-##Managing your API keys
+<div id="managing-your-api-keys"></div>
 
-###Listing
+## Manage your API keys
 
-```php
-<?php
-/*
-View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Apikey);
-$response->success() && var_dump($response->getData());
-?>
-```
+<div id="listing"></div>
+
+### List
+
 ```shell
 # View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
 curl -s \
@@ -255,6 +248,18 @@ request
 		console.log(err.statusCode)
 	})
 ```
+```php
+<?php
+/*
+View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->get(Resources::$Apikey);
+$response->success() && var_dump($response->getData());
+?>
+```
 ```ruby
 # View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
 require 'mailjet'
@@ -264,19 +269,6 @@ Mailjet.configure do |config|
 end
 variable = Mailjet::Apikey.all()
 p variable.attributes['Data']
-```
-```python
-"""
-View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.apikey.get()
-print result.status_code
-print result.json()
 ```
 ``` go
 /*
@@ -299,6 +291,19 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
+```
+```python
+"""
+View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+result = mailjet.apikey.get()
+print result.status_code
+print result.json()
 ```
 ```java
 package com.my.project;
@@ -368,23 +373,16 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-To list your API keys , you just need to do a <code>GET</code> request on the <code>[/apikey](/email-api/v3/apikey/)</code>.
+To list your API keys , you just need to do a <code>GET</code> request on the <code>[/apikey](/reference/email/settings/api-key-configuration/#v3_get_apikey)</code>.
 
 <div></div>
-###Deactivate
 
-You can deactivate an API key with a <code>PUT</code> request with a payload containing the <code>IsActive</code> property. 
+### Deactivate
 
-##Metasender
+You can deactivate an API key with a <code>PUT</code> request with a payload containing the <code>IsActive</code> property.
 
-When using sub API keys, you will need by default to setup all your senders as they are not shared. In case you want to use the same sender or sender domain on all your sub API keys, you can request the validation of a metasender by our support team. 
+## Metasender
 
-This metasender will be authorised on all your API keys and validate automaticaly the use of any additional sender matching this metasender.
+When using sub API keys, you will need by default to setup all your senders as they are not shared. In case you want to use the same sender or sender domain on all your sub API keys, you can request the validation of a metasender by our support team.
 
- 
-
-
-
- 
- 
-
+This metasender will be authorized on all your API keys and validate automatically the use of any additional senders matching this metasender.

@@ -1,4 +1,4 @@
-#Send marketing campaigns
+# Send marketing campaigns
 
 To send your first newsletter, you need to have at least one active sender address in the <a href="https://app.mailjet.com/account/sender" target="_blank">Sender domains & addresses</a> section.
 
@@ -112,33 +112,6 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contactslist;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Create : only need a Name
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Contactslist.resource)
-			.property(Contactslist.NAME, "myList");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
 ```csharp
 using Mailjet.Client;
 using Mailjet.Client.Resources;
@@ -180,6 +153,33 @@ namespace Mailjet.ConsoleApplication
    }
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contactslist;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Create : only need a Name
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Contactslist.resource)
+			.property(Contactslist.NAME, "myList");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 
 
 > API response:
@@ -202,7 +202,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-You can create your contacts list by performing a simple <code>POST</code> request on the <code>[/contactslist](/email-api/v3/contactslist/)</code> resource with only one mandatory field : its name.
+You can create your contacts list by performing a simple <code>POST</code> request on the <code>[/contactslist](/reference/email/contacts/contact-list/)</code> resource with only one mandatory field : its name.
 
 The <code>Name</code> will be a unique identifier for your list.
 
@@ -317,6 +317,33 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Create : Manage the details of a Contact.
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Contact.resource)
+			.property(Contact.EMAIL, "Mister@mailjet.com");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 ```csharp
 using Mailjet.Client;
 using Mailjet.Client.Resources;
@@ -358,33 +385,6 @@ namespace Mailjet.ConsoleApplication
    }
 }
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contact;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Create : Manage the details of a Contact.
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Contact.resource)
-			.property(Contact.EMAIL, "Mister@mailjet.com");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
 
 
 > API response:
@@ -414,19 +414,21 @@ public class MyClass {
 ```
 
 
-To create some contacts which will be the recipients, you need to specify an email address with <code>POST</code> on the <code>[/contact](/email-api/v3/contact/)</code> resource.
+To create some contacts which will be the recipients, you need to specify an email address with <code>POST</code> on the <code>[/contact](/reference/email/contacts/contact/#v3_post_contact)</code> resource.
 
 The email address will be a unique identifier of your contact in the Mailjet System.
 
-<div></div>
+<div id="personalisation-add-contact-properties"></div>
 
-### Personalisation : add contact properties
+### Personalization : add contact properties
 
 The <code>/contact</code> resource allows you to create contacts using their email addresses and names. If you want to add more granular details about your contacts, Mailjet provides the capability to add custom data to contacts.
 
 The addition of custom data starts with the definition of the extra information to store with the contacts (It could be for example the country the contacts live in, how old the contacts are, their current income, the value of their purchases on your site...) and how this data will be stored (string, number, boolean...).
 
-#### Defining custom Contact data
+<div id="defining-custom-contact-data"></div>
+
+#### Define custom Contact data
 
 ```php
 <?php
@@ -494,6 +496,24 @@ name_space: "static"
 )
 p variable.attributes['Data']
 ```
+```python
+"""
+Create : Definition of available extra data items for contacts.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Datatype': 'str',
+  'Name': 'Age',
+  'NameSpace': 'static'
+}
+result = mailjet.contactmetadata.create(data=data)
+print result.status_code
+print result.json()
+```
 ``` go
 /*
 Create : Definition of available extra data items for contacts.
@@ -526,24 +546,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```python
-"""
-Create : Definition of available extra data items for contacts.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Datatype': 'str',
-  'Name': 'Age',
-  'NameSpace': 'static'
-}
-result = mailjet.contactmetadata.create(data=data)
-print result.status_code
-print result.json()
 ```
 ```java
 package com.my.project;
@@ -637,24 +639,45 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-To define custom contact data, perform a <code>POST</code> on <code>[/contactmetadata](/email-api/v3/contactmetadata/)</code> with the following properties:
+To define custom contact data, perform a <code>POST</code> on <code>[/contactmetadata](/reference/email/contacts/contact-properties/#v3_post_contactmetadata)</code> with the following properties:
 
  - <code>Name</code>: the name of the custom data field
  - <code>DataType</code>: the type of data that is being stored (this can be either a <code>str</code>, <code>int</code>, <code>float</code> or <code>bool</code>)
- - <code>NameSpace</code>: this can be either <code>static</code> or <code>historic</code>
+ - <code>NameSpace</code>: this can be either <code>static</code> or <code>historic</code> (legacy)
 
 For example, to store the age of each contacts, a <code>static</code> <code>int</code> "Age" property can be added to the metadata.
 
 A <code>static</code> data stores only one value per DataType. It could store for example a firstname, a lastname, a country, a language ...  
-A <code>historic</code> data stores a timestamped history of the value of this data. It could be used for example to store the value of each purchases over the history of the contact.
+A <code>historic</code> (legacy) data stores a timestamped history of the value of this data.
 
-These 2 Namespaces have their own resources for viewing, creating and editing: <code>[/contactdata](/email-api/v3/contactdata/)</code> and <code>[/contacthistorydata](/email-api/v3/contacthistorydata/)</code>  
+These static namespace has its own resources for viewing, creating and editing: <code>[/contactdata](/reference/email/contacts/contact-properties/)</code>
 
-The contact datas will be available for personalisation of your message content and for segmentation of your lists.
+The contact datas will be available for personalization of your message content and for segmentation of your lists.
 
-<div></div>
-#### Adding custom static Contact data
+<div id="adding-custom-static-contact-data"></div>
 
+#### Add custom static Contact data
+
+```shell
+# Modify : Modify the static custom contact data
+curl -s \
+	-X PUT \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contactdata/$CONTACT_ID \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Data":[
+				{
+						"Name": "Age",
+						"value": 30
+				},
+				{
+						"Name": "Country",
+						"value": "US"
+				}
+		]
+	}'
+```
 ```php
 <?php
 /*
@@ -678,26 +701,6 @@ $body = [
 $response = $mj->put(Resources::$Contactdata, ['id' => $id, 'body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# Modify : Modify the static custom contact data
-curl -s \
-	-X PUT \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contactdata/$CONTACT_ID \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Data":[
-				{
-						"Name": "Age",
-						"value": 30
-				},
-				{
-						"Name": "Country",
-						"value": "US"
-				}
-		]
-	}'
 ```
 ```javascript
 /**
@@ -899,207 +902,9 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-By Performing a <code>PUT</code> (acting like a PATCH, your other static datas will not be lost) on <code>[/contactdata](/email-api/v3/contactdata/)</code>, you can add values for several metadata at once.
+By Performing a <code>PUT</code> (acting like a PATCH, your other static datas will not be lost) on <code>[/contactdata](/reference/email/contacts/contact-properties/#v3_put_contactdata_contact_ID)</code>, you can add values for several metadata at once.
 
-<div></div>
-#### Adding custom historic Contact data
-
-```php
-<?php
-/*
-Create : This resource can be used to add historical data to contact.
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$body = [
-    'ContactID' => "$CONTACT_ID",
-    'Data' => 10,
-    'Name' => "Purchase"
-];
-$response = $mj->post(Resources::$Contacthistorydata, ['body' => $body]);
-$response->success() && var_dump($response->getData());
-?>
-```
-```shell
-# Create : This resource can be used to add historical data to contact.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contacthistorydata \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"ContactID":"$CONTACT_ID",
-		"Data":10,
-		"Name":"Purchase"
-	}'
-```
-```javascript
-/**
- *
- * Create : This resource can be used to add historical data to contact.
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.post("contacthistorydata")
-	.request({
-		"ContactID":"$CONTACT_ID",
-		"Data":10,
-		"Name":"Purchase"
-	})
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
-```ruby
-# Create : This resource can be used to add historical data to contact.
-require 'mailjet'
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
-end
-variable = Mailjet::Contacthistorydata.create(contact_id: "$CONTACT_ID",
-data: "10",
-name: "Purchase"
-)
-p variable.attributes['Data']
-```
-```python
-"""
-Create : This resource can be used to add historical data to contact.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'ContactID': '$CONTACT_ID',
-  'Name': 'Purchase'
-}
-result = mailjet.contacthistorydata.create(data=data)
-print result.status_code
-print result.json()
-```
-``` go
-/*
-Create : This resource can be used to add historical data to contact.
-*/
-package main
-import (
-	"fmt"
-	"log"
-	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Contacthistorydata
-	mr := &Request{
-	  Resource: "contacthistorydata",
-	}
-	fmr := &FullRequest{
-	  Info: mr,
-	  Payload: &resources.Contacthistorydata {
-      ContactID: "$CONTACT_ID",
-      Data: 10,
-      Name: "Purchase",
-    },
-	}
-	err := mailjetClient.Post(fmr, &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contacthistorydata;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Create : This resource can be used to add historical data to contact.
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Contacthistorydata.resource)
-			.property(Contacthistorydata.CONTACTID, "$CONTACT_ID")
-			.property(Contacthistorydata.DATA, "10")
-			.property(Contacthistorydata.NAME, "Purchase");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
-```csharp
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using System;
-using Newtonsoft.Json.Linq;
-namespace Mailjet.ConsoleApplication
-{
-   class Program
-   {
-      /// <summary>
-      /// Create : This resource can be used to add historical data to contact.
-      /// </summary>
-      static void Main(string[] args)
-      {
-         RunAsync().Wait();
-      }
-      static async Task RunAsync()
-      {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
-         MailjetRequest request = new MailjetRequest
-         {
-            Resource = Contacthistorydata.Resource,
-         }
-            .Property(Contacthistorydata.ContactID, "$CONTACT_ID")
-            .Property(Contacthistorydata.Data, 10)
-            .Property(Contacthistorydata.Name, "Purchase");
-         MailjetResponse response = await client.PostAsync(request);
-         if (response.IsSuccessStatusCode)
-         {
-            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
-            Console.WriteLine(response.GetData());
-         }
-         else
-         {
-            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
-            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
-            Console.WriteLine(response.GetData());
-            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
-         }
-      }
-   }
-}
-```
-
-
-By Performing a <code>POST</code> on <code>[/contacthistorydata](/email-api/v3/contacthistorydata/)</code>, you can add a new value for a historic metadata.
-
-This historic metadata will be available for segmentation with dedicated functions like <code>Avg</code>,<code>Min</code>,<code>Max</code>...
-
-<div></div>
-#### Creating contacts with Contact data  
+#### Create contacts with Contact data  
 
 ```php
 <?php
@@ -1406,11 +1211,12 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-Mailjet offers the <code>[/contact/managemanycontacts](/email-api/v3/contact-managemanycontacts/)</code> resource to create or update multiple contacts and their properties at once.
+Mailjet offers the <code>[/contact/managemanycontacts](/reference/email/contacts/bulk-contact-management/#v3_post_contact_managemanycontacts)</code> resource to create or update multiple contacts and their properties at once.
 
 [More information](#contact_managemanycontacts)
 
 <div></div>
+
 ### Subscribe to a list
 
 ```php
@@ -1660,14 +1466,15 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-Last step: you have to add this contact to the contactslist previously created.
+Last step: you have to add this contact to a previously created contact list.
 
-<code>POST</code> on the <code>[/contact/$ID/managecontactslists](/email-api/v3/contact-managecontactslists/)</code> with $ID being the Mailjet contact id or the email address of the contact.
-You can specify one or more list to add this contact to. The <code>action</code> specified with the ListID can be <code>addforce</code> (force the subscription of the contact even if he unsubscribed to the list before) or <code>addnoforce</code> (do not resubscribe the contact to the list if unsubscribed before)
+<code>POST</code> on the <code>[/contact/$ID/managecontactslists](/reference/email/contacts/subscriptions/#v3_post_contact_contact_ID_managecontactslists)</code> with $ID being the Mailjet contact ID or the email address of the contact.
+You can specify one or more lists to add this contact to. The <code>Action</code> specified with the ListID can be <code>addforce</code> (force the subscription of the contact even if he unsubscribed to the list before) or <code>addnoforce</code> (do not resubscribe the contact to the list if unsubscribed before)
 
 <code>managecontactslist</code> offer more possibilities of list management for a contact. [More information](#managecontactslists)
 
 <div></div>
+
 ### Create contact and subscribe at once
 
 ```php
@@ -1924,7 +1731,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-The <code>[/contactslist/$ID/managecontact](/email-api/v3/contactslist-managecontact/)</code> allows to create and add a contact to a list in one call.
+The <code>[/contactslist/$ID/managecontact](/reference/email/contacts/subscriptions/#v3_post_contactslist_list_ID_managecontact)</code> allows you to create and add a contact to a list in one call.
 
 The properties specified in this call can only be static Contact data. The Contact
 
@@ -1965,30 +1772,36 @@ All properties used must be defined in advance in the user interface or through 
 }
 ```
 
-In case of error, <code>/contactslist/$ID/managecontact</code> will return JSON payload containing a <code>ErrorInfo</code> and <code>ErrorMessage</code>.
+In case of error, <code>/contactslist/$ID/managecontact</code> will return JSON payload containing an <code>ErrorInfo</code> and <code>ErrorMessage</code>.
 
 
 ## Add Contacts in bulks
 
-###Managing and uploading multiple contacts ( /contact/managemanycontacts )
+<div id="managing-and-uploading-multiple-contacts-contact-managemanycontacts"></div>
 
-This resource allows to add contacts in bulk in a json format. Optionally, these contacts can be added to existing lists.
+### Manage and upload multiple contacts ( /contact/managemanycontacts )
+
+This resource allows you to add contacts in bulk in a JSON format. Optionally, these contacts can be added to existing lists.
 [More information](#contact_managemanycontacts)
 
-###Managing multiple Contacts subscriptions to a List ( /contactslist/$ID/managemanycontacts )
+<div id="managing-multiple-contacts-subscriptions-to-a-list-contactslist-id-managemanycontacts"></div>
 
-This resource allows to add contacts directly to a list. This resource will create new contacts if the contacts are not already in the Mailjet system.
+### Manage the subscriptions of multiple Contacts to a List ( /contactslist/$ID/managemanycontacts )
+
+This resource allows you to add contacts directly to a list. It will create new contacts if they are not already in the Mailjet system.
 [More information](#contactslist_managemanycontacts)
 
+<div id="managing-contacts-through-csv-upload"></div>
 
-###Managing Contacts through CSV upload
+### Manage Contacts through CSV upload
 
-This process allows to upload csv containing large quantities of contacts.
+This process allows you to upload CSV files containing large quantities of contacts.
 [More information](#csv_upload_contacts)
 
 <div id="prepare-a-newsletter"></div>
 <div id="create-a-newsletter"></div>
-##Prepare a campaign
+
+## Prepare a campaign
 
 ### Create a campaign draft
 
@@ -2246,13 +2059,28 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-To create a campaign draft, perform a POST on the <code>[/campaigndraft](/email-api/v3/campaigndraft/)</code> resource. Required fields are a <code>Locale</code>, <code>Sender</code>, <code>SenderEmail</code>, <code>Subject</code> and <code>ContactsListID</code>.
+To create a campaign draft, perform a POST on the <code>[/campaigndraft](/reference/email/campaigns/drafts/#v3_post_campaigndraft)</code> resource. Required fields are a <code>Locale</code>, <code>Sender</code>, <code>SenderEmail</code>, <code>Subject</code> and <code>ContactsListID</code>.
 
-Reminder: the SenderEmail needs to be active. Visit the <a href="https://app.mailjet.com/account/sender" target="_blank">Sender domains & addresses</a> section to check.
+<aside class="notice">
+NOTICE: The Sender Email needs to be active. Visit the <a href="https://app.mailjet.com/account/sender" target="_blank">Sender domains & addresses</a> section to check.
+</aside>
 
 <div></div>
+
 ### Add a body to a campaign draft
 
+```shell
+# Modify : CampaignDraft content data.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/campaigndraft/$ID/detailcontent \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Html-part":"Hello <strong>world</strong>!",
+		"Text-part":"Hello world!"
+	}'
+```
 ```php
 <?php
 /*
@@ -2268,18 +2096,6 @@ $body = [
 $response = $mj->post(Resources::$CampaigndraftDetailcontent, ['id' => $id, 'body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# Modify : CampaignDraft content data.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/campaigndraft/$ID/detailcontent \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Html-part":"Hello <strong>world</strong>!",
-		"Text-part":"Hello world!"
-	}'
 ```
 ```javascript
 /**
@@ -2457,7 +2273,7 @@ namespace Mailjet.ConsoleApplication
 }
 ```
 
-Now that we have a campaign draft, we can add the most important property: its content, which can be Text or Html (Text-part or Html-part). To do so, you can perform a <code>PUT</code> or <code>POST</code> request  on the <code>[/campaigndraft/$ID/detailcontent](/email-api/v3/campaigndraft-detailcontent/)</code> resource.
+Now that we have a campaign draft, we can add the most important property: its content, which can be Text or Html (Text-part or Html-part). To do so, you can perform a <code>PUT</code> or <code>POST</code> request  on the <code>[/campaigndraft/$ID/detailcontent](/reference/email/campaigns/drafts/#v3_post_campaigndraft_draft_ID_detailcontent)</code> resource.
 With a <code>POST</code>, if you only give a value to Html-part or Text-part, the other one will be set to empty.
 While with a <code>PUT</code>, if you only give a value to Html-part or Text-part, the other one keeps its previous value.
 
@@ -2467,6 +2283,7 @@ Any update of the <code>MJMLContent</code> property of the <code>/campaigndraft/
 
 <div id="send-a-newsletter"></div>
 <div id="test-newsletters"></div>
+
 ## Send a campaign
 
 ### Test a campaign draft
@@ -2703,7 +2520,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-To send a test version of a draft, you need to perform a POST request on the resource <code>[/campaigndraft/$ID/test](/email-api/v3/campaigndraft-test/)</code> with a recipient in the JSON packet.
+To send a test version of a draft, you need to perform a POST request on the resource <code>[/campaigndraft/$ID/test](/reference/email/campaigns/drafts/actions/#v3_post_campaigndraft_draft_ID_test)</code> with a recipient in the JSON packet.
 
 <aside class="notice">
 Before sending, the API will check if the draft has all mandatory fields filled in and that they are valid. In case of error, the API will return a 400 Bad Request.
@@ -2712,6 +2529,7 @@ Before sending, the API will check if the draft has all mandatory fields filled 
 <div></div>
 
 <div id="send-the-newsletter-immediately"></div>
+
 ### Send the campaign immediately
 
 ```php
@@ -2897,7 +2715,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-Once the campaign draft is completely set up, it can be sent with a <code>POST</code> on the <code>[/campaigndraft/$ID/send](/email-api/v3/campaigndraft-send/)</code> resource.
+Once the campaign draft is completely set up, it can be sent with a <code>POST</code> on the <code>[/campaigndraft/$ID/send](/reference/email/campaigns/drafts/actions/#v3_post_campaigndraft_draft_ID_send)</code> resource.
 
 Before sending, the API will check if the draft has all mandatory fields filled in and that they are valid :
 
@@ -2912,6 +2730,7 @@ Before sending, the API will check if the draft has all mandatory fields filled 
 
 <div></div>
 <div id="schedule-a-newsletter"></div>
+
 ### Schedule a campaign
 
 > Schedule a camp for the 22nd of April, 2015 at 9am UTC+1
@@ -3112,7 +2931,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-To send a campaign at a later date, we need to set the date property (ISO 8601 format) at which the campaign shall be sent using the <code>[/campaigndraft/$ID/schedule](/email-api/v3/campaigndraft-schedule/)</code> resource.
+To send a campaign at a later date, we need to set the date property (ISO 8601 format) at which the campaign shall be sent using the <code>[/campaigndraft/$ID/schedule](/reference/email/campaigns/drafts/actions/#v3_post_campaigndraft_draft_ID_schedule)</code> resource.
 
 Before scheduling, the API will check if the campaign draft has all mandatory fields filled in and that they are valid:
 
@@ -3127,10 +2946,12 @@ Before scheduling, the API will check if the campaign draft has all mandatory fi
 
 The value <code>NOW</code> is accepted as a date to indicate immediate sending.
 
-In order to cancel scheduled campaign, you should use <code>DELETE</code> action on <code>[/campaigndraft/$ID/schedule](/email-api/v3/campaigndraft-schedule/)</code> resource.
+In order to cancel scheduled campaign, you should use <code>DELETE</code> action on <code>[/campaigndraft/$ID/schedule](/reference/email/campaigns/drafts/actions/#v3_delete_campaigndraft_draft_ID_schedule)</code> resource.
 
 <div id="checking-a-newsletter-status"></div>
-### Checking a campaign draft status
+<div id="checking-a-campaign-draft-status"></div>
+
+### Check the status of a campaign draft
 
 ```shell
 # View : CampaignDraft data.
@@ -3329,7 +3150,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-Using a GET on the <code>[/campaigndraft](/email-api/v3/campaigndraft/)</code> resource, you can find the <code>Status</code> of your draft.
+Using a GET on the <code>[/campaigndraft](/reference/email/campaigns/drafts/#v3_get_campaigndraft)</code> resource, you can find the <code>Status</code> of your draft.
 
 The status can have the following value:
 
@@ -3341,15 +3162,15 @@ The status can have the following value:
  - <code>3</code> : A/X tesring
 
 
-##Segmentation
+## Segmentation
 
-Our <code>[/contactfilter](/email-api/v3/contactfilter/)</code> resource allows you to send campaigns to certain subsets of your contact lists. A filter can be applied to any contact metadata that you defined, like age, gender, and location.
+Our <code>[/contactfilter](/reference/email/segmentation/)</code> resource allows you to send campaigns to certain subsets of your contact lists. A filter can be applied to any contact metadata that you defined, like age, gender, and location.
 
-###Prerequisites
+### Prerequisites
 
-In order to use a contact filter, you must add additional data to your contacts. Please refer to the [personalisation](#personalisation-add-contact-properties) to see how this is done. You also have to create a contact list, because contact filters are applied to a contact list via the <code>/campaigndraft</code> resource.
+In order to use a contact filter, you must add additional data to your contacts. Please refer to the [Personalization](#personalization-add-contact-properties) section to see how this is done. You also have to create a contact list, because contact filters are applied to a contact list via the <code>/campaigndraft</code> resource.
 
-###How does it work?
+### How does it work?
 
 Mailjet allows you to segment a list of contacts by creating a ContactFilter resource. This resource has a property called expression and it is the value of this property that is used to filter a list of contacts. You can create simple expressions using the <code>=</code>, <code><</code>, <code>></code> and <code>!=</code> operators:
 
@@ -3357,7 +3178,7 @@ Mailjet allows you to segment a list of contacts by creating a ContactFilter res
 - gender=male
 - country=France
 
-You can also apply the negative statement <code>not</code>
+You can also apply the negative statement <code>not</code>.
 
 But you can also combine these operators with the <code>and</code> and <code>or</code> operator, using brackets:
 
@@ -3366,15 +3187,16 @@ But you can also combine these operators with the <code>and</code> and <code>or<
 - ((age>=50) and (age<70)) or (income>50000)
 
 
-Additionaly, you can filter on the contact Activities (who has opened/clicked your campaigns in the last X days). These function return a boolean.
+Additionaly, you can filter based on the contact Activities (who has opened/clicked your campaigns in the last X days). These functions return a boolean.
 
 - <code>HasOpenedSince(number_of_days)</code> - return true if the contact has opened a message in the last number of days
 - <code>HasClickedSince(number_of_days)</code> - return true if the contact has clocked on a message in the last number of days
 
-These functions are not scoped on a specific campaign., but consider any last activity instead.
+These functions are not scoped on a specific campaign, but consider any last activity instead.
 
 <div></div>
-###Create a contact filter
+
+### Create a contact filter
 
 ```php
 <?php
@@ -3493,6 +3315,35 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contactfilter;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Create : A filter expressions for use in newsletters.
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Contactfilter.resource)
+			.property(Contactfilter.DESCRIPTION, "Only contacts aged 40")
+			.property(Contactfilter.EXPRESSION, "age=40")
+			.property(Contactfilter.NAME, "40 year olds");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 ```csharp
 using Mailjet.Client;
 using Mailjet.Client.Resources;
@@ -3536,35 +3387,6 @@ namespace Mailjet.ConsoleApplication
    }
 }
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contactfilter;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Create : A filter expressions for use in newsletters.
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Contactfilter.resource)
-			.property(Contactfilter.DESCRIPTION, "Only contacts aged 40")
-			.property(Contactfilter.EXPRESSION, "age=40")
-			.property(Contactfilter.NAME, "40 year olds");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
 
 
 > API response:
@@ -3586,11 +3408,12 @@ public class MyClass {
 ```
 
 
-Lets say that we added an age property to our contacts, using the <code>[/contactmetadata](/email-api/v3/contactmetadata/)</code> and <code>[/contactdata](/email-api/v3/contactdata/)</code> resources.
-We now want to create a filter that gives us only those contacts that are 40 years old. In order to do this, we perform a <code>POST</code> with the following properties: <code>Name</code> , <code>Expression</code> , and <code>Description</code> . Name and Description allow you to describe the filter,while <code>Expression</code> contains the actual filtering expression.
+Lets say that we added an age property to our contacts, using the [<code>/contactmetadata</code> and <code>/contactdata</code> resources](/reference/email/contacts/contact-properties/).
+We now want to create a filter that gives us only those contacts that are 40 years old. In order to do this, we perform a <code>POST</code> with the following properties: <code>Name</code> , <code>Expression</code> , and <code>Description</code> . Name and Description allow you to describe the filter, while <code>Expression</code> contains the actual filtering expression.
 
 <div></div>
-###Create a campaign with a segmentation filter
+
+### Create a campaign with a segmentation filter
 
 ```php
 <?php
@@ -3817,11 +3640,13 @@ namespace Mailjet.ConsoleApplication
 
 Segmentation is achieved by adding a contact filter to a campaign draft resource using the property <code>SegmentationID</code>. <code>$ID_CONTACT_FILTER</code> is the ID of the contact filter that was created on the previous step.
 
-##Campaign and Statistics
+<div></div>
+
+## Campaign and Statistics
 
 A new campaign resource is created for each campaign draft and transactional email sent.  You can query the campaign resource and its related statistics resources for a variety of data like bounces, number of clicks, and sending time.
 
-###Retrieve campaign information for a particular newsletter
+### Retrieve campaign information for a particular newsletter
 
 ```shell
 # View : Campaign linked to the Newsletter :NEWSLETTER_ID
@@ -3829,38 +3654,6 @@ curl -s \
 	-X GET \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/campaign/mj.nl=$NEWSLETTER_ID 
-```
-```php
-<?php
-/*
-View : Campaign linked to the Newsletter :NEWSLETTER_ID
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Campaign, ['id' => $id]);
-$response->success() && var_dump($response->getData());
-?>
-```
-```javascript
-/**
- *
- * View : Campaign linked to the Newsletter :NEWSLETTER_ID
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("campaign")
-	.id(mj.nl=$NEWSLETTER_ID)
-	.request()
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
 ```
 ```ruby
 # View : Campaign linked to the Newsletter :NEWSLETTER_ID
@@ -3979,6 +3772,38 @@ namespace Mailjet.ConsoleApplication
    }
 }
 ```
+```javascript
+/**
+ *
+ * View : Campaign linked to the Newsletter :NEWSLETTER_ID
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("campaign")
+	.id(mj.nl=$NEWSLETTER_ID)
+	.request()
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```php
+<?php
+/*
+View : Campaign linked to the Newsletter :NEWSLETTER_ID
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->get(Resources::$Campaign, ['id' => $id]);
+$response->success() && var_dump($response->getData());
+?>
+```
 
 
 > API response:
@@ -4018,22 +3843,23 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-When a campaign is created from the processing of a newsletter, its <code>CustomValue</code> property is set to <code>mj.nl=$NEWSLETTER_ID</code> where <code>$NEWSLETTER_ID</code> is the id of the newsletter you just sent. You can use <code>mj.nl=$NEWSLETTER_ID</code> as a unique key to retrieve the campaign.
+When a campaign is created from the processing of a newsletter, its <code>CustomValue</code> property is set to <code>mj.nl=$NEWSLETTER_ID</code> where <code>$NEWSLETTER_ID</code> is the ID of the newsletter you just sent. You can use <code>mj.nl=$NEWSLETTER_ID</code> as a unique key to retrieve the campaign.
 
 
 <div></div>
+
 ### Campaign statistics
 
-The main resource to be used to retrieve campaign statistics is <code>[/statcounters](/email-api/v3/statcounters/)</code>. See the [Statistics](#Statistics) section for details on the available resources and on how to set up your calls to [view the information by campaign](#stats-at-campaign-list-or-apikey-level).
+The main resource to be used to retrieve campaign statistics is <code>[/statcounters](/reference/email/statistics/#v3_get_statcounters)</code>. See the [Statistics](#Statistics) section for details on the available resources and on how to set up your calls to [view the information by campaign](#stats-at-campaign-list-or-apikey-level).
 
-##API Legacy : /newsletter
+## API Legacy : /newsletter
 
-<code>[/campaigndraft](/email-api/v3/campaigndraft/)</code> replaced <code>[/newsletter](/email-api/v3/newsletter/)</code> for the management and configuration of campaign draft.
+<code>[/campaigndraft]</code> replaced <code>[/newsletter]</code> for the management and configuration of campaign drafts.
 
-<code>/campaigndraft</code> is used to access all draft created with Passport and through the <code>/campaigndraft</code> API resource.
+<code>/campaigndraft</code> is used to access all drafts created with Passport and through the <code>/campaigndraft</code> API resource.
 
-<code>/newsletter</code> can still be used to access all draft created with Mailjet old builder and through the <code>/newsletter</code> API resource.
+<code>/newsletter</code> can still be used to access all drafts created with Mailjet old builder and through the <code>/newsletter</code> API resource.
 
-<code>/campaigndraft</code> will not allow access to any of the draft created with <code>/newsletter</code>
+<code>/campaigndraft</code> will not allow access to any of the drafts created with <code>/newsletter</code>
 
 If you have been using the <code>/newsletter</code> API resource to create campaign drafts, make sure to continue to use the <code>/newsletter</code> resource to access them.

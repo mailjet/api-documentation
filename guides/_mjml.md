@@ -1,4 +1,4 @@
-#MJML
+# MJML
 
 ```html
 <!-- MJML -->
@@ -27,7 +27,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>undefined</title>
   <style type="text/css">
-    
+
   #outlook a { padding: 0; }
   .ReadMsgBody { width: 100%; }
   .ExternalClass { width: 100%; }
@@ -75,14 +75,10 @@
 
 ![/images/logo_mjml.png](/images/logo_mjml.png)
 
-MJML is a markup language designed to reduce the pain of coding a responsive email. Its semantic syntax makes it easy and straightforward and its rich standard components library speeds up your development time and lightens your email codebase. MJML's open-source engine generates high quality responsive HTML compliant with best practices.
+MJML is a markup language designed to reduce the pain of coding a responsive email. Its semantic syntax makes it easy and straightforward and its rich standard components library speeds up your development time and lightens your email codebase. MJML's open-source engine generates high-quality responsive HTML compliant with the best practices.
 
 ![/images/mjml_screen.png](/images/mjml_screen.png)
 
-Visit [mjml.io](https://mjml.io) for more details about this open source project initiated by the Mailjet development team. 
+Visit [mjml.io](https://mjml.io) for more details about this open-source project initiated by the Mailjet development team.
 
 Find the mjml repository on [Github](https://github.com/mjmlio/mjml).
-
- 
-
-
