@@ -5,7 +5,7 @@ When using Mailjet's SMS service you may encounter default restrictions of servi
 ## General API Limitations
 
  - Mailjet's SMS sending service is purely transactional. __Marketing use of this service is strictly forbidden.__
- - Sending Limit - by default you are limited to sending 200 SMS messages per day (an SMS consistent of multiple concatenated messages is counted as multiple messages). If you try to exceed that limit, you will receive an error message. Please contact our [Support team](https://www.mailjet.com/contact/) or your Customer Success Manager, if you want this limit increased.
+ - Sending Limit - by default you are limited to sending 200 SMS messages per day (an SMS consisting of multiple concatenated messages is counted as multiple messages). If you try to exceed that limit, you will receive an error message. Please contact our [Support team](https://www.mailjet.com/contact/) or your Customer Success Manager, if you want this limit increased.
  - Encoding - SMS messages that include only standard symbols are encoded in GSM7. If you use any characters that are not supported by the the GSM7 coding standard, the SMS message will be encoded in UNICODE. See [Concatenation & Encoding](#concatenation-and-encoding) for more information.
  - SMS Spoofing - Illegitimate use of [SMS spoofing](https://en.wikipedia.org/wiki/SMS_spoofing) such as impersonating another person, company or product is strictly forbidden.
 

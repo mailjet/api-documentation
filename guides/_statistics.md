@@ -21,19 +21,22 @@ The main improvements of the new system include:
 
 | Legacy statistics endpoints | New statistics endpoints |
 |---|---|
-| [`/apikeytotals`](/email-api/v3/apikeytotals/)  | [`/statcounters`](/email-api/v3/statcounters/) |
-| [`/domainstatistics`](/email-api/v3/domainstatistics/) | [`/statistics/recipient-esp`](/email-api/v3/statistics/recipient-esp/) |
-| [`/graphstatistics`](/email-api/v3/graphstatistics/) | [`/statcounters`](/email-api/v3/statcounters/) |
-| [`/listrecipientstatistics`](/email-api/v3/listrecipientstatistics/) | [`/statcounters`](/email-api/v3/statcounters/) |
-| [`/liststatistics`](/email-api/v3/liststatistics/) | [`/statcounters`](/email-api/v3/statcounters/) |
-| [`/openstatistics`](/email-api/v3/openstatistics/) | [`/statcounters`](/email-api/v3/statcounters/) |
-| --- | [`/statistics/link-click`](/email-api/v3/statistics/link-click/) |
+| [`/apikeytotals`](/reference/email/statistics/#v3_get_apikeytotals)  | [`/statcounters`](/reference/email/statistics/#v3_get_statcounters) |
+| [`/campaigngraphstatistics`](/reference/email/statistics/#v3_get_campaigngraphstatistics)  | [`/statcounters`](/reference/email/statistics/#v3_get_statcounters) |
+| [`/campaignstatistics`](/reference/email/statistics/#v3_get_campaignstatistics)  | [`/statcounters`](/reference/email/statistics/#v3_get_statcounters) |
+| [`/domainstatistics`](/reference/email/statistics/#v3_get_domainstatistics/) | [`/statistics/recipient-esp`](/reference/email/statistics/#v3_get_statistics_recipient-esp) |
+| [`/graphstatistics`](/reference/email/statistics/#v3_get_graphstatistics/) | [`/statcounters`](/reference/email/statistics/#v3_get_statcounters) |
+| [`/liststatistics`](/reference/email/statistics/#v3_get_liststatistics/) | [`/statcounters`](/reference/email/statistics/#v3_get_statcounters) |
+| [`/messagestatistics`](/reference/email/statistics/#v3_get_messagestatistics/) | [`/statcounters`](/reference/email/statistics/#v3_get_statcounters) |
+| [`/messagesentstatistics`](/reference/email/messages/#v3_get_messagesentstatistics) | [`/statcounters`](/reference/email/statistics/#v3_get_statcounters) |
+| [`/openstatistics`](/reference/email/statistics/#v3_get_openstatistics/) | [`/statcounters`](/reference/email/statistics/#v3_get_statcounters) |
+| --- | [`/statistics/link-click`](/reference/email/statistics/#v3_get_statistics_link-click/) |
 
 In this guide we will focus on resources that are available for new / migrated users.
 
 ## Key Performance Statistics
 
-The <code>[/statcounters](/email-api/v3/statcounters/)</code> resource is a multifunctional tool that allows you to view stats through various prisms while varying the Source (API Key, Campaign or List), the Timing (Event-based or Message-based counters' timestamp), or the Timeframe (Lifetime, Day, Hour, 5 Minutes).
+The <code>[/statcounters](/reference/email/statistics/#v3_get_statcounters)</code> resource is a multifunctional tool that allows you to view stats through various prisms while varying the Source (API Key, Campaign or List), the Timing (Event-based or Message-based counters' timestamp), or the Timeframe (Lifetime, Day, Hour, 5 Minutes).
 
 The response will provide statistics that you can display in different ways:
 
@@ -43,7 +46,7 @@ The response will provide statistics that you can display in different ways:
 
 ### Stats at Campaign, List or APIKey Level
 
-The [`/statcounters`](/email-api/v3/statcounters/) code samples available in the following sections are done at a campaign level, which is indicated by the use of the following filters in the calls:
+The [`/statcounters`](/reference/email/statistics/#v3_get_statcounters) code samples available in the following sections are done at a campaign level, which is indicated by the use of the following filters in the calls:
 
 - `SourceId=$Campaign_ID` - Substitute `$CampaignID` with the ID of the Campaign you are interested in.
 - `CounterSource=Campaign`
@@ -54,13 +57,13 @@ Similarly, if you need the stats at an **Account** level, make the request with 
 
 ### Event-based vs Message-based Stats Timing
 
-The [`/statcounters`](/email-api/v3/statcounters/) resource allows you to retrieve information both based on the message sending time (message-based) and on the timing of the event occurrence (event-based).
+The [`/statcounters`](/reference/email/statistics/#v3_get_statcounters) resource allows you to retrieve information both based on the message sending time (message-based) and on the timing of the event occurrence (event-based).
 
 Message-based stats allow you to easily view the success of your sending by having the delivery rates / contact engagement details linked to the sending time.
 
 Event-based stats allow you to view the spread of events over time after the initial sending, helping you identify when recipients were most active / engaged with your campaigns.
 
-**Example:** A campaign is sent on Day1. There are 10 opens on Day2 and another 20 on Day3. If you use `CounterTiming=Message` in the call, the returned result will be for the messages that were opened, thus showing 30 opens on Day1. If you use `CounterTiming=Event`, [`/statcounters`](/email-api/v3/statcounters/) will return the information on the open events, showing 10 opens on Day2 and 20 on Day3.
+**Example:** A campaign is sent on Day1. There are 10 opens on Day2 and another 20 on Day3. If you use `CounterTiming=Message` in the call, the returned result will be for the messages that were opened, thus showing 30 opens on Day1. If you use `CounterTiming=Event`, [`/statcounters`](/reference/email/statistics/#v3_get_statcounters) will return the information on the open events, showing 10 opens on Day2 and 20 on Day3.
 
 To specify which details you need, use the `CounterTiming` filter.
 
@@ -255,7 +258,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-Use the endpoint <code>[/statcounters](/email-api/v3/statcounters/)</code> to receive the counters needed to calculate the following rates:
+Use the endpoint <code>[/statcounters](/reference/email/statistics/#v3_get_statcounters)</code> to receive the counters needed to calculate the following rates:
 
 > API response:
 
@@ -344,7 +347,7 @@ Use the endpoint <code>[/statcounters](/email-api/v3/statcounters/)</code> to re
 
 Engagement statistics allow you to measure your campaign performance.
 
-The information is retrieved with the same <code>[/statcounters](/email-api/v3/statcounters/)</code> request as when retrieving Delivery Statistics, but you will be looking at different .
+The information is retrieved with the same <code>[/statcounters](/reference/email/statistics/#v3_get_statcounters)</code> request as when retrieving Delivery Statistics, but you will be looking at different .
 
 ![contact_engagement](../images/stats-contact-engage.png)
 
@@ -528,7 +531,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-By setting appropriate value for the <code>CounterSource</code>, <code>CounterResolution</code>, and <code>CounterTiming</code> filters you can generate an array of responses allowing to calculate the campaign statistics [as displayed in your Mailjet account](https://www.mailjet.com/docs/statistics#stats-overview).
+By setting an appropriate value for the <code>CounterSource</code>, <code>CounterResolution</code>, and <code>CounterTiming</code> filters you can generate an array of responses allowing to calculate the campaign statistics as displayed in your Mailjet account.
 
 Use the following filters values:
 
@@ -631,7 +634,7 @@ In the below table you will find the rules to retrieve and calculate the respect
 
 ### Evolution / Graph Statistics
 
-By using <code>[/statcounters](/email-api/v3/statcounters/)</code> and setting appropriate values for the <code>CounterSource</code>, <code>CounterResolution</code>, and <code>CounterTiming</code> filters you can generate an array of responses over a period of time. With this information you will be able to see the evolution of the campaign events over the selected time period.
+By using <code>[/statcounters](/reference/email/statistics/#v3_get_statcounters)</code> and setting appropriate values for the <code>CounterSource</code>, <code>CounterResolution</code>, and <code>CounterTiming</code> filters you can generate an array of responses over a period of time. With this information you will be able to see the evolution of the campaign events over the selected time period.
 
 ![stats_graph](../images/stats-campaign-graph.png)
 
@@ -907,7 +910,7 @@ Using multiple such calls with different CampaignID values for the `SourceID` fi
 
 ### Additional metrics
 
-Using the same <code>[/statcounters](/email-api/v3/statcounters/)</code> resource, if you want to dig a little deeper, you will be able to get more detailed metrics.
+Using the same <code>[/statcounters](/reference/email/statistics/#v3_get_statcounters)</code> resource, if you want to dig a little deeper, you will be able to get more detailed metrics.
 
 They can help with thoroughly analyzing your contacts engagement indicators.
 
@@ -1185,7 +1188,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-Use [`/contactstatistics`](/email-api/v3/contactstatistics/) to retrieve the respective information:
+Use [`/contactstatistics`](/reference/email/statistics/#v3_get_contactstatistics) to retrieve the respective information:
 
 <div></div>
 
@@ -1375,7 +1378,7 @@ namespace Mailjet.ConsoleApplication
 }
 ```
 
-As a result, you may want to use [`/statistics/link-click`](/email-api/v3/statistics/link-click/) to retrieve activity information based on the links in your campaign templates. With this endpoint you can track both unique clicks and total click events, as well as retrieve the URL and its position within the template. It gives you valuable insight into what links are used more often than others, possibly showing correlation between position / design and link popularity.
+As a result, you may want to use [`/statistics/link-click`](/reference/email/statistics/#v3_get_statistics_link-click) to retrieve activity information based on the links in your campaign templates. With this endpoint you can track both unique clicks and total click events, as well as retrieve the URL and its position within the template. It gives you valuable insight into what links are used more often than others, possibly showing correlation between position / design and link popularity.
 
 <div></div>
 
@@ -1550,7 +1553,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-The [`/statistics/recipient-esp`](/email-api/v3/statistics//recipient-esp) resource can be used to view statistics based on the Email Service Providers of the recipients of your campaign.
+The [`/statistics/recipient-esp`](/reference/email/statistics/#v3_get_statistics_recipient-esp) resource can be used to view statistics based on the Email Service Providers of the recipients of your campaign.
 
 <div></div>
 
@@ -1639,7 +1642,7 @@ Below you can see how to calculate stats by ESP as displayed in the Email Provid
   </tr>
   <tr>
     <td class="tg-yw4l">Retrying</td>
-    <td class="tg-yw4l">Messages that were deferred from the ESP as a percentage of Attempted messages. Mailjet will continue trying to send these messages in the next 5 days, after which, if not successfully delivered, they will become Soft-Bounced</td>
+    <td class="tg-yw4l">Messages that were deferred from the ESP as a percentage of Attempted messages. Mailjet will continue trying to send these messages in the next 3 days, after which, if not successfully delivered, they will become Soft-Bounced</td>
     <td class="tg-yw4l"><code>DeferredMessagesCount</code> / <code>AttemptedMessagesCount</code></td>
   </tr>
 </table>
@@ -1816,7 +1819,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-Use the [/geostatistics](/email-api/v3/geostatistics/) resource to get information on opens and clicks by country.
+Use the [/geostatistics](/reference/email/statistics/#v3_get_geostatistics) resource to get information on opens and clicks by country.
 
 <div></div>
 
@@ -1824,6 +1827,6 @@ Use the [/geostatistics](/email-api/v3/geostatistics/) resource to get informati
 
 The following statistic resources will allow you to view information about the events on your messages. They will show a log of events on your messages for a selected time period. By default, the payload response will include the log for the current day, but you can specify a timeframe with the `FromTS` and `ToTS` filters.
 
-- [/openinformation](/email-api/v3/openinformation/) : Will give you details on opens, including useful information like timestamp for each open event, UserAgent, CampaignID and UserID.
-- [/clickstatistics](/email-api/v3/clickstatistics/) : Shows information on click events, including timestamp for the click, URL, UserAgent and delay between sending and the click event.
-- [/bouncestatistics](/email-api/v3/bouncestatistics/) : Displays details for bounces, including bounce timestamp, campaign ID and contact ID, whether bounce is permanent or not.
+- [/openinformation](/reference/email/events/#v3_get_openinformation/) : Will give you details on opens, including useful information like timestamp for each open event, UserAgent, CampaignID and UserID.
+- [/clickstatistics](/reference/email/events/#v3_get_clickstatistics/) : Shows information on click events, including timestamp for the click, URL, UserAgent and delay between sending and the click event.
+- [/bouncestatistics](/reference/email/events/#v3_get_bouncestatistics) : Displays details for bounces, including bounce timestamp, campaign ID and contact ID, whether bounce is permanent or not.

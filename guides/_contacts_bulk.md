@@ -1,27 +1,35 @@
-# Managing Contacts in bulk
+<div id="managing-contacts-in-bulk"></div>
 
-## Choosing a resource
+# Manage Contacts in bulk
 
+<div id="choosing-a-resource"></div>
 
-###Managing list subscriptions for a single contact ( /contact/$ID/managecontactslists )
+## Choose a resource
 
-This resource allows to add a single contact in several lists at once.
+<div id="managing-list-subscriptions-for-a-single-contact-contact-id-managecontactslists"></div>
+
+### Manage list subscriptions for a single contact ( /contact/$ID/managecontactslists )
+
+This resource allows you to add a single contact in several lists at once.
 [More information](#managecontactslists)
 
-###Managing and uploading multiple contacts ( /contact/managemanycontacts ) 
+<div id="managing-and-uploading-multiple-contacts-contact-managemanycontacts"></div>
+### Manage and upload multiple contacts ( /contact/managemanycontacts )
 
-This resource allows to add contacts in bulk in a json format. Optionally, these contacts can be added to existing lists. 
+This resource allows you to add contacts in bulk in a JSON format. Optionally, these contacts can be added to existing lists.
 [More information](#contact_managemanycontacts)
 
-###Managing multiple Contacts subscriptions to a list ( /contactslist/$ID/managemanycontacts ) 
+<div id="managing-multiple-contacts-subscriptions-to-a-list-contactslist-id-managemanycontacts"></div>
+### Manage multiple Contacts subscriptions to a list ( /contactslist/$ID/managemanycontacts )
 
-This resource allows to add contacts directly to a list. This resource will create new contacts if the contacts are not already in the Mailjet system. 
+This resource allows you to add contacts directly to a list. It will create new contacts if they are not already in the Mailjet system.
 [More information](#contactslist_managemanycontacts)
 
+<div id="managing-contacts-through-csv-upload"></div>
 
-###Managing Contacts through CSV upload
+### Manage Contacts through CSV upload
 
-This process allows to upload csv containing large quantities of contacts.
+This process allows you to upload CSV files containing large quantities of contacts.
 [More information](#csv_upload_contacts)
 
 
@@ -298,7 +306,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-To manage a Contact subscription for one or multiple Lists, we can do a <code>POST</code> on <code>[/contact/$ID/managecontactslists](/email-api/v3/contact-managecontactslists/)</code>, specifying the contact ID in the URL and add JSON to the body of the request with the list subscriptions to be modified.
+To manage a Contact subscription for one or multiple Lists, we can do a <code>POST</code> on <code>[/contact/$ID/managecontactslists](/reference/email/contacts/subscriptions/#v3_post_contact_contact_ID_managecontactslists)</code>, specifying the contact ID in the URL and adding JSON to the body of the request with the list subscriptions to be modified.
 
 
   'Action' is mandatory and can be one of the following values:
@@ -317,8 +325,8 @@ To manage a Contact subscription for one or multiple Lists, we can do a <code>PO
 	"ErrorMessage": {
 		"ContactsLists": [
 			{
-				"ListID": "original_list_id", 
-				"Action": "original_string_action", 
+				"ListID": "original_list_id",
+				"Action": "original_string_action",
 				"Error": "errorstring"
 			}
 		]
@@ -336,7 +344,7 @@ For this API call, there is one specific <code>HTTP 400 status</code> error cond
 <p>
 	A detailed description of the error will be sent in a standard API error payload: <br />
 
-	The <code>errorpayload</code> will contain the following json detailing each property error in the original json payload. Only the properties having an error will be listed. <br /><br />
+	The <code>errorpayload</code> will contain the following JSON detailing each property error in the original JSON payload. Only the properties having an error will be listed. <br /><br />
 	<br>
 	The possible <code>errorstring</code> are:
 	</p>
@@ -345,7 +353,7 @@ For this API call, there is one specific <code>HTTP 400 status</code> error cond
 		<li>action missing or not valid</li>
 	</ul>
 
-<h2 id="contact_managemanycontacts">Managing multiple contacts</h2>
+<h2 id="contact_managemanycontacts">Manage multiple contacts</h2>
 
 ```php
 <?php
@@ -476,38 +484,6 @@ request
 		console.log(err.statusCode)
 	})
 ```
-```ruby
-# Create : Manage the details of a Contact.
-require 'mailjet'
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
-end
-variable = Mailjet::Contact_managemanycontacts.create(contacts_lists: [{
-    'ListID'=> 1,
-    'action'=> 'addnoforce'
-}, {
-    'ListID'=> 2,
-    'action'=> 'addforce'
-}],
-contacts: [{
-    'Email'=> 'jimsmith@example.com',
-    'Name'=> 'Jim',
-    'Properties'=> {
-        'Property1'=> 'value',
-        'Property2'=> 'value2'
-    }
-}, {
-    'Email'=> 'janetdoe@example.com',
-    'Name'=> 'Janet',
-    'Properties'=> {
-        'Property1'=> 'value',
-        'Property2'=> 'value2'
-    }
-}]
-)
-p variable.attributes['Data']
-```
 ```python
 """
 Create : Manage the details of a Contact.
@@ -550,6 +526,38 @@ data = {
 result = mailjet.contact_managemanycontacts.create(data=data)
 print result.status_code
 print result.json()
+```
+```ruby
+# Create : Manage the details of a Contact.
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Contact_managemanycontacts.create(contacts_lists: [{
+    'ListID'=> 1,
+    'action'=> 'addnoforce'
+}, {
+    'ListID'=> 2,
+    'action'=> 'addforce'
+}],
+contacts: [{
+    'Email'=> 'jimsmith@example.com',
+    'Name'=> 'Jim',
+    'Properties'=> {
+        'Property1'=> 'value',
+        'Property2'=> 'value2'
+    }
+}, {
+    'Email'=> 'janetdoe@example.com',
+    'Name'=> 'Janet',
+    'Properties'=> {
+        'Property1'=> 'value',
+        'Property2'=> 'value2'
+    }
+}]
+)
+p variable.attributes['Data']
 ```
 ``` go
 /*
@@ -726,7 +734,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-Uploading multiple contacts, with the option to manage their subscription to a Contact List or multiple lists, if required, can be done with a <code>POST</code> on the <code>[/contact/managemanycontacts](/email-api/v3/contact-managemanycontacts/)</code> resource. This resource is asynchronous and will return a <code>JobID</code> allowing you to monitor the process.
+Uploading multiple contacts, with the option to manage their subscriptions to a Contact List or multiple lists, if required, can be done with a <code>POST</code> on the <code>[/contact/managemanycontacts](/reference/email/contacts/bulk-contact-management/#v3_post_contact_managemanycontacts)</code> resource. This resource is asynchronous and will return a <code>JobID</code> allowing you to monitor the process.
 
 <code>Email</code> is the only mandatory property in <code>Contacts</code>.
 
@@ -734,9 +742,9 @@ If you are specifying <code>Properties</code> for a contact, please note that th
 
 If a contact (uniquely identified by the email) has already been added, multiple entries or subsequent uploads will not add duplicate entries in neither the contacts and list subscription. The <code>Properties</code> and <code>Name</code> of the contact will be updated with any modified values.
 
-To unassign custom contact data for specific contact, set the value of the contact property to <code>null</code>.
+To unassign custom contact data for a specific contact, set the value of the contact property to <code>null</code>.
 
-<code>ContactsLists</code> in this <code>POST</code> is not mandatory. You can upload multiple contact without adding them to a list. The field <code>Action</code> in ContactsLists can have the following values:
+<code>ContactsLists</code> in this <code>POST</code> is not mandatory. You can upload multiple contacts without adding them to a list. The field <code>Action</code> in `ContactsLists` can have the following values:
 
 Actions | |
   ----------|------------
@@ -764,8 +772,8 @@ Actions | |
 
 A successful call will return JSON in the following format, containing the <code>JobID</code> allowing to monitor the processing :
 
-<div></div>
-### Monitoring the upload of multiple contacts
+<div id="monitoring-the-upload-of-multiple-contacts"></div>
+### Monitor the upload of multiple contacts
 
 ```php
 <?php
@@ -888,7 +896,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-> API response: 
+> API response:
 
 ```json
 {
@@ -927,7 +935,7 @@ This provides the following information:
 
 <div></div>
 
-> Recovering error file 
+> Recovering error file
 
 ```php
 <?php
@@ -972,7 +980,7 @@ Not available in Go, please refer to Curl
 
 
 
-<h2 id="contactslist_managemanycontacts">Managing contacts in a list</h2>
+<h2 id="contactslist_managemanycontacts">Manage contacts in a list</h2>
 
 ```php
 <?php
@@ -1286,7 +1294,7 @@ namespace Mailjet.ConsoleApplication
 
 ```
 
-Multiple contacts, in JSON format, can be uploaded with a <code>POST</code> using the <code>[/contactslist/$ID/managemanycontacts](/email-api/v3/contactslist-managemanycontacts/)</code> action. This resource is asynchronous and will return a <code>JobID</code> allowing you to monitor the process. This is the perfect method to easily add large quantity of contacts in a list.
+Multiple contacts, in JSON format, can be uploaded with a <code>POST</code> using the <code>[/contactslist/$ID/managemanycontacts](/reference/email/contacts/bulk-contact-management/#v3_post_contactslist_list_ID_managemanycontacts)</code> action. This resource is asynchronous and will return a <code>JobID</code> allowing you to monitor the process. This is the perfect method to easily add a large quantity of contacts to a list.
 
 The field <code>Email</code> in Contacts is the key for the contact and is mandatory, as is <code>Action</code>. <code>Action</code> can have one of the following values:
 
@@ -1297,12 +1305,13 @@ Actions | |
   remove | **string** <br /> removes the contact from the List
   unsub | **string** <br /> unsubscribes the contact from the List
 
-If you are specifying <code>Properties</code> for a contact, please note that these properties must already be defined with the <code>[/contactmetadata](#defining-custom-contact-data)</code> resource. The properties specified can only be <code>static</code> in this resource. To unassign custom contact data for specific contact, set the value of the contact property to <code>null</code>.
+If you are specifying <code>Properties</code> for a contact, please note that these properties must already be defined with the <code>[/contactmetadata](#defining-custom-contact-data)</code> resource. The properties specified can only be <code>static</code> in this resource. To unassign custom contact data for a specific contact, set the value of the contact property to <code>null</code>.
 
 If a contact (uniquely identified by the email) has already been added to your contacts or a list, multiple entries or subsequent uploads will not add duplicate entries in either the contacts or list subscription. The <code>Properties</code> and <code>Name</code> of the contact will be updated with any modified values.
 
-<div></div>
-### Monitoring the upload of multiple contacts
+<div id="monitoring-the-upload-of-multiple-contacts-2"></div>
+
+### Monitor the upload of multiple contacts
 
 ```php
 <?php
@@ -1425,7 +1434,7 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-> API response: 
+> API response:
 
 ```json
 {
@@ -1463,7 +1472,7 @@ This provides the following information:
  - Error: If the status equals 'error', contains error information from the batch job
  - ErrorFile: Contains the URL to the Error information file
 
-> Recovering error file 
+> Recovering error file
 
 ```php
 <?php
@@ -1509,13 +1518,13 @@ Not available in Go, please refer to Curl
 
 <h2 id="csv_upload_contacts">Contacts CSV upload</h2>
 
-In some cases you might need to manage large quantities of contacts stored into a csv record in relation to a contactslist. 
+In some cases you might need to manage large quantities of contacts stored into a CSV record in relation to a contactslist.
 
 With the following process, you will be able to fully manage your contacts and their relationship with a contact list (ie: adding, removing or unsubscribing)
 
 Please note that these steps represent a single process. Don't execute each step independently but rather as a whole.
 
-###CSV file structure
+### CSV file structure
 
 ```
 "email","age"
@@ -1524,15 +1533,28 @@ Please note that these steps represent a single process. Don't execute each step
 "sam@ple.co.uk",37
 ```
 
-The structure for the csv file should be as follows:
+The structure for the CSV file should be as follows:
 
-You can define Custom Contact Data in the csv. Visit our [Contact Personalisation Guide](#personalisation-add-contact-properties) for more information about defining Custom Contact Data. If you are using undefined contact properties, Mailjet will automatically create <code>/contactmetadata</code> in the next step of the process.
+You can define Custom Contact Data in the CSV. Visit our [Contact Personalization Guide](#personalization-add-contact-properties) for more information about defining Custom Contact Data. If you are using undefined contact properties, Mailjet will automatically create <code>/contactmetadata</code> in the next step of the process.
 
 With this process it is not possible to populate the Contact Name property. If you specify a "name" it will create a new <code>/contactmetadata</code> and <code>/contactdata</code> as explained above.
-The email should be unique in the file and will be the key to reconcile this list with your existing contact in Mailjet system. 
+The email should be unique in the file and will be the key to reconcile this list with your existing contact in Mailjet system.
+
+### CSV file structure with contact data of type datetime
+
+```
+"foo@example.org",2018/10/12
+"bar@example.com",2016/10/12
+"sam@ple.co.uk",2017/10/12
+```
+When creating a CSV file, which contains contact properties with type <code>datetime</code>, you have to omit the first row of the csv, which defines the names of the contact properties in the CSV file. These contact properties are added in dedicated field - <code>ImportOptions</code>. [See here for details.](##adding-contacts-with-contact-data-of-type-datetime).
 
 <div></div>
-###Uploading of the data
+
+
+<div id="uploading-the-data"></div>
+
+### Data Upload
 
 ``` python
 from mailjet_rest import Client
@@ -1654,17 +1676,18 @@ func main () {
 
 > API response:
 
-```json 
+```json
 {
    "ID": 57
 }
 ```
 
-The first step is to upload the csv data to the server.
+The first step is to upload the CSV data to the server.
 You need to specify the wanted <code>contactslist</code> ID and, of course, the csv_content.
 
-<div></div>
-###Adding the contacts and subscriptions to the contact list
+<div id="adding-the-contacts-and-subscriptions-to-the-contact-list"></div>
+
+### Add the contacts and subscriptions to the contact list
 
 ```php
 <?php
@@ -1887,17 +1910,257 @@ namespace Mailjet.ConsoleApplication
 
 Now, the uploaded data needs to be assigned to the given <code>contactslist</code> resource.
 
-Method's possible values are: 
+Method's possible values are:
 
-  Actions | |
-  ----------|------------
-  addforce | **string** <br /> adds the contact and resets the unsub status to false
-  addnoforce | **string** <br /> adds the contact and does not change the subscription status of the contact
-  remove | **string** <br /> removes the contact from the List
-  unsub | **string** <br /> unsubscribes a contact from the List
+Actions | |
+----------|------------
+addforce | **string** <br /> adds the contact and resets the unsub status to false
+addnoforce | **string** <br /> adds the contact and does not change the subscription status of the contact
+remove | **string** <br /> removes the contact from the List
+unsub | **string** <br /> unsubscribes a contact from the List
 
 <div></div>
-###Monitoring the process
+
+### Add contacts with contact data of type datetime
+
+```php
+<?php
+/*
+Create: A wrapper for the CSV importer
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$body = [
+    'ContactsListID' => "$ID_CONTACTLIST",
+    'DataID' => "$ID_DATA",
+    'Method' => "addnoforce",
+    'ImportOptions' => "{\\"DateTimeFormat\\": \\"yyyy/mm/dd\\",\\"TimezoneOffset\\": 2,\\"FieldNames\\": [\\"email\\",\\"birthday\\"]}"
+];
+$response = $mj->post(Resources::$Csvimport, ['body' => $body]);
+$response->success() && var_dump($response->getData());
+?>
+```
+```shell
+# Create: A wrapper for the CSV importer
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/csvimport \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"ContactsListID":"$ID_CONTACTLIST",
+		"DataID":"$ID_DATA",
+		"Method":"addnoforce",
+		"ImportOptions":"{\"DateTimeFormat\": \"yyyy/mm/dd\",\"TimezoneOffset\": 2,\"FieldNames\": [\"email\",\"birthday\"]}"
+	}'
+```
+```javascript
+/**
+ *
+ * Create: A wrapper for the CSV importer
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.post("csvimport")
+	.request({
+		"ContactsListID":"$ID_CONTACTLIST",
+		"DataID":"$ID_DATA",
+		"Method":"addnoforce",
+		"ImportOptions":"{\"DateTimeFormat\": \"yyyy/mm/dd\",\"TimezoneOffset\": 2,\"FieldNames\": [\"email\",\"birthday\"]}"
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```ruby
+# Create: A wrapper for the CSV importer
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Csvimport.create(contacts_list_id: "$ID_CONTACTLIST",
+data_id: "$ID_DATA",
+method: "addnoforce",
+import_options: "{\"DateTimeFormat\": \"yyyy/mm/dd\",\"TimezoneOffset\": 2,\"FieldNames\": [\"email\",\"birthday\"]}"
+)
+p variable.attributes['Data']
+```
+```python
+"""
+Create: A wrapper for the CSV importer
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'ContactsListID': '$ID_CONTACTLIST',
+  'DataID': '$ID_DATA',
+  'Method': 'addnoforce',
+  'ImportOptions': '{\"DateTimeFormat\": \"yyyy/mm/dd\",\"TimezoneOffset\": 2,\"FieldNames\": [\"email\",\"birthday\"]}'
+}
+result = mailjet.csvimport.create(data=data)
+print result.status_code
+print result.json()
+```
+``` go
+/*
+Create: A wrapper for the CSV importer
+*/
+package main
+import (
+	"fmt"
+	"log"
+	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Csvimport
+	mr := &Request{
+	  Resource: "csvimport",
+	}
+	fmr := &FullRequest{
+	  Info: mr,
+	  Payload: &resources.Csvimport {
+      ContactsListID: "$ID_CONTACTLIST",
+      DataID: "$ID_DATA",
+      Method: "addnoforce",
+    ImportOptions: "{\"DateTimeFormat\": \"yyyy/mm/dd\",\"TimezoneOffset\": 2,\"FieldNames\": [\"email\",\"birthday\"]}",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Csvimport;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Create: A wrapper for the CSV importer
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Csvimport.resource)
+			.property(Csvimport.CONTACTSLISTID, "$ID_CONTACTLIST")
+			.property(Csvimport.DATAID, "$ID_DATA")
+			.property(Csvimport.METHOD, "addnoforce")
+			.property(Csvimport.IMPORTOPTIONS, "{\\"DateTimeFormat\\": \\"yyyy/mm/dd\\",\\"TimezoneOffset\\": 2,\\"FieldNames\\": [\\"email\\",\\"birthday\\"]}");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+   class Program
+   {
+      /// <summary>
+      /// Create: A wrapper for the CSV importer
+      /// </summary>
+      static void Main(string[] args)
+      {
+         RunAsync().Wait();
+      }
+      static async Task RunAsync()
+      {
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetRequest request = new MailjetRequest
+         {
+            Resource = Csvimport.Resource,
+         }
+            .Property(Csvimport.ContactsListID, "$ID_CONTACTLIST")
+            .Property(Csvimport.DataID, "$ID_DATA")
+            .Property(Csvimport.Method, "addnoforce")
+            .Property(Csvimport.ImportOptions, "{\\"DateTimeFormat\\": \\"yyyy/mm/dd\\",\\"TimezoneOffset\\": 2,\\"FieldNames\\": [\\"email\\",\\"birthday\\"]}");
+         MailjetResponse response = await client.PostAsync(request);
+         if (response.IsSuccessStatusCode)
+         {
+            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+            Console.WriteLine(response.GetData());
+         }
+         else
+         {
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
+            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+         }
+      }
+   }
+}
+```
+
+
+> API response
+
+```json
+{
+	"Count": 1,
+	"Data": [
+		{
+			"AliveAt": "",
+			"ContactsList": "",
+			"Count": "",
+			"Current": "",
+			"DataID": "",
+			"Errcount": "",
+			"ErrTreshold": "",
+			"ID": "",
+			"ImportOptions": "",
+			"JobEnd": "",
+			"JobStart": "",
+			"Method": "",
+			"RequestAt": "",
+			"Status": ""
+		}
+	],
+	"Total": 1
+}
+```
+
+
+When using contact data with type <code>datetime</code>, you should define an additional property - <code>ImportOptions</code>. Its value should be passed as a string, containing the following options:
+
+ - `DateTimeFormat` - it shows the format of the datetime in the CSV file. It can be represented as any combination of the acronyms for year (<code>yy</code>), month (<code>mm</code>), day (<code>dd</code>), hour (<code>hh</code>), minute (<code>nn</code>), second (<code>ss</code>). The date is separated from the time with an empty space. The separators for the dates could be a dash(<code>-</code>), slash (<code>>/</code>) or dot (<code>.</code>). The separator for the time is a colon (<code>:</code>). The RFC3339 format is also supported (e.g. <code>'yyyy-mm-ddThh:nn:ss+01:00'</code>).
+ - `TimezoneOffset` - used to select timezone offset. The value is integer in the range from -12 to 12.
+ - `FieldNames` - specifies the names of the fields that are going to be imported. This corresponds to the first row of the CSV, when you import contacts without </code>datetime</code> contact data. All properties that will be modified should be added to the import options, following the exact same order as the columns in the CSV.
+
+<div></div>
+
+<div id="monitoring-the-process"></div>
+
+### Monitor the process
 
 ```shell
 # View: CSV upload Batch job running on the Mailjet infrastructure.
@@ -1938,16 +2201,6 @@ request
 		console.log(err.statusCode)
 	})
 ```
-```ruby
-# View: CSV upload Batch job running on the Mailjet infrastructure.
-require 'mailjet'
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
-end
-variable = Mailjet::Csvimport.find($ID_JOB)
-p variable.attributes['Data']
-```
 ```python
 """
 View: CSV upload Batch job running on the Mailjet infrastructure.
@@ -1961,6 +2214,16 @@ id = '$ID_JOB'
 result = mailjet.csvimport.get(id=id)
 print result.status_code
 print result.json()
+```
+```ruby
+# View: CSV upload Batch job running on the Mailjet infrastructure.
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Csvimport.find($ID_JOB)
+p variable.attributes['Data']
 ```
 ``` go
 /*
@@ -2101,11 +2364,12 @@ Using the job <code>ID</code> returned in the previous step, you can retrieve th
 		<li>JobStart: Time of job start</li>
 		<li>JobEnd: Time of job end</li>
 		<li>Count: Represents the number of contacts already processed by the background job</li>
-		<li>Errcount: contains the number of errors detected during the processus, the Status can be "Completed" and have errors</li>
+		<li>Errcount: contains the number of errors detected during the process, the Status can be "Completed" and have errors</li>
 	</ul>
 
 <div></div>
-###Error handling
+
+### Error handling
 
 ```php
 <?php
@@ -2150,9 +2414,9 @@ Not available in Go, please refer to Curl
 Using the job ID, you can retrieve the error file (if any, see <code>Errcount</code> number in the response of the monitoring of the job), through the DATA API. This error file will give you a textual reason for errors.
 
 <div></div>
-The returned file will be a copy of your original file with an added column describing the error for each line in error. 
+The returned file will be a copy of your original file with an added column describing the error for each line in error.
 
-> File uploaded with error : 
+> File uploaded with error :
 
 ```
 "email","age"

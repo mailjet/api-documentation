@@ -1,26 +1,30 @@
 <div id="template-api"></div>
 <div id="transactional-templating"></div>
-#Template API
+
+# Template API
+
 ## Overview
 
-Template API allows for the storage and access to your templates on the Mailjet system. 
+Template API allows for the storage and access to your templates on the Mailjet system.
 
 Template API will give you access to all templates : Marketing , Transactional , Automation and snippets
 
-By using templates, you will find no need to provide the content of your message at each call to the [Send API](#use-the-template-in-send-api), just use your predefined template. 
+By using templates, you will find no need to provide the content of your message at each call to the [Send API](#use-the-template-in-send-api), just use your predefined template.
 
-Template API can leverage templates created with [Passport](https://www.mailjet.com/feature/passport/), our free responsive email template builder. 
+Template API can leverage templates created with [Passport](https://www.mailjet.com/feature/passport/), our free responsive email template builder.
 
 <aside class="notice">
 Template API will also allow you to leverage Mailjet template language for your transactional templates. Find more information <a href="/template-language" target="_blank">here</a>.
 </aside>
 
-<div></div>
-## Storing a template
+<div id="storing-a-template"></div>
+## Store a template
 
-Store your templates on your Mailjet account by using the `/template` API resource. These templates can also be edited directly in [Passport](https://www.mailjet.com/passport), our WYSIWYG template editor.
+Store your templates on your Mailjet account by using the `/template` API resource. These templates can also be edited directly in [Passport](https://www.mailjet.com/feature/passport), our WYSIWYG template editor.
 
-### Creating the template
+<div id="creating-the-template"></div>
+
+### Create the template
 ```php
 <?php
 /*
@@ -223,15 +227,15 @@ namespace Mailjet.ConsoleApplication
 ```
 
 
-The <code>[/template](/email-api/v3/template/)</code> resource allows to store your template on the Mailjet system.
+The <code>[/template](/reference/email/templates/)</code> resource allows you to store your template in the Mailjet system.
 
 To create a template, `POST` on the <code>/template</code> resource specifying a name.
 
-You can them reuse the template at will for your messages by referencing the <code>ID</code> returned when created.
+You can then reuse the template at will for your messages by referencing the <code>ID</code> returned when it's created.
 
-<div></div>
+<div id="adding-a-content"></div>
 
-### Adding a content
+### Add the content
 
 ```php
 <?php
@@ -297,6 +301,24 @@ text_part: "Hello {{var:name}}"
 )
 p variable.attributes['Data']
 ```
+```python
+"""
+Create : Template content
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$ID_TEMPLATE'
+data = {
+  'Html-part': '<html><body><p>Hello {{var:name}}</p></body></html>',
+  'Text-part': 'Hello {{var:name}}'
+}
+result = mailjet.template_detailcontent.create(id=id, data=data)
+print result.status_code
+print result.json()
+```
 ``` go
 /*
 Create : Template content
@@ -330,24 +352,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```python
-"""
-Create : Template content
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$ID_TEMPLATE'
-data = {
-  'Html-part': '<html><body><p>Hello {{var:name}}</p></body></html>',
-  'Text-part': 'Hello {{var:name}}'
-}
-result = mailjet.template_detailcontent.create(id=id, data=data)
-print result.status_code
-print result.json()
 ```
 ```java
 package com.my.project;
@@ -423,23 +427,22 @@ namespace Mailjet.ConsoleApplication
 
 
 Now that you have created a template, you can add the content, which can be Text or Html (<code>Text-part</code> or <code>Html-part</code>).
-To do so, you can perform a <code>PUT</code> or <code>POST</code> request  on the <code>[/template/$ID/detailcontent](/email-api/v3/template-detailcontent/)</code> resource.
+To do so, you can perform a <code>PUT</code> or <code>POST</code> request on the <code>[/template/$ID/detailcontent](/reference/email/templates/#v3_post_template_template_ID_detailcontent)</code> resource.
 With a <code>POST</code>, if you only give a value to Html-part or Text-part, the other one will be set to empty.
 While with a <code>PUT</code>, if you only give a value to Html-part or Text-part, the other one keeps its previous value.
 
-<div></div>
+<div id="leveraging-template-headers"></div>
+### Leverage Template Headers
 
-### Leveraging Template Headers
+The <code>[/template/$ID/detailcontent](/reference/email/templates/#v3_post_template_template_ID_detailcontent)</code> resource allows you to store a <code>headers</code> property. In this property you can store a JSON object containing the default value for a standard SMTP header or Send API properties.
 
-The <code>[/template/$ID/detailcontent](/email-api/v3/template-detailcontent/)</code> resource allow to store a <code>headers</code> property. You can store in this property a JSON object containing default value for some standard SMTP header or Send API properties. 
-
-When using a template in Send API, the processing of the message will take as default the value from the <code>headers</code> property. It will allow you to call Send API without repeating in each API call the same information. If you specify one of those information in your Send API call, you will overwrite the default values of the template.
+When using a template in Send API, the processing of the message will take as default the value from the <code>headers</code> property. It will allow you to call Send API without repeating the same information in each API call. If you specify one of those details in your Send API call, you will overwrite the default values of the template.
 
 <div></div>
 
 > JSON Sample of headers
 
-```json 
+```json
 {
 "From":"\"Mailjet pilot\" <pilot@mailjet.com>",
 "Subject":"Welcome",
@@ -450,16 +453,17 @@ When using a template in Send API, the processing of the message will take as de
 Template headers property | Send API property | Description
   ----------|------------|------------
 From | FromName and FromEmail| Sender name and email address<br /><code>john@example.com</code> or <code>&lt;john@example.com&gt;</code> or <code>"John Doe" &lt;john@example.com&gt;</code><br />
-Subject | Subject | Message subject (support template language) 
+Subject | Subject | Message subject (support template language)
 Reply-To | Reply-To property of Headers object | Email address that should be used to reply to the message
 
 Templates generated with Passport for transactional will also support the default values listed above.
 
 <aside class="notice">
-Note: From Septembre 2016, the JSON format of the <code>Headers</code> has been modified. All templates, generated through Passport prior to this change, are not supporting this format. To allow the <code>Headers</code> format to be compliant with Send API, please re-edit and save your templates in Passport.
+Note: Since September 2016, the JSON format of the <code>Headers</code> has been modified. All templates, generated through Passport prior to this change, are not supporting this format. To allow the <code>Headers</code> format to be compliant with Send API, please re-edit and save your templates in Passport.
 </aside>
 
 <div></div>
+
 ## Use the Template in Send API
 
 The templates and templating languages can be used in multiple ways with Send API:
@@ -770,9 +774,9 @@ Use the <code>Mj-TemplateID</code> property in your Send API payload to specify 
 
 You must set the <code>Mj-TemplateLanguage</code> property in the payload at <code>true</code> to have the templating language interpreted.
 
-<div></div>
+<div id="using-passport-templates"></div>
 
-### Using Passport Templates
+### Use Passport Templates
 
 ```php
 <?php
@@ -789,6 +793,13 @@ $filters = [
 $response = $mj->get(Resources::$Template, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# View : Find your personal templates
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/template?OwnerType=user\&Limit=100 
 ```
 ```javascript
 /**
@@ -812,13 +823,6 @@ request
 		console.log(err.statusCode)
 	})
 ```
-```shell
-# View : Find your personal templates
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/template?OwnerType=user\&Limit=100 
-```
 ```ruby
 # View : Find your personal templates
 require 'mailjet'
@@ -830,6 +834,23 @@ variable = Mailjet::Template.all(owner_type: "user",
 limit: "100"
 )
 p variable.attributes['Data']
+```
+```python
+"""
+View : Find your personal templates
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+filters = {
+  'OwnerType': 'user',
+  'Limit': '100'
+}
+result = mailjet.template.get(filters=filters)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -852,23 +873,6 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
-```
-```python
-"""
-View : Find your personal templates
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-filters = {
-  'OwnerType': 'user',
-  'Limit': '100'
-}
-result = mailjet.template.get(filters=filters)
-print result.status_code
-print result.json()
 ```
 ```java
 package com.my.project;
@@ -1115,17 +1119,8 @@ public class MyClass {
 ```
 
 
-When using <a href="https://app.mailjet.com/templates/transactional" target="_blank">Passport</a>, you have the option to save your work as a template. Next step will be to preview the template and see how it will look like on different devices - mobile phone, tablet and desktop. You can send a test as well to see how the variables will be printed. On the last step, you will see code sample which can be directly used in your system, after specifying the variables.
+When using <a href="https://app.mailjet.com/templates/transactional" target="_blank">Passport</a>, you have the option to save your work as a template. The next step will be to preview the template and see what it will look like on different devices - mobile phone, tablet and desktop. You can send a test as well to see how the variables will be printed. On the last step, you will see code sample which can be directly used in your system, after specifying the variables.
 
-You can find your templates with a GET on the <code>/template</code> resource then you can use them using the same Send API call as templates created with the API.
+You can find your templates with a GET on the <code>/template</code> resource. Then you can use them using the same Send API call as templates created with the API.
 
-<div></div> 
-
-
-
-
-
-
-
-
-
+<div></div>
