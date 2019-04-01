@@ -484,6 +484,38 @@ request
 		console.log(err.statusCode)
 	})
 ```
+```ruby
+# Create : Manage the details of a Contact.
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Contact_managemanycontacts.create(contacts_lists: [{
+    'ListID'=> 1,
+    'action'=> 'addnoforce'
+}, {
+    'ListID'=> 2,
+    'action'=> 'addforce'
+}],
+contacts: [{
+    'Email'=> 'jimsmith@example.com',
+    'Name'=> 'Jim',
+    'Properties'=> {
+        'Property1'=> 'value',
+        'Property2'=> 'value2'
+    }
+}, {
+    'Email'=> 'janetdoe@example.com',
+    'Name'=> 'Janet',
+    'Properties'=> {
+        'Property1'=> 'value',
+        'Property2'=> 'value2'
+    }
+}]
+)
+p variable.attributes['Data']
+```
 ```python
 """
 Create : Manage the details of a Contact.
@@ -526,38 +558,6 @@ data = {
 result = mailjet.contact_managemanycontacts.create(data=data)
 print result.status_code
 print result.json()
-```
-```ruby
-# Create : Manage the details of a Contact.
-require 'mailjet'
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
-end
-variable = Mailjet::Contact_managemanycontacts.create(contacts_lists: [{
-    'ListID'=> 1,
-    'action'=> 'addnoforce'
-}, {
-    'ListID'=> 2,
-    'action'=> 'addforce'
-}],
-contacts: [{
-    'Email'=> 'jimsmith@example.com',
-    'Name'=> 'Jim',
-    'Properties'=> {
-        'Property1'=> 'value',
-        'Property2'=> 'value2'
-    }
-}, {
-    'Email'=> 'janetdoe@example.com',
-    'Name'=> 'Janet',
-    'Properties'=> {
-        'Property1'=> 'value',
-        'Property2'=> 'value2'
-    }
-}]
-)
-p variable.attributes['Data']
 ```
 ``` go
 /*
@@ -2162,13 +2162,6 @@ When using contact data with type <code>datetime</code>, you should define an ad
 
 ### Monitor the process
 
-```shell
-# View: CSV upload Batch job running on the Mailjet infrastructure.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/csvimport/$ID_JOB 
-```
 ```php
 <?php
 /*
@@ -2180,6 +2173,13 @@ $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'
 $response = $mj->get(Resources::$Csvimport, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# View: CSV upload Batch job running on the Mailjet infrastructure.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/csvimport/$ID_JOB 
 ```
 ```javascript
 /**
@@ -2201,6 +2201,16 @@ request
 		console.log(err.statusCode)
 	})
 ```
+```ruby
+# View: CSV upload Batch job running on the Mailjet infrastructure.
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Csvimport.find($ID_JOB)
+p variable.attributes['Data']
+```
 ```python
 """
 View: CSV upload Batch job running on the Mailjet infrastructure.
@@ -2214,16 +2224,6 @@ id = '$ID_JOB'
 result = mailjet.csvimport.get(id=id)
 print result.status_code
 print result.json()
-```
-```ruby
-# View: CSV upload Batch job running on the Mailjet infrastructure.
-require 'mailjet'
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
-end
-variable = Mailjet::Csvimport.find($ID_JOB)
-p variable.attributes['Data']
 ```
 ``` go
 /*

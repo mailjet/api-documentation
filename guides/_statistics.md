@@ -78,13 +78,6 @@ Delivery statistics tell you whether your messages reached your recipients’ in
 
 ![delivery_rates](../images/stats-delivery-rates.png)
 
-```shell
-# View : Retrieve Key Delivery statistics for a Specific Campaign
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/statcounters?SourceId=$Campaign_ID\&CounterSource=Campaign\&CounterTiming=Message\&CounterResolution=Lifetime 
-```
 ```php
 <?php
 /*
@@ -102,6 +95,13 @@ $filters = [
 $response = $mj->get(Resources::$Statcounters, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# View : Retrieve Key Delivery statistics for a Specific Campaign
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/statcounters?SourceId=$Campaign_ID\&CounterSource=Campaign\&CounterTiming=Message\&CounterResolution=Lifetime 
 ```
 ```javascript
 /**
@@ -351,13 +351,6 @@ The information is retrieved with the same <code>[/statcounters](/reference/emai
 
 ![contact_engagement](../images/stats-contact-engage.png)
 
-```shell
-# View : Retrieve Key Delivery statistics for a Specific Campaign
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/statcounters?SourceId=$Campaign_ID\&CounterSource=Campaign\&CounterTiming=Message\&CounterResolution=Lifetime 
-```
 ```php
 <?php
 /*
@@ -375,6 +368,13 @@ $filters = [
 $response = $mj->get(Resources::$Statcounters, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# View : Retrieve Key Delivery statistics for a Specific Campaign
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/statcounters?SourceId=$Campaign_ID\&CounterSource=Campaign\&CounterTiming=Message\&CounterResolution=Lifetime 
 ```
 ```javascript
 /**
@@ -750,38 +750,6 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Statcounters;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Statcounters.resource)
-                  .filter(Statcounters.SOURCEID, "$Campaign_ID")
-                  .filter(Statcounters.COUNTERSOURCE, "Campaign")
-                  .filter(Statcounters.COUNTERTIMING, "Event")
-                  .filter(Statcounters.COUNTERRESOLUTION, "Day")
-                  .filter(Statcounters.FROMTS, "123")
-                  .filter(Statcounters.TOTS, "456");
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
 ```csharp
 using Mailjet.Client;
 using Mailjet.Client.Resources;
@@ -826,6 +794,38 @@ namespace Mailjet.ConsoleApplication
          }
       }
    }
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Statcounters;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Statcounters.resource)
+                  .filter(Statcounters.SOURCEID, "$Campaign_ID")
+                  .filter(Statcounters.COUNTERSOURCE, "Campaign")
+                  .filter(Statcounters.COUNTERTIMING, "Event")
+                  .filter(Statcounters.COUNTERRESOLUTION, "Day")
+                  .filter(Statcounters.FROMTS, "123")
+                  .filter(Statcounters.TOTS, "456");
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 
@@ -1017,6 +1017,18 @@ curl -s \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/contactstatistics 
 ```
+```php
+<?php
+/*
+View : View message statistics for a given contact.
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->get(Resources::$Contactstatistics);
+$response->success() && var_dump($response->getData());
+?>
+```
 ```javascript
 /**
  *
@@ -1035,18 +1047,6 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
-```
-```php
-<?php
-/*
-View : View message statistics for a given contact.
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Contactstatistics);
-$response->success() && var_dump($response->getData());
-?>
 ```
 ```ruby
 # View : View message statistics for a given contact.
@@ -1658,6 +1658,18 @@ curl -s \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/contactstatistics 
 ```
+```php
+<?php
+/*
+View : View message statistics for a given contact.
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->get(Resources::$Contactstatistics);
+$response->success() && var_dump($response->getData());
+?>
+```
 ```javascript
 /**
  *
@@ -1676,18 +1688,6 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
-```
-```php
-<?php
-/*
-View : View message statistics for a given contact.
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Contactstatistics);
-$response->success() && var_dump($response->getData());
-?>
 ```
 ```ruby
 # View : View message statistics for a given contact.

@@ -40,6 +40,17 @@ The API will return a simple response indicating if the message is ready to be p
 
 ### Verify a Sender
 
+```shell
+# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/sender \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Email":"anothersender@example.com"
+	}'
+```
 ```php
 <?php
 /*
@@ -54,17 +65,6 @@ $body = [
 $response = $mj->post(Resources::$Sender, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/sender \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Email":"anothersender@example.com"
-	}'
 ```
 ```javascript
 /**
@@ -264,7 +264,7 @@ $body = [
             ],
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+            'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
         ]
     ]
 ];
@@ -294,7 +294,7 @@ curl -s \
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
 				}
 		]
 	}'
@@ -324,7 +324,7 @@ const request = mailjet
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
 				}
 		]
 	})
@@ -357,7 +357,7 @@ variable = Mailjet::Send.create(messages: [{
     ],
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!'
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!</h3><br />May the delivery force be with you!'
 }]
 )
 p variable.attributes['Messages']
@@ -386,7 +386,7 @@ data = {
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
 				}
 		]
 }
@@ -421,7 +421,7 @@ func main () {
         },
         Subject: "Your email flight plan!",
         TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
       },
     }
 	messages := mailjet.MessagesV31{Info: messagesInfo }
@@ -464,7 +464,7 @@ public class MyClass {
                             .put("Name", "passenger 1")))
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!")));
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!")));
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -511,7 +511,7 @@ namespace Mailjet.ConsoleApplication
                   }},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"}
+                 {"HTMLPart", "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"}
                  }
                 });
          MailjetResponse response = await client.PostAsync(request);
@@ -625,7 +625,7 @@ $body = [
             ],
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+            'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
         ]
     ]
 ];
@@ -671,7 +671,7 @@ curl -s \
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
 				}
 		]
 	}'
@@ -717,7 +717,7 @@ const request = mailjet
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
 				}
 		]
 	})
@@ -766,58 +766,10 @@ variable = Mailjet::Send.create(messages: [{
     ],
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!'
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!</h3><br />May the delivery force be with you!'
 }]
 )
 p variable.attributes['Messages']
-```
-```python
-"""
-This call sends a message to one recipient.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret), version='v3.1')
-data = {
-  'Messages': [
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								},
-								{
-										"Email": "passenger2@mailjet.com",
-										"Name": "passenger 2"
-								}
-						],
-						"Cc": [
-								{
-										"Email": "copilot@mailjet.com",
-										"Name": "Copilot"
-								}
-						],
-						"Bcc": [
-								{
-										"Email": "air-traffic-control@mailjet.com",
-										"Name": "Air traffic control"
-								}
-						],
-						"Subject": "Your email flight plan!",
-						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
-				}
-		]
-}
-result = mailjet.send.create(data=data)
-print result.status_code
-print result.json()
 ```
 ``` go
 /*
@@ -862,7 +814,7 @@ func main () {
         },
         Subject: "Your email flight plan!",
         TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
       },
     }
 	messages := mailjet.MessagesV31{Info: messagesInfo }
@@ -872,6 +824,54 @@ func main () {
 	}
 	fmt.Printf("Data: %+v\n", res)
 }
+```
+```python
+"""
+This call sends a message to one recipient.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+data = {
+  'Messages': [
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								},
+								{
+										"Email": "passenger2@mailjet.com",
+										"Name": "passenger 2"
+								}
+						],
+						"Cc": [
+								{
+										"Email": "copilot@mailjet.com",
+										"Name": "Copilot"
+								}
+						],
+						"Bcc": [
+								{
+										"Email": "air-traffic-control@mailjet.com",
+										"Name": "Air traffic control"
+								}
+						],
+						"Subject": "Your email flight plan!",
+						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
+				}
+		]
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```java
 package com.my.project;
@@ -916,7 +916,7 @@ public class MyClass {
                             .put("Name", "Air traffic control")))
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!")));
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!")));
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -979,7 +979,7 @@ namespace Mailjet.ConsoleApplication
                   }},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"}
+                 {"HTMLPart", "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"}
                  }
                 });
          MailjetResponse response = await client.PostAsync(request);
@@ -1050,6 +1050,40 @@ namespace Mailjet.ConsoleApplication
 
 ## Send with attached files
 
+```shell
+# This call sends a message to the given recipient with attachment.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3.1/send \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Messages":[
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"Subject": "Your email flight plan!",
+						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
+						"Attachments": [
+								{
+										"ContentType": "text/plain",
+										"Filename": "test.txt",
+										"Base64Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"
+								}
+						]
+				}
+		]
+	}'
+```
 ```php
 <?php
 /*
@@ -1073,7 +1107,7 @@ $body = [
             ],
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+            'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
             'Attachments' => [
                 [
                     'ContentType' => "text/plain",
@@ -1087,40 +1121,6 @@ $body = [
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# This call sends a message to the given recipient with attachment.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3.1/send \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Messages":[
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"Subject": "Your email flight plan!",
-						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
-						"Attachments": [
-								{
-										"ContentType": "text/plain",
-										"Filename": "test.txt",
-										"Base64Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"
-								}
-						]
-				}
-		]
-	}'
 ```
 ```javascript
 /**
@@ -1147,7 +1147,7 @@ const request = mailjet
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
 						"Attachments": [
 								{
 										"ContentType": "text/plain",
@@ -1187,7 +1187,7 @@ variable = Mailjet::Send.create(messages: [{
     ],
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!',
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!</h3><br />May the delivery force be with you!',
     'Attachments'=> [
         {
             'ContentType'=> 'text/plain',
@@ -1223,7 +1223,7 @@ data = {
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
 						"Attachments": [
 								{
 										"ContentType": "text/plain",
@@ -1265,7 +1265,7 @@ func main () {
         },
         Subject: "Your email flight plan!",
         TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
         Attachments: &mailjet.AttachmentsV31{
           mailjet.AttachmentV31 {
             ContentType: "text/plain",
@@ -1315,7 +1315,7 @@ public class MyClass {
                             .put("Name", "passenger 1")))
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!")
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!")
                     .put(Emailv31.Message.ATTACHMENTS, new JSONArray()
                         .put(new JSONObject()
                             .put("ContentType", "text/plain")
@@ -1367,7 +1367,7 @@ namespace Mailjet.ConsoleApplication
                   }},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"},
+                 {"HTMLPart", "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"},
                  {"Attachments", new JArray {
                   new JObject {
                    {"ContentType", "text/plain"},
@@ -1427,13 +1427,13 @@ $body = [
             ],
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> Mailjet!</h3><br />May the delivery force be with you!",
+            'HTMLPart' => "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
             'InlinedAttachments' => [
                 [
-                    'ContentType' => "image/gif",
-                    'Filename' => "logo.gif",
+                    'ContentType' => "image/png",
+                    'Filename' => "logo.png",
                     'ContentID' => "id1",
-                    'Base64Content' => "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"
+                    'Base64Content' => "iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wIIChcxurq5eQAAAAd0RVh0QXV0aG9yAKmuzEgAAAAMdEVYdERlc2NyaXB0aW9uABMJISMAAAAKdEVYdENvcHlyaWdodACsD8w6AAAADnRFWHRDcmVhdGlvbiB0aW1lADX3DwkAAAAJdEVYdFNvZnR3YXJlAF1w/zoAAAALdEVYdERpc2NsYWltZXIAt8C0jwAAAAh0RVh0V2FybmluZwDAG+aHAAAAB3RFWHRTb3VyY2UA9f+D6wAAAAh0RVh0Q29tbWVudAD2zJa/AAAABnRFWHRUaXRsZQCo7tInAAABV0lEQVQokaXSPWtTYRTA8d9N7k1zm6a+RG2x+FItgpu66uDQxbFurrr5OQQHR9FZnARB3PwSFqooddAStCBoqmLtS9omx+ESUXuDon94tnP+5+1JYm057GyQjZFP+l+S6G2FzlNe3WHtHc2TNI8zOlUUGLxsD1kDyR+EEQE2P/L8Jm/uk6RUc6oZaYM0JxtnpEX9AGPTtM6w7yzVEb61EaSNn4QD3j5m4QabH6hkVFLSUeqHyCeot0ib6BdNVGscPM/hWWr7S4Tw9TUvbpFUitHTnF6XrS+sL7O6VBSausT0FZonSkb+nZUFFm+z8Z5up5Btr1Lby7E5Zq4yPrMrLR263ZV52g+LvfW3iy6PXubUNVrnhqYNF3bmiZ1i1MmLnL7OxIWh4T+IMpYeRNyrRzyZjWg/ioh+aVgZu4WfXxaixbsRve5fiwb8epTo8+kZjSPFf/sHvgNC0/mbjJbxPAAAAABJRU5ErkJggg=="
                 ]
             ]
         ]
@@ -1465,18 +1465,52 @@ curl -s \
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
 						"InlinedAttachments": [
 								{
-										"ContentType": "image/gif",
-										"Filename": "logo.gif",
+										"ContentType": "image/png",
+										"Filename": "logo.png",
 										"ContentID": "id1",
-										"Base64Content": "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"
+										"Base64Content": "iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wIIChcxurq5eQAAAAd0RVh0QXV0aG9yAKmuzEgAAAAMdEVYdERlc2NyaXB0aW9uABMJISMAAAAKdEVYdENvcHlyaWdodACsD8w6AAAADnRFWHRDcmVhdGlvbiB0aW1lADX3DwkAAAAJdEVYdFNvZnR3YXJlAF1w/zoAAAALdEVYdERpc2NsYWltZXIAt8C0jwAAAAh0RVh0V2FybmluZwDAG+aHAAAAB3RFWHRTb3VyY2UA9f+D6wAAAAh0RVh0Q29tbWVudAD2zJa/AAAABnRFWHRUaXRsZQCo7tInAAABV0lEQVQokaXSPWtTYRTA8d9N7k1zm6a+RG2x+FItgpu66uDQxbFurrr5OQQHR9FZnARB3PwSFqooddAStCBoqmLtS9omx+ESUXuDon94tnP+5+1JYm057GyQjZFP+l+S6G2FzlNe3WHtHc2TNI8zOlUUGLxsD1kDyR+EEQE2P/L8Jm/uk6RUc6oZaYM0JxtnpEX9AGPTtM6w7yzVEb61EaSNn4QD3j5m4QabH6hkVFLSUeqHyCeot0ib6BdNVGscPM/hWWr7S4Tw9TUvbpFUitHTnF6XrS+sL7O6VBSausT0FZonSkb+nZUFFm+z8Z5up5Btr1Lby7E5Zq4yPrMrLR263ZV52g+LvfW3iy6PXubUNVrnhqYNF3bmiZ1i1MmLnL7OxIWh4T+IMpYeRNyrRzyZjWg/ioh+aVgZu4WfXxaixbsRve5fiwb8epTo8+kZjSPFf/sHvgNC0/mbjJbxPAAAAABJRU5ErkJggg=="
 								}
 						]
 				}
 		]
 	}'
+```
+```ruby
+# This call sends a message to the given recipient with inline attachment.
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+  config.api_version = "v3.1"
+end
+variable = Mailjet::Send.create(messages: [{
+    'From'=> {
+        'Email'=> 'pilot@mailjet.com',
+        'Name'=> 'Mailjet Pilot'
+    },
+    'To'=> [
+        {
+            'Email'=> 'passenger1@mailjet.com',
+            'Name'=> 'passenger 1'
+        }
+    ],
+    'Subject'=> 'Your email flight plan!',
+    'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <img src=\'cid:id1\'> <a href=\'https://www.mailjet.com/\'>Mailjet</a>!</h3><br />May the delivery force be with you!',
+    'InlinedAttachments'=> [
+        {
+            'ContentType'=> 'image/png',
+            'Filename'=> 'logo.png',
+            'ContentID'=> 'id1',
+            'Base64Content'=> 'iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wIIChcxurq5eQAAAAd0RVh0QXV0aG9yAKmuzEgAAAAMdEVYdERlc2NyaXB0aW9uABMJISMAAAAKdEVYdENvcHlyaWdodACsD8w6AAAADnRFWHRDcmVhdGlvbiB0aW1lADX3DwkAAAAJdEVYdFNvZnR3YXJlAF1w/zoAAAALdEVYdERpc2NsYWltZXIAt8C0jwAAAAh0RVh0V2FybmluZwDAG+aHAAAAB3RFWHRTb3VyY2UA9f+D6wAAAAh0RVh0Q29tbWVudAD2zJa/AAAABnRFWHRUaXRsZQCo7tInAAABV0lEQVQokaXSPWtTYRTA8d9N7k1zm6a+RG2x+FItgpu66uDQxbFurrr5OQQHR9FZnARB3PwSFqooddAStCBoqmLtS9omx+ESUXuDon94tnP+5+1JYm057GyQjZFP+l+S6G2FzlNe3WHtHc2TNI8zOlUUGLxsD1kDyR+EEQE2P/L8Jm/uk6RUc6oZaYM0JxtnpEX9AGPTtM6w7yzVEb61EaSNn4QD3j5m4QabH6hkVFLSUeqHyCeot0ib6BdNVGscPM/hWWr7S4Tw9TUvbpFUitHTnF6XrS+sL7O6VBSausT0FZonSkb+nZUFFm+z8Z5up5Btr1Lby7E5Zq4yPrMrLR263ZV52g+LvfW3iy6PXubUNVrnhqYNF3bmiZ1i1MmLnL7OxIWh4T+IMpYeRNyrRzyZjWg/ioh+aVgZu4WfXxaixbsRve5fiwb8epTo8+kZjSPFf/sHvgNC0/mbjJbxPAAAAABJRU5ErkJggg=='
+        }
+    ]
+}]
+)
+p variable.attributes['Messages']
 ```
 ```javascript
 /**
@@ -1503,13 +1537,13 @@ const request = mailjet
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
 						"InlinedAttachments": [
 								{
-										"ContentType": "image/gif",
-										"Filename": "logo.gif",
+										"ContentType": "image/png",
+										"Filename": "logo.png",
 										"ContentID": "id1",
-										"Base64Content": "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"
+										"Base64Content": "iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wIIChcxurq5eQAAAAd0RVh0QXV0aG9yAKmuzEgAAAAMdEVYdERlc2NyaXB0aW9uABMJISMAAAAKdEVYdENvcHlyaWdodACsD8w6AAAADnRFWHRDcmVhdGlvbiB0aW1lADX3DwkAAAAJdEVYdFNvZnR3YXJlAF1w/zoAAAALdEVYdERpc2NsYWltZXIAt8C0jwAAAAh0RVh0V2FybmluZwDAG+aHAAAAB3RFWHRTb3VyY2UA9f+D6wAAAAh0RVh0Q29tbWVudAD2zJa/AAAABnRFWHRUaXRsZQCo7tInAAABV0lEQVQokaXSPWtTYRTA8d9N7k1zm6a+RG2x+FItgpu66uDQxbFurrr5OQQHR9FZnARB3PwSFqooddAStCBoqmLtS9omx+ESUXuDon94tnP+5+1JYm057GyQjZFP+l+S6G2FzlNe3WHtHc2TNI8zOlUUGLxsD1kDyR+EEQE2P/L8Jm/uk6RUc6oZaYM0JxtnpEX9AGPTtM6w7yzVEb61EaSNn4QD3j5m4QabH6hkVFLSUeqHyCeot0ib6BdNVGscPM/hWWr7S4Tw9TUvbpFUitHTnF6XrS+sL7O6VBSausT0FZonSkb+nZUFFm+z8Z5up5Btr1Lby7E5Zq4yPrMrLR263ZV52g+LvfW3iy6PXubUNVrnhqYNF3bmiZ1i1MmLnL7OxIWh4T+IMpYeRNyrRzyZjWg/ioh+aVgZu4WfXxaixbsRve5fiwb8epTo8+kZjSPFf/sHvgNC0/mbjJbxPAAAAABJRU5ErkJggg=="
 								}
 						]
 				}
@@ -1522,40 +1556,6 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
-```
-```ruby
-# This call sends a message to the given recipient with inline attachment.
-require 'mailjet'
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
-  config.api_version = "v3.1"
-end
-variable = Mailjet::Send.create(messages: [{
-    'From'=> {
-        'Email'=> 'pilot@mailjet.com',
-        'Name'=> 'Mailjet Pilot'
-    },
-    'To'=> [
-        {
-            'Email'=> 'passenger1@mailjet.com',
-            'Name'=> 'passenger 1'
-        }
-    ],
-    'Subject'=> 'Your email flight plan!',
-    'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <img src=\'cid:id1\'> Mailjet!</h3><br />May the delivery force be with you!',
-    'InlinedAttachments'=> [
-        {
-            'ContentType'=> 'image/gif',
-            'Filename'=> 'logo.gif',
-            'ContentID'=> 'id1',
-            'Base64Content'=> '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'
-        }
-    ]
-}]
-)
-p variable.attributes['Messages']
 ```
 ```python
 """
@@ -1581,13 +1581,13 @@ data = {
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
 						"InlinedAttachments": [
 								{
-										"ContentType": "image/gif",
-										"Filename": "logo.gif",
+										"ContentType": "image/png",
+										"Filename": "logo.png",
 										"ContentID": "id1",
-										"Base64Content": "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"
+										"Base64Content": "iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wIIChcxurq5eQAAAAd0RVh0QXV0aG9yAKmuzEgAAAAMdEVYdERlc2NyaXB0aW9uABMJISMAAAAKdEVYdENvcHlyaWdodACsD8w6AAAADnRFWHRDcmVhdGlvbiB0aW1lADX3DwkAAAAJdEVYdFNvZnR3YXJlAF1w/zoAAAALdEVYdERpc2NsYWltZXIAt8C0jwAAAAh0RVh0V2FybmluZwDAG+aHAAAAB3RFWHRTb3VyY2UA9f+D6wAAAAh0RVh0Q29tbWVudAD2zJa/AAAABnRFWHRUaXRsZQCo7tInAAABV0lEQVQokaXSPWtTYRTA8d9N7k1zm6a+RG2x+FItgpu66uDQxbFurrr5OQQHR9FZnARB3PwSFqooddAStCBoqmLtS9omx+ESUXuDon94tnP+5+1JYm057GyQjZFP+l+S6G2FzlNe3WHtHc2TNI8zOlUUGLxsD1kDyR+EEQE2P/L8Jm/uk6RUc6oZaYM0JxtnpEX9AGPTtM6w7yzVEb61EaSNn4QD3j5m4QabH6hkVFLSUeqHyCeot0ib6BdNVGscPM/hWWr7S4Tw9TUvbpFUitHTnF6XrS+sL7O6VBSausT0FZonSkb+nZUFFm+z8Z5up5Btr1Lby7E5Zq4yPrMrLR263ZV52g+LvfW3iy6PXubUNVrnhqYNF3bmiZ1i1MmLnL7OxIWh4T+IMpYeRNyrRzyZjWg/ioh+aVgZu4WfXxaixbsRve5fiwb8epTo8+kZjSPFf/sHvgNC0/mbjJbxPAAAAABJRU5ErkJggg=="
 								}
 						]
 				}
@@ -1596,6 +1596,52 @@ data = {
 result = mailjet.send.create(data=data)
 print result.status_code
 print result.json()
+```
+``` go
+/*
+This call sends a message to the given recipient with inline attachment.
+*/
+package main
+import (
+	"fmt"
+	"log"
+	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	messagesInfo := []mailjet.InfoMessagesV31 {
+      mailjet.InfoMessagesV31{
+        From: &mailjet.RecipientV31{
+          Email: "pilot@mailjet.com",
+          Name: "Mailjet Pilot",
+        },
+        To: &mailjet.RecipientsV31{
+          mailjet.RecipientV31 {
+            Email: "passenger1@mailjet.com",
+            Name: "passenger 1",
+          },
+        },
+        Subject: "Your email flight plan!",
+        TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
+        InlinedAttachments: &mailjet.InlinedAttachmentsV31{
+          mailjet.InlineAttachmentV31 {
+            ContentType: "image/png",
+            Filename: "logo.png",
+            ContentID: "id1",
+            Base64Content: "iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wIIChcxurq5eQAAAAd0RVh0QXV0aG9yAKmuzEgAAAAMdEVYdERlc2NyaXB0aW9uABMJISMAAAAKdEVYdENvcHlyaWdodACsD8w6AAAADnRFWHRDcmVhdGlvbiB0aW1lADX3DwkAAAAJdEVYdFNvZnR3YXJlAF1w/zoAAAALdEVYdERpc2NsYWltZXIAt8C0jwAAAAh0RVh0V2FybmluZwDAG+aHAAAAB3RFWHRTb3VyY2UA9f+D6wAAAAh0RVh0Q29tbWVudAD2zJa/AAAABnRFWHRUaXRsZQCo7tInAAABV0lEQVQokaXSPWtTYRTA8d9N7k1zm6a+RG2x+FItgpu66uDQxbFurrr5OQQHR9FZnARB3PwSFqooddAStCBoqmLtS9omx+ESUXuDon94tnP+5+1JYm057GyQjZFP+l+S6G2FzlNe3WHtHc2TNI8zOlUUGLxsD1kDyR+EEQE2P/L8Jm/uk6RUc6oZaYM0JxtnpEX9AGPTtM6w7yzVEb61EaSNn4QD3j5m4QabH6hkVFLSUeqHyCeot0ib6BdNVGscPM/hWWr7S4Tw9TUvbpFUitHTnF6XrS+sL7O6VBSausT0FZonSkb+nZUFFm+z8Z5up5Btr1Lby7E5Zq4yPrMrLR263ZV52g+LvfW3iy6PXubUNVrnhqYNF3bmiZ1i1MmLnL7OxIWh4T+IMpYeRNyrRzyZjWg/ioh+aVgZu4WfXxaixbsRve5fiwb8epTo8+kZjSPFf/sHvgNC0/mbjJbxPAAAAABJRU5ErkJggg==",
+          },
+        },
+      },
+    }
+	messages := mailjet.MessagesV31{Info: messagesInfo }
+	res, err := m.SendMailV31(&messages)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Data: %+v\n", res)
+}
 ```
 ```java
 package com.my.project;
@@ -1629,63 +1675,17 @@ public class MyClass {
                             .put("Name", "passenger 1")))
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> Mailjet!</h3><br />May the delivery force be with you!")
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!")
                     .put(Emailv31.Message.INLINEDATTACHMENTS, new JSONArray()
                         .put(new JSONObject()
-                            .put("ContentType", "image/gif")
-                            .put("Filename", "logo.gif")
+                            .put("ContentType", "image/png")
+                            .put("Filename", "logo.png")
                             .put("ContentID", "id1")
-                            .put("Base64Content", "R0lGODlhEAAQAOYAAP////748v39/Pvq1vr6+lJSVeqlK/zqyv7+/unKjJ+emv78+fb29pucnfrlwvTCi9ra2vTCa6urrWdoaurr6/Pz8uHh4vn49PO7QqGfmumaN+2uS1ZWWfr27uyuLnBxd/z8+0pLTvHAWvjar/zr2Z6cl+jal+2kKmhqcEJETvHQbPb07lBRVPv6+cjJycXFxn1+f//+/f337nF0efO/Mf306NfW0fjHSJOTk/TKlfTp0Prlx/XNj83HuPfEL+/v8PbJgueXJOzp4MG8qUNES9fQqN3d3vTJa/vq1f317P769f/8+gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjY5ODYxMzYzMkJCMTFFMDkzQkFFMkFENzVGN0JGRkYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MjY5ODYxMzczMkJCMTFFMDkzQkFFMkFENzVGN0JGRkYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyNjk4NjEzNDMyQkIxMUUwOTNCQUUyQUQ3NUY3QkZGRiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyNjk4NjEzNTMyQkIxMUUwOTNCQUUyQUQ3NUY3QkZGRiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAEAAAAALAAAAAAQABAAAAdUgACCg4SFhoeIiYRGLhaKhA0TMDgSLxAUiEIZHAUsIUQpKAo9Og6FNh8zJUNFJioYQIgJRzc+NBEkiAcnBh4iO4o8QRsjj0gaOY+CDwPKzs/Q0YSBADs=")))));
+                            .put("Base64Content", "iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wIIChcxurq5eQAAAAd0RVh0QXV0aG9yAKmuzEgAAAAMdEVYdERlc2NyaXB0aW9uABMJISMAAAAKdEVYdENvcHlyaWdodACsD8w6AAAADnRFWHRDcmVhdGlvbiB0aW1lADX3DwkAAAAJdEVYdFNvZnR3YXJlAF1w/zoAAAALdEVYdERpc2NsYWltZXIAt8C0jwAAAAh0RVh0V2FybmluZwDAG+aHAAAAB3RFWHRTb3VyY2UA9f+D6wAAAAh0RVh0Q29tbWVudAD2zJa/AAAABnRFWHRUaXRsZQCo7tInAAABV0lEQVQokaXSPWtTYRTA8d9N7k1zm6a+RG2x+FItgpu66uDQxbFurrr5OQQHR9FZnARB3PwSFqooddAStCBoqmLtS9omx+ESUXuDon94tnP+5+1JYm057GyQjZFP+l+S6G2FzlNe3WHtHc2TNI8zOlUUGLxsD1kDyR+EEQE2P/L8Jm/uk6RUc6oZaYM0JxtnpEX9AGPTtM6w7yzVEb61EaSNn4QD3j5m4QabH6hkVFLSUeqHyCeot0ib6BdNVGscPM/hWWr7S4Tw9TUvbpFUitHTnF6XrS+sL7O6VBSausT0FZonSkb+nZUFFm+z8Z5up5Btr1Lby7E5Zq4yPrMrLR263ZV52g+LvfW3iy6PXubUNVrnhqYNF3bmiZ1i1MmLnL7OxIWh4T+IMpYeRNyrRzyZjWg/ioh+aVgZu4WfXxaixbsRve5fiwb8epTo8+kZjSPFf/sHvgNC0/mbjJbxPAAAAABJRU5ErkJggg==")))));
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
-}
-```
-``` go
-/*
-This call sends a message to the given recipient with inline attachment.
-*/
-package main
-import (
-	"fmt"
-	"log"
-	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	messagesInfo := []mailjet.InfoMessagesV31 {
-      mailjet.InfoMessagesV31{
-        From: &mailjet.RecipientV31{
-          Email: "pilot@mailjet.com",
-          Name: "Mailjet Pilot",
-        },
-        To: &mailjet.RecipientsV31{
-          mailjet.RecipientV31 {
-            Email: "passenger1@mailjet.com",
-            Name: "passenger 1",
-          },
-        },
-        Subject: "Your email flight plan!",
-        TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> Mailjet!</h3><br />May the delivery force be with you!",
-        InlinedAttachments: &mailjet.InlinedAttachmentsV31{
-          mailjet.InlineAttachmentV31 {
-            ContentType: "image/gif",
-            Filename: "logo.gif",
-            ContentID: "id1",
-            Base64Content: "R0lGODlhEAAQAOYAAP////748v39/Pvq1vr6+lJSVeqlK/zqyv7+/unKjJ+emv78+fb29pucnfrlwvTCi9ra2vTCa6urrWdoaurr6/Pz8uHh4vn49PO7QqGfmumaN+2uS1ZWWfr27uyuLnBxd/z8+0pLTvHAWvjar/zr2Z6cl+jal+2kKmhqcEJETvHQbPb07lBRVPv6+cjJycXFxn1+f//+/f337nF0efO/Mf306NfW0fjHSJOTk/TKlfTp0Prlx/XNj83HuPfEL+/v8PbJgueXJOzp4MG8qUNES9fQqN3d3vTJa/vq1f317P769f/8+gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH/C1hNUCBEYXRhWE1QPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS4wLWMwNjAgNjEuMTM0Nzc3LCAyMDEwLzAyLzEyLTE3OjMyOjAwICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MjY5ODYxMzYzMkJCMTFFMDkzQkFFMkFENzVGN0JGRkYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MjY5ODYxMzczMkJCMTFFMDkzQkFFMkFENzVGN0JGRkYiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoyNjk4NjEzNDMyQkIxMUUwOTNCQUUyQUQ3NUY3QkZGRiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyNjk4NjEzNTMyQkIxMUUwOTNCQUUyQUQ3NUY3QkZGRiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAEAAAAALAAAAAAQABAAAAdUgACCg4SFhoeIiYRGLhaKhA0TMDgSLxAUiEIZHAUsIUQpKAo9Og6FNh8zJUNFJioYQIgJRzc+NBEkiAcnBh4iO4o8QRsjj0gaOY+CDwPKzs/Q0YSBADs=",
-          },
-        },
-      },
-    }
-	messages := mailjet.MessagesV31{Info: messagesInfo }
-	res, err := m.SendMailV31(&messages)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Data: %+v\n", res)
 }
 ```
 ```csharp
@@ -1728,13 +1728,13 @@ namespace Mailjet.ConsoleApplication
                   }},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> Mailjet!</h3><br />May the delivery force be with you!"},
+                 {"HTMLPart", "<h3>Dear passenger 1, welcome to <img src=\"cid:id1\"> <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"},
                  {"InlinedAttachments", new JArray {
                   new JObject {
-                   {"ContentType", "image/gif"},
-                   {"Filename", "logo.gif"},
+                   {"ContentType", "image/png"},
+                   {"Filename", "logo.png"},
                    {"ContentID", "id1"},
-                   {"Base64Content", "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"}
+                   {"Base64Content", "iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wIIChcxurq5eQAAAAd0RVh0QXV0aG9yAKmuzEgAAAAMdEVYdERlc2NyaXB0aW9uABMJISMAAAAKdEVYdENvcHlyaWdodACsD8w6AAAADnRFWHRDcmVhdGlvbiB0aW1lADX3DwkAAAAJdEVYdFNvZnR3YXJlAF1w/zoAAAALdEVYdERpc2NsYWltZXIAt8C0jwAAAAh0RVh0V2FybmluZwDAG+aHAAAAB3RFWHRTb3VyY2UA9f+D6wAAAAh0RVh0Q29tbWVudAD2zJa/AAAABnRFWHRUaXRsZQCo7tInAAABV0lEQVQokaXSPWtTYRTA8d9N7k1zm6a+RG2x+FItgpu66uDQxbFurrr5OQQHR9FZnARB3PwSFqooddAStCBoqmLtS9omx+ESUXuDon94tnP+5+1JYm057GyQjZFP+l+S6G2FzlNe3WHtHc2TNI8zOlUUGLxsD1kDyR+EEQE2P/L8Jm/uk6RUc6oZaYM0JxtnpEX9AGPTtM6w7yzVEb61EaSNn4QD3j5m4QabH6hkVFLSUeqHyCeot0ib6BdNVGscPM/hWWr7S4Tw9TUvbpFUitHTnF6XrS+sL7O6VBSausT0FZonSkb+nZUFFm+z8Z5up5Btr1Lby7E5Zq4yPrMrLR263ZV52g+LvfW3iy6PXubUNVrnhqYNF3bmiZ1i1MmLnL7OxIWh4T+IMpYeRNyrRzyZjWg/ioh+aVgZu4WfXxaixbsRve5fiwb8epTo8+kZjSPFf/sHvgNC0/mbjJbxPAAAAABJRU5ErkJggg=="}
                    }
                   }}
                  }
@@ -1792,7 +1792,7 @@ $body = [
             ],
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+            'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
         ],
         [
             'From' => [
@@ -1807,7 +1807,7 @@ $body = [
             ],
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+            'HTMLPart' => "<h3>Dear passenger 2, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"
         ]
     ]
 ];
@@ -1837,7 +1837,7 @@ curl -s \
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
 				},
 				{
 						"From": {
@@ -1852,7 +1852,7 @@ curl -s \
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 2, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"
 				}
 		]
 	}'
@@ -1882,7 +1882,7 @@ const request = mailjet
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
 				},
 				{
 						"From": {
@@ -1897,7 +1897,7 @@ const request = mailjet
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 2, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"
 				}
 		]
 	})
@@ -1930,7 +1930,7 @@ variable = Mailjet::Send.create(messages: [{
     ],
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!'
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!</h3><br />May the delivery force be with you!'
 }, {
     'From'=> {
         'Email'=> 'pilot@mailjet.com',
@@ -1944,7 +1944,7 @@ variable = Mailjet::Send.create(messages: [{
     ],
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear passenger 2, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!'
+    'HTMLPart'=> '<h3>Dear passenger 2, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!<br />May the delivery force be with you!'
 }]
 )
 p variable.attributes['Messages']
@@ -1973,7 +1973,7 @@ data = {
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
 				},
 				{
 						"From": {
@@ -1988,7 +1988,7 @@ data = {
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 2, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"
 				}
 		]
 }
@@ -2023,7 +2023,7 @@ func main () {
         },
         Subject: "Your email flight plan!",
         TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
       },
       mailjet.InfoMessagesV31{
         From: &mailjet.RecipientV31{
@@ -2038,7 +2038,7 @@ func main () {
         },
         Subject: "Your email flight plan!",
         TextPart: "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 2, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
       },
     }
 	messages := mailjet.MessagesV31{Info: messagesInfo }
@@ -2081,7 +2081,7 @@ public class MyClass {
                             .put("Name", "passenger 1")))
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"))
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"))
                 .put(new JSONObject()
                     .put(Emailv31.Message.FROM, new JSONObject()
                         .put("Email", "pilot@mailjet.com")
@@ -2092,7 +2092,7 @@ public class MyClass {
                             .put("Name", "passenger 2")))
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!")));
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 2, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!")));
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -2139,7 +2139,7 @@ namespace Mailjet.ConsoleApplication
                   }},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"}
+                 {"HTMLPart", "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"}
                  },
                 new JObject {
                  {"From", new JObject {
@@ -2154,7 +2154,7 @@ namespace Mailjet.ConsoleApplication
                   }},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger 2, welcome to Mailjet!</h3><br />May the delivery force be with you!"}
+                 {"HTMLPart", "<h3>Dear passenger 2, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"}
                  }
                 });
          MailjetResponse response = await client.PostAsync(request);
@@ -2301,7 +2301,7 @@ $body = [
             'TemplateLanguage' => true,
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear passenger, welcome to Mailjet! On this {{var:day}}, may the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger, welcome to Mailjet!</h3><br />On this {{var:day}}, may the delivery force be with you!"
+            'HTMLPart' => "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />On this {{var:day}}, may the delivery force be with you!"
         ]
     ]
 ];
@@ -2335,7 +2335,7 @@ curl -s \
 						"TemplateLanguage": true,
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger, welcome to Mailjet! On this {{var:day}}, may the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger, welcome to Mailjet!</h3><br />On this {{var:day}}, may the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />On this {{var:day}}, may the delivery force be with you!"
 				}
 		]
 	}'
@@ -2369,7 +2369,7 @@ const request = mailjet
 						"TemplateLanguage": true,
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger, welcome to Mailjet! On this {{var:day}}, may the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger, welcome to Mailjet!</h3><br />On this {{var:day}}, may the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />On this {{var:day}}, may the delivery force be with you!"
 				}
 		]
 	})
@@ -2406,7 +2406,7 @@ variable = Mailjet::Send.create(messages: [{
     'TemplateLanguage'=> true,
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear passenger, welcome to Mailjet! On this {{var:day}}, may the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger, welcome to Mailjet!</h3><br />On this {{var:day}}, may the delivery force be with you!'
+    'HTMLPart'=> '<h3>Dear passenger, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!</h3><br />On this {{var:day}}, may the delivery force be with you!'
 }]
 )
 p variable.attributes['Messages']
@@ -2439,7 +2439,7 @@ data = {
 						"TemplateLanguage": True,
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger, welcome to Mailjet! On this {{var:day}}, may the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger, welcome to Mailjet!</h3><br />On this {{var:day}}, may the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />On this {{var:day}}, may the delivery force be with you!"
 				}
 		]
 }
@@ -2477,7 +2477,7 @@ func main () {
       TemplateLanguage: true,
       Subject: "Your email flight plan!",
     TextPart: "Dear passenger, welcome to Mailjet! On this {{var:day}}, may the delivery force be with you!",
-    HTMLPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br />On this {{var:day}}, may the delivery force be with you!",
+    HTMLPart: "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />On this {{var:day}}, may the delivery force be with you!",
     },
   },
 	messages := mailjet.MessagesV31{Info: messagesInfo }
@@ -2523,7 +2523,7 @@ public class MyClass {
                     .put(Emailv31.Message.TEMPLATELANGUAGE, true)
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear passenger, welcome to Mailjet! On this {{var:day}}, may the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger, welcome to Mailjet!</h3><br />On this {{var:day}}, may the delivery force be with you!")));
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />On this {{var:day}}, may the delivery force be with you!")));
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -2574,7 +2574,7 @@ namespace Mailjet.ConsoleApplication
                  {"TemplateLanguage", true},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger, welcome to Mailjet! On this {{var:day}}, may the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger, welcome to Mailjet!</h3><br />On this {{var:day}}, may the delivery force be with you!"}
+                 {"HTMLPart", "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />On this {{var:day}}, may the delivery force be with you!"}
                  }
                 });
          MailjetResponse response = await client.PostAsync(request);
@@ -2628,7 +2628,7 @@ $body = [
             'TemplateLanguage' => true,
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet!</h3><br /> May the delivery force be with you!"
+            'HTMLPart' => "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> May the delivery force be with you!"
         ]
     ]
 ];
@@ -2659,7 +2659,7 @@ curl -s \
 						"TemplateLanguage": true,
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet!</h3><br /> May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> May the delivery force be with you!"
 				}
 		]
 	}'
@@ -2690,7 +2690,7 @@ const request = mailjet
 						"TemplateLanguage": true,
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet!</h3><br /> May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> May the delivery force be with you!"
 				}
 		]
 	})
@@ -2724,7 +2724,7 @@ variable = Mailjet::Send.create(messages: [{
     'TemplateLanguage'=> true,
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear {{data:firstname:\'passenger\'}}, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear {{data:firstname:\'passenger\'}}, welcome to Mailjet!</h3><br /> May the delivery force be with you!'
+    'HTMLPart'=> '<h3>Dear {{data:firstname:\'passenger\'}}, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!<br /> May the delivery force be with you!'
 }]
 )
 p variable.attributes['Messages']
@@ -2754,52 +2754,13 @@ data = {
 						"TemplateLanguage": True,
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet!</h3><br /> May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> May the delivery force be with you!"
 				}
 		]
 }
 result = mailjet.send.create(data=data)
 print result.status_code
 print result.json()
-```
-``` go
-/*
-This call sends a message to the a recipient with contact property personalisation.
-*/
-package main
-import (
-	"fmt"
-	"log"
-	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	messagesInfo := []mailjet.InfoMessagesV31 {
-      mailjet.InfoMessagesV31{
-        From: &mailjet.RecipientV31{
-          Email: "pilot@mailjet.com",
-          Name: "Mailjet Pilot",
-        },
-        To: &mailjet.RecipientsV31{
-          mailjet.RecipientV31 {
-            Email: "passenger1@mailjet.com",
-            Name: "passenger 1",
-          },
-        },
-        TemplateLanguage: true,
-        Subject: "Your email flight plan!",
-      TextPart: "Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet! May the delivery force be with you!",
-      HTMLPart: "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet!</h3><br /> May the delivery force be with you!",
-      },
-    }
-	messages := mailjet.MessagesV31{Info: messagesInfo }
-	res, err := m.SendMailV31(&messages)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Data: %+v\n", res)
-}
 ```
 ```java
 package com.my.project;
@@ -2834,11 +2795,50 @@ public class MyClass {
                     .put(Emailv31.Message.TEMPLATELANGUAGE, true)
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet!</h3><br /> May the delivery force be with you!")));
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> May the delivery force be with you!")));
       response = client.post(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
+}
+```
+``` go
+/*
+This call sends a message to the a recipient with contact property personalisation.
+*/
+package main
+import (
+	"fmt"
+	"log"
+	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	messagesInfo := []mailjet.InfoMessagesV31 {
+      mailjet.InfoMessagesV31{
+        From: &mailjet.RecipientV31{
+          Email: "pilot@mailjet.com",
+          Name: "Mailjet Pilot",
+        },
+        To: &mailjet.RecipientsV31{
+          mailjet.RecipientV31 {
+            Email: "passenger1@mailjet.com",
+            Name: "passenger 1",
+          },
+        },
+        TemplateLanguage: true,
+        Subject: "Your email flight plan!",
+      TextPart: "Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet! May the delivery force be with you!",
+      HTMLPart: "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> May the delivery force be with you!",
+      },
+    }
+	messages := mailjet.MessagesV31{Info: messagesInfo }
+	res, err := m.SendMailV31(&messages)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Data: %+v\n", res)
 }
 ```
 ```csharp
@@ -2882,7 +2882,7 @@ namespace Mailjet.ConsoleApplication
                  {"TemplateLanguage", true},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet!</h3><br /> May the delivery force be with you!"}
+                 {"HTMLPart", "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> May the delivery force be with you!"}
                  }
                 });
          MailjetResponse response = await client.PostAsync(request);
@@ -2915,6 +2915,33 @@ Refer to the [Personalization section](/guides/#personalization-add-contact-prop
 <div id="using-a-template"></div>
 ## Use a Template
 
+```shell
+# This call sends a message based on a template.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3.1/send \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Messages":[
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"TemplateID": 1,
+						"TemplateLanguage": true,
+						"Subject": "Your email flight plan!"
+				}
+		]
+	}'
+```
 ```php
 <?php
 /*
@@ -2945,33 +2972,6 @@ $body = [
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# This call sends a message based on a template.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3.1/send \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Messages":[
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"TemplateID": 1,
-						"TemplateLanguage": true,
-						"Subject": "Your email flight plan!"
-				}
-		]
-	}'
 ```
 ```javascript
 /**
@@ -3249,7 +3249,7 @@ $body = [
                 ]
             ],
             'TextPart' => "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
-            'HTMLPart' => "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+            'HTMLPart' => "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
             'TemplateLanguage' => true,
             'Subject' => "Your email flight plan!",
             'Variables' => [
@@ -3284,7 +3284,7 @@ curl -s \
 								}
 						],
 						"TextPart": "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
-						"HTMLPart": "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+						"HTMLPart": "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
 						"TemplateLanguage": true,
 						"Subject": "Your email flight plan!",
 						"Variables": {
@@ -3319,7 +3319,7 @@ const request = mailjet
 								}
 						],
 						"TextPart": "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
-						"HTMLPart": "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+						"HTMLPart": "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
 						"TemplateLanguage": true,
 						"Subject": "Your email flight plan!",
 						"Variables": {
@@ -3357,7 +3357,7 @@ variable = Mailjet::Send.create(messages: [{
         }
     ],
     'TextPart'=> 'Dear passenger, welcome to Mailjet! On this {{var:day:\'monday\'}}, may the delivery force be with you! {{var:personalmessage:\'\'}}',
-    'HTMLPart'=> '<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\'monday\'}}, may the delivery force be with you! {{var:personalmessage:\'\'}}',
+    'HTMLPart'=> '<h3>Dear passenger, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!<br /> On this {{var:day:\'monday\'}}, may the delivery force be with you! {{var:personalmessage:\'\'}}',
     'TemplateLanguage'=> true,
     'Subject'=> 'Your email flight plan!',
     'Variables'=> {
@@ -3367,6 +3367,43 @@ variable = Mailjet::Send.create(messages: [{
 }]
 )
 p variable.attributes['Messages']
+```
+```python
+"""
+This call sends a message to the given recipient with vars and custom vars.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+data = {
+  'Messages': [
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"TextPart": "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+						"HTMLPart": "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+						"TemplateLanguage": True,
+						"Subject": "Your email flight plan!",
+						"Variables": {
+								"day": "Tuesday",
+								"personalmessage": "Happy birthday!"
+						}
+				}
+		]
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ``` go
 /*
@@ -3394,7 +3431,7 @@ func main () {
           },
         },
       TextPart: "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
-      HTMLPart: "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+      HTMLPart: "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
         TemplateLanguage: true,
         Subject: "Your email flight plan!",
       Variables: map[string]interface{}{
@@ -3440,7 +3477,7 @@ public class MyClass {
                             .put("Email", "passenger1@mailjet.com")
                             .put("Name", "passenger 1")))
                     .put(Emailv31.Message.TEXTPART, "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}")
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}")
                     .put(Emailv31.Message.TEMPLATELANGUAGE, true)
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.VARIABLES, new JSONObject()
@@ -3491,7 +3528,7 @@ namespace Mailjet.ConsoleApplication
                    }
                   }},
                  {"TextPart", "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}"},
-                 {"HTMLPart", "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}"},
+                 {"HTMLPart", "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}"},
                  {"TemplateLanguage", true},
                  {"Subject", "Your email flight plan!"},
                  {"Variables", new JObject {
@@ -3516,43 +3553,6 @@ namespace Mailjet.ConsoleApplication
       }
    }
 }
-```
-```python
-"""
-This call sends a message to the given recipient with vars and custom vars.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret), version='v3.1')
-data = {
-  'Messages': [
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"TextPart": "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
-						"HTMLPart": "<h3>Dear passenger, welcome to Mailjet!</h3><br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
-						"TemplateLanguage": True,
-						"Subject": "Your email flight plan!",
-						"Variables": {
-								"day": "Tuesday",
-								"personalmessage": "Happy birthday!"
-						}
-				}
-		]
-}
-result = mailjet.send.create(data=data)
-print result.status_code
-print result.json()
 ```
 
 
@@ -3598,7 +3598,7 @@ $body = [
             ],
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+            'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
             'Headers' => [
                 'X-My-header' => "X2332X-324-432-534"
             ]
@@ -3631,7 +3631,7 @@ curl -s \
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
 						"Headers": {
 								"X-My-header": "X2332X-324-432-534"
 						}
@@ -3664,7 +3664,7 @@ const request = mailjet
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
 						"Headers": {
 								"X-My-header": "X2332X-324-432-534"
 						}
@@ -3700,7 +3700,7 @@ variable = Mailjet::Send.create(messages: [{
     ],
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!',
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!<br />May the delivery force be with you!',
     'Headers'=> {
         'X-My-header'=> 'X2332X-324-432-534'
     }
@@ -3732,7 +3732,7 @@ data = {
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
 						"Headers": {
 								"X-My-header": "X2332X-324-432-534"
 						}
@@ -3770,7 +3770,7 @@ func main () {
         },
         Subject: "Your email flight plan!",
         TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
       Headers: map[string]interface{}{
       "X-My-header": "X2332X-324-432-534"},
     },
@@ -3815,7 +3815,7 @@ public class MyClass {
                             .put("Name", "passenger 1")))
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!")
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!")
                     .put(Emailv31.Message.HEADERS, new JSONObject()
                         .put("X-My-header", "X2332X-324-432-534"))));
       response = client.post(request);
@@ -3864,7 +3864,7 @@ namespace Mailjet.ConsoleApplication
                   }},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"},
+                 {"HTMLPart", "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"},
                  {"Headers", new JObject {
                   {"X-My-header", "X2332X-324-432-534"}
                   }}
@@ -3921,38 +3921,6 @@ These custom tags are included in the events triggered by our [Event API](#event
 
 ### Send an email with a custom ID
 
-```php
-<?php
-/*
-This call sends a message to one recipient with a CustomID
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'),true,['version' => 'v3.1']);
-$body = [
-    'Messages' => [
-        [
-            'From' => [
-                'Email' => "pilot@mailjet.com",
-                'Name' => "Mailjet Pilot"
-            ],
-            'To' => [
-                [
-                    'Email' => "passenger1@mailjet.com",
-                    'Name' => "passenger 1"
-                ]
-            ],
-            'Subject' => "Your email flight plan!",
-            'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
-            'CustomID' => "PassengerEticket1234"
-        ]
-    ]
-];
-$response = $mj->post(Resources::$Email, ['body' => $body]);
-$response->success() && var_dump($response->getData());
-?>
-```
 ```shell
 # This call sends a message to one recipient with a CustomID
 curl -s \
@@ -3975,7 +3943,7 @@ curl -s \
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
 						"CustomID": "PassengerEticket1234"
 				}
 		]
@@ -4006,7 +3974,7 @@ const request = mailjet
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
 						"CustomID": "PassengerEticket1234"
 				}
 		]
@@ -4018,6 +3986,38 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
+```
+```php
+<?php
+/*
+This call sends a message to one recipient with a CustomID
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'),true,['version' => 'v3.1']);
+$body = [
+    'Messages' => [
+        [
+            'From' => [
+                'Email' => "pilot@mailjet.com",
+                'Name' => "Mailjet Pilot"
+            ],
+            'To' => [
+                [
+                    'Email' => "passenger1@mailjet.com",
+                    'Name' => "passenger 1"
+                ]
+            ],
+            'Subject' => "Your email flight plan!",
+            'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+            'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
+            'CustomID' => "PassengerEticket1234"
+        ]
+    ]
+];
+$response = $mj->post(Resources::$Email, ['body' => $body]);
+$response->success() && var_dump($response->getData());
+?>
 ```
 ```ruby
 # This call sends a message to one recipient with a CustomID
@@ -4040,7 +4040,7 @@ variable = Mailjet::Send.create(messages: [{
     ],
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!',
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!<br />May the delivery force be with you!',
     'CustomID'=> 'PassengerEticket1234'
 }]
 )
@@ -4070,7 +4070,7 @@ data = {
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
 						"CustomID": "PassengerEticket1234"
 				}
 		]
@@ -4106,7 +4106,7 @@ func main () {
         },
         Subject: "Your email flight plan!",
         TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
         CustomID: "PassengerEticket1234",
       },
     }
@@ -4150,7 +4150,7 @@ public class MyClass {
                             .put("Name", "passenger 1")))
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!")
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!")
                     .put(Emailv31.Message.CUSTOMID, "PassengerEticket1234")));
       response = client.post(request);
       System.out.println(response.getStatus());
@@ -4198,7 +4198,7 @@ namespace Mailjet.ConsoleApplication
                   }},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"},
+                 {"HTMLPart", "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"},
                  {"CustomID", "PassengerEticket1234"}
                  }
                 });
@@ -4224,6 +4224,13 @@ namespace Mailjet.ConsoleApplication
 Sometimes you may need to use your own ID, in addition to ours, to be able to easily trace back the message in our system. To achieve this, just pass the ID you wish in the <code>CustomID</code> property.
 
 <div></div>
+```shell
+# View : API Key Statistical campaign/message data.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/message?CustomID=PassengerEticket1234 
+```
 ```php
 <?php
 /*
@@ -4239,12 +4246,16 @@ $response = $mj->get(Resources::$Message, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```shell
+```ruby
 # View : API Key Statistical campaign/message data.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/message?CustomID=PassengerEticket1234 
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Message.all(custom_id: "PassengerEticket1234"
+)
+p variable.attributes['Data']
 ```
 ```javascript
 /**
@@ -4266,17 +4277,6 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
-```
-```ruby
-# View : API Key Statistical campaign/message data.
-require 'mailjet'
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
-end
-variable = Mailjet::Message.all(custom_id: "PassengerEticket1234"
-)
-p variable.attributes['Data']
 ```
 ```python
 """
@@ -4392,6 +4392,34 @@ Your <code>CustomID</code> will be linked to our own UUID. You can also retrieve
 
 ### Send an email with a payload
 
+```shell
+# This call sends a message to one recipient with an EventPayload.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3.1/send \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Messages":[
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"Subject": "Your email flight plan!",
+						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
+						"EventPayload": "Eticket,1234,row,15,seat,B"
+				}
+		]
+	}'
+```
 ```php
 <?php
 /*
@@ -4415,7 +4443,7 @@ $body = [
             ],
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+            'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
             'EventPayload' => "Eticket,1234,row,15,seat,B"
         ]
     ]
@@ -4423,34 +4451,6 @@ $body = [
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# This call sends a message to one recipient with an EventPayload.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3.1/send \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Messages":[
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"Subject": "Your email flight plan!",
-						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
-						"EventPayload": "Eticket,1234,row,15,seat,B"
-				}
-		]
-	}'
 ```
 ```javascript
 /**
@@ -4477,7 +4477,7 @@ const request = mailjet
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
 						"EventPayload": "Eticket,1234,row,15,seat,B"
 				}
 		]
@@ -4511,7 +4511,7 @@ variable = Mailjet::Send.create(messages: [{
     ],
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!',
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!<br />May the delivery force be with you!',
     'EventPayload'=> 'Eticket,1234,row,15,seat,B'
 }]
 )
@@ -4541,7 +4541,7 @@ data = {
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
 						"EventPayload": "Eticket,1234,row,15,seat,B"
 				}
 		]
@@ -4577,7 +4577,7 @@ func main () {
         },
         Subject: "Your email flight plan!",
         TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
         EventPayload: "Eticket,1234,row,15,seat,B",
       },
     }
@@ -4621,7 +4621,7 @@ public class MyClass {
                             .put("Name", "passenger 1")))
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!")
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!")
                     .put(Emailv31.Message.EVENTPAYLOAD, "Eticket,1234,row,15,seat,B")));
       response = client.post(request);
       System.out.println(response.getStatus());
@@ -4669,7 +4669,7 @@ namespace Mailjet.ConsoleApplication
                   }},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"},
+                 {"HTMLPart", "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"},
                  {"EventPayload", "Eticket,1234,row,15,seat,B"}
                  }
                 });
@@ -4722,7 +4722,7 @@ $body = [
             ],
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+            'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
             'CustomCampaign' => "SendAPI_campaign",
             'DeduplicateCampaign' => true
         ]
@@ -4754,7 +4754,7 @@ curl -s \
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
 						"CustomCampaign": "SendAPI_campaign",
 						"DeduplicateCampaign": true
 				}
@@ -4786,7 +4786,7 @@ const request = mailjet
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
 						"CustomCampaign": "SendAPI_campaign",
 						"DeduplicateCampaign": true
 				}
@@ -4821,7 +4821,7 @@ variable = Mailjet::Send.create(messages: [{
     ],
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!',
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!</h3><br />May the delivery force be with you!',
     'CustomCampaign'=> 'SendAPI_campaign',
     'DeduplicateCampaign'=> true
 }]
@@ -4852,7 +4852,7 @@ data = {
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
 						"CustomCampaign": "SendAPI_campaign",
 						"DeduplicateCampaign": True
 				}
@@ -4889,7 +4889,7 @@ func main () {
         },
         Subject: "Your email flight plan!",
         TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
         CustomCampaign: "SendAPI_campaign",
         DeduplicateCampaign: true,
       },
@@ -4900,47 +4900,6 @@ func main () {
 		log.Fatal(err)
 	}
 	fmt.Printf("Data: %+v\n", res)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.ClientOptions;
-import com.mailjet.client.resource.Emailv31;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * This call sends a message to one recipient within a campaign blocking multiple messages to same recipient
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"), new ClientOptions("v3.1"));
-      request = new MailjetRequest(Emailv31.resource)
-			.property(Emailv31.MESSAGES, new JSONArray()
-                .put(new JSONObject()
-                    .put(Emailv31.Message.FROM, new JSONObject()
-                        .put("Email", "pilot@mailjet.com")
-                        .put("Name", "Mailjet Pilot"))
-                    .put(Emailv31.Message.TO, new JSONArray()
-                        .put(new JSONObject()
-                            .put("Email", "passenger1@mailjet.com")
-                            .put("Name", "passenger 1")))
-                    .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
-                    .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!")
-                    .put(Emailv31.Message.CUSTOMCAMPAIGN, "SendAPI_campaign")
-                    .put(Emailv31.Message.DEDUPLICATECAMPAIGN, true)));
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
 }
 ```
 ```csharp
@@ -4983,7 +4942,7 @@ namespace Mailjet.ConsoleApplication
                   }},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"},
+                 {"HTMLPart", "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"},
                  {"CustomCampaign", "SendAPI_campaign"},
                  {"DeduplicateCampaign", true}
                  }
@@ -5003,6 +4962,47 @@ namespace Mailjet.ConsoleApplication
          }
       }
    }
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.ClientOptions;
+import com.mailjet.client.resource.Emailv31;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * This call sends a message to one recipient within a campaign blocking multiple messages to same recipient
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"), new ClientOptions("v3.1"));
+      request = new MailjetRequest(Emailv31.resource)
+			.property(Emailv31.MESSAGES, new JSONArray()
+                .put(new JSONObject()
+                    .put(Emailv31.Message.FROM, new JSONObject()
+                        .put("Email", "pilot@mailjet.com")
+                        .put("Name", "Mailjet Pilot"))
+                    .put(Emailv31.Message.TO, new JSONArray()
+                        .put(new JSONObject()
+                            .put("Email", "passenger1@mailjet.com")
+                            .put("Name", "passenger 1")))
+                    .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
+                    .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!")
+                    .put(Emailv31.Message.CUSTOMCAMPAIGN, "SendAPI_campaign")
+                    .put(Emailv31.Message.DEDUPLICATECAMPAIGN, true)));
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 
@@ -5358,7 +5358,7 @@ $body = [
             ],
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+            'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"
         ]
     ],
     'SandboxMode' => true
@@ -5389,7 +5389,7 @@ curl -s \
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"
 				}
 		],
 		"SandboxMode":true
@@ -5420,7 +5420,7 @@ const request = mailjet
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"
 				}
 		],
 		"SandboxMode":true
@@ -5454,44 +5454,11 @@ variable = Mailjet::Send.create(messages: [{
     ],
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!'
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!<br />May the delivery force be with you!'
 }],
 sandbox_mode: true
 )
 p variable.attributes['Messages']
-```
-```python
-"""
-This call sends a message to one recipient in sandbox mode.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret), version='v3.1')
-data = {
-  'Messages': [
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"Subject": "Your email flight plan!",
-						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"
-				}
-		],
-  'SandboxMode': True
-}
-result = mailjet.send.create(data=data)
-print result.status_code
-print result.json()
 ```
 ``` go
 /*
@@ -5520,7 +5487,7 @@ func main () {
         },
         Subject: "Your email flight plan!",
         TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
       },
     }
 	messages := mailjet.MessagesV31{Info: messagesInfo, SandboxMode: true }
@@ -5530,6 +5497,39 @@ func main () {
 	}
 	fmt.Printf("Data: %+v\n", res)
 }
+```
+```python
+"""
+This call sends a message to one recipient in sandbox mode.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+data = {
+  'Messages': [
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"Subject": "Your email flight plan!",
+						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"
+				}
+		],
+  'SandboxMode': True
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```java
 package com.my.project;
@@ -5563,7 +5563,7 @@ public class MyClass {
                             .put("Name", "passenger 1")))
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!")))
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!")))
 			.property(Emailv31.SANDBOXMODE, true);
       response = client.post(request);
       System.out.println(response.getStatus());
@@ -5611,7 +5611,7 @@ namespace Mailjet.ConsoleApplication
                   }},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"}
+                 {"HTMLPart", "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"}
                  }
                 })
             .Property(Send.SandboxMode, true);
@@ -5668,6 +5668,34 @@ NOTICE: The <code>SandboxMode</code> property is a Send API JSON payload root pr
 
 ## Real-time Monitoring
 
+```shell
+# This call sends a message to one recipient with Real-time Monitoring.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3.1/send \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Messages":[
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"Subject": "Your email flight plan!",
+						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
+						"MonitoringCategory": "Category1"
+				}
+		]
+	}'
+```
 ```php
 <?php
 /*
@@ -5691,7 +5719,7 @@ $body = [
             ],
             'Subject' => "Your email flight plan!",
             'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+            'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
             'MonitoringCategory' => "Category1"
         ]
     ]
@@ -5699,34 +5727,6 @@ $body = [
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# This call sends a message to one recipient with Real-time Monitoring.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3.1/send \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Messages":[
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"Subject": "Your email flight plan!",
-						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
-						"MonitoringCategory": "Category1"
-				}
-		]
-	}'
 ```
 ```javascript
 /**
@@ -5753,7 +5753,7 @@ const request = mailjet
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
 						"MonitoringCategory": "Category1"
 				}
 		]
@@ -5787,7 +5787,7 @@ variable = Mailjet::Send.create(messages: [{
     ],
     'Subject'=> 'Your email flight plan!',
     'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!',
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!<br />May the delivery force be with you!',
     'MonitoringCategory'=> 'Category1'
 }]
 )
@@ -5817,7 +5817,7 @@ data = {
 						],
 						"Subject": "Your email flight plan!",
 						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
 						"MonitoringCategory": "Category1"
 				}
 		]
@@ -5853,7 +5853,7 @@ func main () {
         },
         Subject: "Your email flight plan!",
         TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
         MonitoringCategory: "Category1",
       },
     }
@@ -5897,7 +5897,7 @@ public class MyClass {
                             .put("Name", "passenger 1")))
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
                     .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!")
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!")
                     .put(Emailv31.Message.MONITORINGCATEGORY, "Category1")));
       response = client.post(request);
       System.out.println(response.getStatus());
@@ -5945,7 +5945,7 @@ namespace Mailjet.ConsoleApplication
                   }},
                  {"Subject", "Your email flight plan!"},
                  {"TextPart", "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!"},
-                 {"HTMLPart", "<h3>Dear passenger 1, welcome to Mailjet!</h3><br />May the delivery force be with you!"},
+                 {"HTMLPart", "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"},
                  {"MonitoringCategory", "Category1"}
                  }
                 });

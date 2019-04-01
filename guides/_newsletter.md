@@ -112,6 +112,33 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contactslist;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Create : only need a Name
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Contactslist.resource)
+			.property(Contactslist.NAME, "myList");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 ```csharp
 using Mailjet.Client;
 using Mailjet.Client.Resources;
@@ -151,33 +178,6 @@ namespace Mailjet.ConsoleApplication
          }
       }
    }
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contactslist;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Create : only need a Name
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Contactslist.resource)
-			.property(Contactslist.NAME, "myList");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
 }
 ```
 
@@ -496,24 +496,6 @@ name_space: "static"
 )
 p variable.attributes['Data']
 ```
-```python
-"""
-Create : Definition of available extra data items for contacts.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Datatype': 'str',
-  'Name': 'Age',
-  'NameSpace': 'static'
-}
-result = mailjet.contactmetadata.create(data=data)
-print result.status_code
-print result.json()
-```
 ``` go
 /*
 Create : Definition of available extra data items for contacts.
@@ -545,35 +527,6 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contactmetadata;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Create : Definition of available extra data items for contacts.
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Contactmetadata.resource)
-			.property(Contactmetadata.DATATYPE, "str")
-			.property(Contactmetadata.NAME, "Age")
-			.property(Contactmetadata.NAMESPACE, "static");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
 }
 ```
 ```csharp
@@ -619,6 +572,53 @@ namespace Mailjet.ConsoleApplication
    }
 }
 ```
+```python
+"""
+Create : Definition of available extra data items for contacts.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Datatype': 'str',
+  'Name': 'Age',
+  'NameSpace': 'static'
+}
+result = mailjet.contactmetadata.create(data=data)
+print result.status_code
+print result.json()
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contactmetadata;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Create : Definition of available extra data items for contacts.
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Contactmetadata.resource)
+			.property(Contactmetadata.DATATYPE, "str")
+			.property(Contactmetadata.NAME, "Age")
+			.property(Contactmetadata.NAMESPACE, "static");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 
 
 > API response:
@@ -658,26 +658,6 @@ The contact datas will be available for personalization of your message content 
 
 #### Add custom static Contact data
 
-```shell
-# Modify : Modify the static custom contact data
-curl -s \
-	-X PUT \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contactdata/$CONTACT_ID \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Data":[
-				{
-						"Name": "Age",
-						"value": 30
-				},
-				{
-						"Name": "Country",
-						"value": "US"
-				}
-		]
-	}'
-```
 ```php
 <?php
 /*
@@ -701,6 +681,26 @@ $body = [
 $response = $mj->put(Resources::$Contactdata, ['id' => $id, 'body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# Modify : Modify the static custom contact data
+curl -s \
+	-X PUT \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contactdata/$CONTACT_ID \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Data":[
+				{
+						"Name": "Age",
+						"value": 30
+				},
+				{
+						"Name": "Country",
+						"value": "US"
+				}
+		]
+	}'
 ```
 ```javascript
 /**
@@ -816,39 +816,6 @@ func main () {
 	}
 }
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contactdata;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Modify : Modify the static custom contact data
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Contactdata.resource, ID)
-			.property(Contactdata.DATA, new JSONArray()
-                .put(new JSONObject()
-                    .put("Name", "Age")
-                    .put("value", "30"))
-                .put(new JSONObject()
-                    .put("Name", "Country")
-                    .put("value", "US")));
-      response = client.put(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
 ```csharp
 using Mailjet.Client;
 using Mailjet.Client.Resources;
@@ -898,6 +865,39 @@ namespace Mailjet.ConsoleApplication
          }
       }
    }
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contactdata;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Modify : Modify the static custom contact data
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Contactdata.resource, ID)
+			.property(Contactdata.DATA, new JSONArray()
+                .put(new JSONObject()
+                    .put("Name", "Age")
+                    .put("value", "30"))
+                .put(new JSONObject()
+                    .put("Name", "Country")
+                    .put("value", "US")));
+      response = client.put(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 
@@ -1477,259 +1477,11 @@ You can specify one or more lists to add this contact to. The <code>Action</code
 
 ### Create contact and subscribe at once
 
-```php
-<?php
-/*
-Add a contact to the list
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$body = [
-    'Email' => "mrsmith@mailjet.com",
-    'Name' => "MrSmith",
-    'Action' => "addnoforce",
-    'Properties' => [
-        'property1' => "value",
-        'propertyN' => "valueN"
-    ]
-];
-$response = $mj->post(Resources::$ContactslistManagecontact, ['id' => $id, 'body' => $body]);
-$response->success() && var_dump($response->getData());
-?>
-```
-```shell
-# Add a contact to the list
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contactslist/$LIST_ID/managecontact \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Email":"mrsmith@mailjet.com",
-		"Name":"MrSmith",
-		"Action":"addnoforce",
-		"Properties":{
-				"property1": "value",
-				"propertyN": "valueN"
-		}
-	}'
-```
-```javascript
-/**
- *
- * Add a contact to the list
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.post("contactslist")
-	.id($LIST_ID)
-	.action("managecontact")
-	.request({
-		"Email":"mrsmith@mailjet.com",
-		"Name":"MrSmith",
-		"Action":"addnoforce",
-		"Properties":{
-				"property1": "value",
-				"propertyN": "valueN"
-		}
-	})
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
-```ruby
-# Add a contact to the list
-require 'mailjet'
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
-end
-variable = Mailjet::Contactslist_managecontact.create(id: $LIST_ID, , , , email: "mrsmith@mailjet.com",
-name: "MrSmith",
-action: "addnoforce",
-properties: {
-    'property1'=> 'value',
-    'propertyN'=> 'valueN'
-}
-)
-p variable.attributes['Data']
-```
-```python
-"""
-Add a contact to the list
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$LIST_ID'
-data = {
-  'Email': 'mrsmith@mailjet.com',
-  'Name': 'MrSmith',
-  'Action': 'addnoforce',
-  'Properties': {
-				"property1": "value",
-				"propertyN": "valueN"
-		}
-}
-result = mailjet.contactslist_managecontact.create(id=id, data=data)
-print result.status_code
-print result.json()
-```
-``` go
-/*
-Add a contact to the list
-*/
-package main
-import (
-	"fmt"
-	"log"
-	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-)
-type  MyPropertiesStruct  struct {
-  Property1  string
-  PropertyN  string
-}
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.ContactslistManagecontact
-	mr := &Request{
-	  Resource: "contactslist",
-	  ID: RESOURCE_ID,
-	  Action: "managecontact",
-	}
-	fmr := &FullRequest{
-	  Info: mr,
-	  Payload: &resources.ContactslistManagecontact {
-      Email: "mrsmith@mailjet.com",
-      Name: "MrSmith",
-      Action: "addnoforce",
-      Properties: MyPropertiesStruct {
-        Property1: "value",
-        PropertyN: "valueN",
-      },
-    },
-	}
-	err := mailjetClient.Post(fmr, &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.ContactslistManagecontact;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Add a contact to the list
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(ContactslistManagecontact.resource, ID)
-			.property(ContactslistManagecontact.EMAIL, "mrsmith@mailjet.com")
-			.property(ContactslistManagecontact.NAME, "MrSmith")
-			.property(ContactslistManagecontact.ACTION, "addnoforce")
-			.property(ContactslistManagecontact.PROPERTIES, new JSONObject()
-                .put("property1", "value")
-                .put("propertyN", "valueN"));
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
-```csharp
-using Mailjet.Client;
-using Mailjet.Client.Resources;
-using System;
-using Newtonsoft.Json.Linq;
-namespace Mailjet.ConsoleApplication
-{
-   class Program
-   {
-      /// <summary>
-      /// Add a contact to the list
-      /// </summary>
-      static void Main(string[] args)
-      {
-         RunAsync().Wait();
-      }
-      static async Task RunAsync()
-      {
-         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
-         MailjetRequest request = new MailjetRequest
-         {
-            Resource = ContactslistManagecontact.Resource,
-            ResourceId = ResourceId.Numeric(ID)
-         }
-            .Property(ContactslistManagecontact.Email, "mrsmith@mailjet.com")
-            .Property(ContactslistManagecontact.Name, "MrSmith")
-            .Property(ContactslistManagecontact.Action, "addnoforce")
-            .Property(ContactslistManagecontact.Properties, new JObject {
-                {"property1", "value"},
-                {"propertyN", "valueN"}
-                });
-         MailjetResponse response = await client.PostAsync(request);
-         if (response.IsSuccessStatusCode)
-         {
-            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
-            Console.WriteLine(response.GetData());
-         }
-         else
-         {
-            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
-            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
-            Console.WriteLine(response.GetData());
-            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
-         }
-      }
-   }
-}
-```
-
+{{contactslist_managecontact2_POST}}
 
 > API response:
 
-```json
-{
-	"Count": 1,
-	"Data": [
-		{
-			"ContactID": "10",
-			"Email": "mrsmith@mailjet.com",
-			"Action": "addnoforce",
-			"Name": "MrSmith",
-			"Properties": {
-				"property1": "value",
-				"propertyN": "valueN"
-			}
-		}
-	],
-	"Total": 1
-}
-```
-
+{{contactslist_managecontact2_POST_STATIC_response_STATIC}}
 
 The <code>[/contactslist/$ID/managecontact](/reference/email/contacts/subscriptions/#v3_post_contactslist_list_ID_managecontact)</code> allows you to create and add a contact to a list in one call.
 
@@ -2069,18 +1821,6 @@ NOTICE: The Sender Email needs to be active. Visit the <a href="https://app.mail
 
 ### Add a body to a campaign draft
 
-```shell
-# Modify : CampaignDraft content data.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/campaigndraft/$ID/detailcontent \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Html-part":"Hello <strong>world</strong>!",
-		"Text-part":"Hello world!"
-	}'
-```
 ```php
 <?php
 /*
@@ -2096,6 +1836,18 @@ $body = [
 $response = $mj->post(Resources::$CampaigndraftDetailcontent, ['id' => $id, 'body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# Modify : CampaignDraft content data.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/campaigndraft/$ID/detailcontent \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Html-part":"Hello <strong>world</strong>!",
+		"Text-part":"Hello world!"
+	}'
 ```
 ```javascript
 /**
@@ -2532,6 +2284,16 @@ Before sending, the API will check if the draft has all mandatory fields filled 
 
 ### Send the campaign immediately
 
+```shell
+# Send a CampaignDraft
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/campaigndraft/$ID/send \
+	-H 'Content-Type: application/json' \
+	-d '{
+	}'
+```
 ```php
 <?php
 /*
@@ -2543,16 +2305,6 @@ $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'
 $response = $mj->post(Resources::$CampaigndraftSend, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# Send a CampaignDraft
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/campaigndraft/$ID/send \
-	-H 'Content-Type: application/json' \
-	-d '{
-	}'
 ```
 ```javascript
 /**
@@ -2631,32 +2383,6 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.CampaigndraftSend;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Send a CampaignDraft
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(CampaigndraftSend.resource, ID);
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
-}
-```
 ```csharp
 using Mailjet.Client;
 using Mailjet.Client.Resources;
@@ -2696,6 +2422,32 @@ namespace Mailjet.ConsoleApplication
          }
       }
    }
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.CampaigndraftSend;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Send a CampaignDraft
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(CampaigndraftSend.resource, ID);
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 
@@ -2812,39 +2564,6 @@ result = mailjet.campaigndraft_schedule.create(id=id, data=data)
 print result.status_code
 print result.json()
 ```
-``` go
-/*
-Create : CampaignDraft schedule
-*/
-package main
-import (
-	"fmt"
-	"log"
-	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.CampaigndraftSchedule
-	mr := &Request{
-	  Resource: "campaigndraft",
-	  ID: RESOURCE_ID,
-	  Action: "schedule",
-	}
-	fmr := &FullRequest{
-	  Info: mr,
-	  Payload: &resources.CampaigndraftSchedule {
-      Date: "2015-04-22T09:00:00+01:00",
-    },
-	}
-	err := mailjetClient.Post(fmr, &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
-}
-```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
@@ -2912,6 +2631,39 @@ namespace Mailjet.ConsoleApplication
          }
       }
    }
+}
+```
+``` go
+/*
+Create : CampaignDraft schedule
+*/
+package main
+import (
+	"fmt"
+	"log"
+	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.CampaigndraftSchedule
+	mr := &Request{
+	  Resource: "campaigndraft",
+	  ID: RESOURCE_ID,
+	  Action: "schedule",
+	}
+	fmr := &FullRequest{
+	  Info: mr,
+	  Payload: &resources.CampaigndraftSchedule {
+      Date: "2015-04-22T09:00:00+01:00",
+    },
+	}
+	err := mailjetClient.Post(fmr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
 }
 ```
 
@@ -3264,24 +3016,6 @@ name: "40 year olds"
 )
 p variable.attributes['Data']
 ```
-```python
-"""
-Create : A filter expressions for use in newsletters.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-data = {
-  'Description': 'Only contacts aged 40',
-  'Expression': 'age=40',
-  'Name': '40 year olds'
-}
-result = mailjet.contactfilter.create(data=data)
-print result.status_code
-print result.json()
-```
 ``` go
 /*
 Create : A filter expressions for use in newsletters.
@@ -3314,6 +3048,24 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
+```
+```python
+"""
+Create : A filter expressions for use in newsletters.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+data = {
+  'Description': 'Only contacts aged 40',
+  'Expression': 'age=40',
+  'Name': '40 year olds'
+}
+result = mailjet.contactfilter.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```java
 package com.my.project;
@@ -3655,6 +3407,38 @@ curl -s \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 	https://api.mailjet.com/v3/REST/campaign/mj.nl=$NEWSLETTER_ID 
 ```
+```javascript
+/**
+ *
+ * View : Campaign linked to the Newsletter :NEWSLETTER_ID
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("campaign")
+	.id(mj.nl=$NEWSLETTER_ID)
+	.request()
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```php
+<?php
+/*
+View : Campaign linked to the Newsletter :NEWSLETTER_ID
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->get(Resources::$Campaign, ['id' => $id]);
+$response->success() && var_dump($response->getData());
+?>
+```
 ```ruby
 # View : Campaign linked to the Newsletter :NEWSLETTER_ID
 require 'mailjet'
@@ -3771,38 +3555,6 @@ namespace Mailjet.ConsoleApplication
       }
    }
 }
-```
-```javascript
-/**
- *
- * View : Campaign linked to the Newsletter :NEWSLETTER_ID
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("campaign")
-	.id(mj.nl=$NEWSLETTER_ID)
-	.request()
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
-```php
-<?php
-/*
-View : Campaign linked to the Newsletter :NEWSLETTER_ID
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Campaign, ['id' => $id]);
-$response->success() && var_dump($response->getData());
-?>
 ```
 
 

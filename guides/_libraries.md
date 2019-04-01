@@ -14,7 +14,7 @@ You can find even more usefull tools and plugins on the <a href="https://github.
 
 We welcome any contribution to these repositories.  
 
-Please follow the following instructions to make it easier to process your improvements :
+Please follow the instructions below to make it easier to process your improvements :
 
  - Fork the project.
  - Create a topic branch.
@@ -26,5 +26,3 @@ Please follow the following instructions to make it easier to process your impro
 Please do not include changes to the gemspec (Ruby), or version files.
 
 <aside class="notice">Make sure that you don't share your private credentials when pushing your code</aside>
-
-

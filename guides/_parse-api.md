@@ -14,6 +14,21 @@ It will make the processing of inbound messages easier as Mailjet will do all th
 
 ## Basic Setup
 
+```php
+<?php
+/*
+Create : ParseRoute description
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$body = [
+    'Url' => "https://www.mydomain.com/mj_parse.php"
+];
+$response = $mj->post(Resources::$Parseroute, ['body' => $body]);
+$response->success() && var_dump($response->getData());
+?>
+```
 ```shell
 # Create : ParseRoute description
 curl -s \
@@ -46,32 +61,6 @@ request
 		console.log(err.statusCode)
 	})
 ```
-```php
-<?php
-/*
-Create : ParseRoute description
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$body = [
-    'Url' => "https://www.mydomain.com/mj_parse.php"
-];
-$response = $mj->post(Resources::$Parseroute, ['body' => $body]);
-$response->success() && var_dump($response->getData());
-?>
-```
-```ruby
-# Create : ParseRoute description
-require 'mailjet'
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
-end
-variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php"
-)
-p variable.attributes['Data']
-```
 ```python
 """
 Create : ParseRoute description
@@ -87,6 +76,17 @@ data = {
 result = mailjet.parseroute.create(data=data)
 print result.status_code
 print result.json()
+```
+```ruby
+# Create : ParseRoute description
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Parseroute.create(url: "https://www.mydomain.com/mj_parse.php"
+)
+p variable.attributes['Data']
 ```
 ``` go
 /*
@@ -117,33 +117,6 @@ func main () {
 	  fmt.Println(err)
 	}
 	fmt.Printf("Data array: %+v\n", data)
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Parseroute;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Create : ParseRoute description
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Parseroute.resource)
-			.property(Parseroute.URL, "https://www.mydomain.com/mj_parse.php");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
 }
 ```
 ```csharp
@@ -185,6 +158,33 @@ namespace Mailjet.ConsoleApplication
          }
       }
    }
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Parseroute;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Create : ParseRoute description
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Parseroute.resource)
+			.property(Parseroute.URL, "https://www.mydomain.com/mj_parse.php");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
 }
 ```
 

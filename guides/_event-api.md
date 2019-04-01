@@ -230,6 +230,7 @@ The event data is sent in the <code>POST</code> request body using a JSON object
       "event": "sent",
       "time": 1433333949,
       "MessageID": 19421777835146490,
+      "Message_GUID": "1ab23cd4-e567-8901-2345-6789f0gh1i2j",
       "email": "api@mailjet.com",
       "mj_campaign_id": 7257,
       "mj_contact_id": 4,
@@ -243,6 +244,7 @@ The event data is sent in the <code>POST</code> request body using a JSON object
       "event": "sent",
       "time": 1433333949,
       "MessageID": 19421777835146491,
+      "Message_GUID": "j2i1hg0-f987-6543-2109-8765e4dc32ba1",
       "email": "api@mailjet.com",
       "mj_campaign_id": 7257,
       "mj_contact_id": 4,
@@ -295,6 +297,7 @@ All JSON event objects contain the following properties:
    "event": "sent",
    "time": 1433333949,
    "MessageID": 19421777835146490,
+   "Message_GUID": "1ab23cd4-e567-8901-2345-6789f0gh1i2j",
    "email": "api@mailjet.com",
    "mj_campaign_id": 7257,
    "mj_contact_id": 4,
@@ -323,6 +326,7 @@ Sent event additional properties:
    "event": "open",
    "time": 1433103519,
    "MessageID": 19421777396190490,
+   "Message_GUID": "1ab23cd4-e567-8901-2345-6789f0gh1i2j",
    "email": "api@mailjet.com",
    "mj_campaign_id": 7173,
    "mj_contact_id": 320,
@@ -352,6 +356,7 @@ Open event additional properties:
    "event": "click",
    "time": 1433334653,
    "MessageID": 19421777836302490,
+   "Message_GUID": "1ab23cd4-e567-8901-2345-6789f0gh1i2j",
    "email": "api@mailjet.com",
    "mj_campaign_id": 7272,
    "mj_contact_id": 4,
@@ -380,6 +385,7 @@ Click event additional properties:
    "event": "bounce",
    "time": 1430812195,
    "MessageID": 13792286917004336,
+   "Message_GUID": "1ab23cd4-e567-8901-2345-6789f0gh1i2j",
    "email": "bounce@mailjet.com",
    "mj_campaign_id": 0,
    "mj_contact_id": 0,
@@ -415,6 +421,7 @@ NOTICE: If you consider using this event to modify the status of your recipient 
    "event": "blocked",
    "time": 1430812195,
    "MessageID": 13792286917004336,
+   "Message_GUID": "1ab23cd4-e567-8901-2345-6789f0gh1i2j",
    "email": "bounce@mailjet.com",
    "mj_campaign_id": 0,
    "mj_contact_id": 0,
@@ -448,6 +455,7 @@ NOTICE: If you consider using this event to modify the status of your recipient 
    "event": "spam",
    "time": 1430812195,
    "MessageID": 13792286917004336,
+   "Message_GUID": "1ab23cd4-e567-8901-2345-6789f0gh1i2j",
    "email": "bounce@mailjet.com",
    "mj_campaign_id": 0,
    "mj_contact_id": 0,
@@ -473,6 +481,7 @@ Spam event additional properties:
    "event": "unsub",
    "time": 1433334941,
    "MessageID": 20547674933128000,
+   "Message_GUID": "1ab23cd4-e567-8901-2345-6789f0gh1i2j",
    "email": "api@mailjet.com",
    "mj_campaign_id": 7276,
    "mj_contact_id": 126,
@@ -517,10 +526,3 @@ system | system issue | Something went wrong on our server-side. A temporary err
  | connection issue | Something went wrong with our servers. This should not happen, and never be permanent !
 mailjet | preblocked | You tried to send an email to an address that recently (or repeatedly) bounced. We didn't try to send it to avoid damaging your reputation.
  | duplicate in campaign | You used X-Mailjet-DeduplicateCampaign and sent more than one email to a single recipient. Only the first email was sent; the others were blocked.
-
-## Online Demonstration
-
-You can test the Event API with our <a href="https://live-event-dashboard-demo.mailjet.com/" target="_blank">Mailjet Live Event API Dashboard</a>.
-After setting up your public and private API key, you can select the events you want to test. This dashboard will update your Endpoint URLs (Make sure that when testing you make a backup of your current Endpoint URLs). You can then send messages and see the event payload appear in the Dashboard.
-
-This demo, built in NodeJS and Golang, is available on <a href="https://github.com/arnaudbreton/mailjet-live-event-dashboard" target="_blank">GitHub</a>. Feel free to reuse or contribute.

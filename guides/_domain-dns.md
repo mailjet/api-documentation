@@ -6,6 +6,17 @@ You will also need to verify your sender addresses and domain names. The validat
 
 ## Create DNS entry
 
+```shell
+# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/sender \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Email":"anothersender@example.com"
+	}'
+```
 ```php
 <?php
 /*
@@ -20,17 +31,6 @@ $body = [
 $response = $mj->post(Resources::$Sender, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/sender \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Email":"anothersender@example.com"
-	}'
 ```
 ```javascript
 /**
@@ -411,6 +411,16 @@ Follow the <a href="https://www.mailjet.com/docs/spf-dkim-guide" target="_blank"
 
 ##Check your DNS
 
+```shell
+# Check : Run a check on a domain
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/dns/$ID_OR_DOMAINNAME/check \
+	-H 'Content-Type: application/json' \
+	-d '{
+	}'
+```
 ```php
 <?php
 /*
@@ -422,16 +432,6 @@ $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'
 $response = $mj->post(Resources::$DnsCheck, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# Check : Run a check on a domain
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/dns/$ID_OR_DOMAINNAME/check \
-	-H 'Content-Type: application/json' \
-	-d '{
-	}'
 ```
 ```javascript
 /**
@@ -622,6 +622,17 @@ The check action follows the SPF records in cascade and takes CNAME records into
 
 ### Validate single sending address
 
+```shell
+# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/sender \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Email":"anothersender@example.com"
+	}'
+```
 ```php
 <?php
 /*
@@ -636,17 +647,6 @@ $body = [
 $response = $mj->post(Resources::$Sender, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/sender \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Email":"anothersender@example.com"
-	}'
 ```
 ```javascript
 /**
@@ -826,16 +826,6 @@ Once added, the email will be inactive by default. In order to activate it, call
 
 <div></div>
 
-```shell
-# Validate : check if the Ownership token has been properly setup on the website or DNS
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/sender/$ID/validate \
-	-H 'Content-Type: application/json' \
-	-d '{
-	}'
-```
 ```php
 <?php
 /*
@@ -847,6 +837,16 @@ $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'
 $response = $mj->post(Resources::$SenderValidate, ['id' => $id]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# Validate : check if the Ownership token has been properly setup on the website or DNS
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/sender/$ID/validate \
+	-H 'Content-Type: application/json' \
+	-d '{
+	}'
 ```
 ```javascript
 /**
