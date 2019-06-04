@@ -36,29 +36,6 @@ curl -s \
 		"Version":2
 	}'
 ```
-```javascript
-/**
- *
- * Create a grouped handler for the open event
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.post("eventcallbackurl")
-	.request({
-		"EventType":"open",
-		"Url":"https://mydomain.com/event_handler",
-		"Version":2
-	})
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
-```
 ```ruby
 # Create a grouped handler for the open event
 require 'mailjet'
@@ -88,6 +65,29 @@ data = {
 result = mailjet.eventcallbackurl.create(data=data)
 print result.status_code
 print result.json()
+```
+```javascript
+/**
+ *
+ * Create a grouped handler for the open event
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.post("eventcallbackurl")
+	.request({
+		"EventType":"open",
+		"Url":"https://mydomain.com/event_handler",
+		"Version":2
+	})
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
 ```
 ``` go
 /*
@@ -200,17 +200,13 @@ The endpoint is a URL our server will call for each event (it can lead to a lot 
 
 It must return a <code>200 OK</code> HTTP code if all goes well. Any other HTTP code will result in our server retrying the request later.
 
-Our system will retry following these rules :
-
- - 10 attempts with 30 seconds between each attempt
- - followed by 10 attempts with 30 minutes between each attempt
- - finally the URL is suspended
+**Our system will retry every 30 seconds and will stop 24 hours after the initial failure, unless a new event is generated.**
 
 The event API also allows you to configure a backup endpoint URL with the property <code>isBackup</code> that will be used in case the primary URL is suspended.
 
-To reactivate a suspended enpoint URL, you need to update the URL with a new URL.
+To reactivate a suspended endpoint URL, you need to update the URL with a new URL.
 
-We strongly recommend using a secure (HTTPS) URL in combination with a basic authentification to make sure data cannot be intercepted, and that only our servers can send you data.
+We strongly recommend using a secure (HTTPS) URL in combination with a basic authentication to make sure data cannot be intercepted, and that only our servers can send you data.
 
 E.g.: <code>https://username:password@www.example.com/mailjet_triggers.php</code>
 
@@ -268,7 +264,7 @@ The Event API relies on your server being able to handle large amount of POST ca
 
 We advise you to follow some basic guidelines for implementation and usage.
 
- - Process the payload received asynchronously : as much as possible, the webhook script should rely on an asynchronous consumer process that will use the data saved by your webhook. You should keep out of your webhook logic all cross matches of the delivered events with other ressources of our API or your internal database. This step will allow your webhook to answer our calls in a timely manner  and avoid timing out and being retried by our server.
+ - Process the payload received asynchronously : as much as possible, the webhook script should rely on an asynchronous consumer process that will use the data saved by your webhook. You should keep out of your webhook logic all cross matches of the delivered events with other resources of our API or your internal database. This step will allow your webhook to answer our calls in a timely manner  and avoid timing out and being retried by our server.
  - Check your server logs regularly for any errors : all non 200 errors would be retried and could cause an increasing volume of calls to your system.
  - Leverage the [transactional message tagging](#tagging-email-messages) to simplify reconciliation between the events and your own system.
 
@@ -277,12 +273,13 @@ We advise you to follow some basic guidelines for implementation and usage.
 All JSON event objects contain the following properties:
 
 - event : the event type
-- time : unix timestamp of event
+- time : Unix timestamp of event
 - email : email address of recipient triggering the event
 - mj_campaign_id : internal Mailjet campaign ID associated to the message
 - mj_contact_id : internal Mailjet contact ID
 - customcampaign : value of the X-Mailjet-Campaign header when provided
 - MessageID : The unique message ID
+- Message_GUID : Unique 128-bit ID for this message. Equals the value of MessageUUID returned after the message is sent.
 - CustomID: the custom ID, when provided at send time
 - Payload: the event payload, when provided at send time
 
@@ -392,10 +389,11 @@ Click event additional properties:
    "customcampaign": "",
    "CustomID": "helloworld",
    "Payload": "",
-   "blocked": true,
+   "blocked": false,
    "hard_bounce": true,
    "error_related_to": "recipient",
    "error": "user unknown"
+   "comment": "Host or domain name not found. Name service error for name=lbjsnrftlsiuvbsren.com type=A: Host not found"
 }
 ```
 
@@ -403,8 +401,9 @@ Bounce event additional properties:
 
 - blocked : true if this bounce leads to the recipient being blocked
 - hard_bounce : true if error was permanent
-- error_related_to : see error table
+- error_related_to : see [error table](#possible-values-for-errors)
 - error : see [error table](#possible-values-for-errors)
+- comment : the raw SMTP error code, including descriptions of the reason for the bounce
 
 <aside class="notice">
 NOTICE: If you consider using this event to modify the status of your recipient subscription or viability , please take into account the value of the <code>hard_bounce</code> and <code>error</code> property. All bounce events may not have the same level of importance.
@@ -440,7 +439,7 @@ Blocked event additional properties:
 
 
 <aside class="notice">
-NOTICE: If you consider using this event to modify the status of your recipient subscription, please take into account the value of the <code>error</code> property. All blocked events may not have the same reason and perpetuity on the status of the contact (ie: <code>duplicate in campaign</code> indicates that the recipient message was blocked for the campaign and <code>preblocked</code> indicates that the recipient is blocked for all messages).  
+NOTICE: If you consider using this event to modify the status of your recipient subscription, please take into account the value of the <code>error</code> property. All blocked events may not have the same reason and perpetuity on the status of the contact (i.e. <code>duplicate in campaign</code> indicates that the recipient message was blocked for the campaign and <code>preblocked</code> indicates that the recipient is blocked for all messages).  
 </aside>
 
 <div></div>
@@ -514,7 +513,7 @@ recipient | user unknown | Email address doesn't exist, double check it for typo
 domain | invalid domain | There's a typo in the domain name part of the address. Or the address is so old that its domain has expired !
  | no mail host | Nobody answers when we knock at the door.
  | relay/access denied | The destination mail server is refusing to talk to us.
- | greylisted | This is a temporary error due to possible unrecognised senders. Delivery will be re-attempted.
+ | greylisted | This is a temporary error due to possible unrecognized senders. Delivery will be re-attempted.
  | typofix | The domain part of your recipient email address was not valid.
 content | bad or empty template | You should check that the template you are using has a content or is not corrupted.
  | error in template language | Your content contains a template language error, you can refer to the [error reporting functionalities](#templates-error-management) to get more information.

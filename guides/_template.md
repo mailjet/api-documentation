@@ -3,7 +3,7 @@
 
 # Template API
 
-## Overview
+## Template API Overview
 
 Template API allows for the storage and access to your templates on the Mailjet system.
 
@@ -25,6 +25,17 @@ Store your templates on your Mailjet account by using the `/template` API resour
 <div id="creating-the-template"></div>
 
 ### Create the template
+```shell
+# Create : 
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/template \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Name":"First Template"
+	}'
+```
 ```php
 <?php
 /*
@@ -39,17 +50,6 @@ $body = [
 $response = $mj->post(Resources::$Template, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# Create : 
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/template \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Name":"First Template"
-	}'
 ```
 ```javascript
 /**
@@ -478,33 +478,6 @@ You must set the <code>Mj-TemplateLanguage</code> property in the payload provid
 
 ### Send a stored template
 
-```shell
-# This call sends a message based on a template.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3.1/send \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Messages":[
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"TemplateID": 1,
-						"TemplateLanguage": true,
-						"Subject": "Your email flight plan!"
-				}
-		]
-	}'
-```
 ```php
 <?php
 /*
@@ -535,6 +508,33 @@ $body = [
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# This call sends a message based on a template.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3.1/send \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Messages":[
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"TemplateID": 1,
+						"TemplateLanguage": true,
+						"Subject": "Your email flight plan!"
+				}
+		]
+	}'
 ```
 ```javascript
 /**
@@ -778,6 +778,13 @@ You must set the <code>Mj-TemplateLanguage</code> property in the payload at <co
 
 ### Use Passport Templates
 
+```shell
+# View : Find your personal templates
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/template?OwnerType=user\&Limit=100 
+```
 ```php
 <?php
 /*
@@ -793,13 +800,6 @@ $filters = [
 $response = $mj->get(Resources::$Template, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# View : Find your personal templates
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/template?OwnerType=user\&Limit=100 
 ```
 ```javascript
 /**
@@ -945,6 +945,13 @@ namespace Mailjet.ConsoleApplication
 }
 ```
 
+```shell
+# View : Find your templates, created in Passport
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/template?EditMode=tool\&Limit=100\&OwnerType=user 
+```
 ```php
 <?php
 /*
@@ -961,13 +968,6 @@ $filters = [
 $response = $mj->get(Resources::$Template, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# View : Find your templates, created in Passport
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/template?EditMode=tool\&Limit=100\&OwnerType=user 
 ```
 ```javascript
 /**

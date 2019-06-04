@@ -15,7 +15,7 @@ To use the Mailjet Email API, you need to:
 
 <div style="margin-left:45px;" class="postman-run-button"
 data-postman-action="collection/import"
-data-postman-var-1="10d8b2fb27a2e369594c"></div>
+data-postman-var-1="f10958358116f86b841d"></div>
 <script type="text/javascript">
   (function (p,o,s,t,m,a,n) {
     !p[s] && (p[s] = function () { (p[t] || (p[t] = [])).push(arguments); });
@@ -68,6 +68,33 @@ export $RECIPIENT_EMAIL='Enter your recipient email address here'
 
  <div></div>
 
+```shell
+# Run:
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3.1/send \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Messages":[
+				{
+						"From": {
+								"Email": "$SENDER_EMAIL",
+								"Name": "Me"
+						},
+						"To": [
+								{
+										"Email": "$RECIPIENT_EMAIL",
+										"Name": "You"
+								}
+						],
+						"Subject": "My first Mailjet Email!",
+						"TextPart": "Greetings from Mailjet!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
+				}
+		]
+	}'
+```
 ```php
 <?php
 /*
@@ -98,33 +125,6 @@ $body = [
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
-```
-```shell
-# Run:
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3.1/send \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Messages":[
-				{
-						"From": {
-								"Email": "$SENDER_EMAIL",
-								"Name": "Me"
-						},
-						"To": [
-								{
-										"Email": "$RECIPIENT_EMAIL",
-										"Name": "You"
-								}
-						],
-						"Subject": "My first Mailjet Email!",
-						"TextPart": "Greetings from Mailjet!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
-				}
-		]
-	}'
 ```
 ```javascript
 /**
@@ -374,6 +374,7 @@ Then use the code sample to send a message.
       "To": [
         {
           "Email": "passenger@mailjet.com",
+          "MessageUUID": "1ab23cd4-e567-8901-2345-6789f0gh1i2j",
           "MessageID": "1234567890987654321",
           "MessageHref": "https://api.mailjet.com/v3/message/1234567890987654321"
         }
@@ -440,6 +441,32 @@ end
 variable = Mailjet::Message.find($MESSAGE_ID)
 p variable.attributes['Data']
 ```
+``` go
+/*
+Run :
+*/
+package main
+import (
+	"fmt"
+	"log"
+	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.Message
+	mr := &Request{
+	  Resource: "message",
+	  ID: RESOURCE_ID,
+	}
+	err := mailjetClient.Get(mr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
 ```python
 """
 Run :
@@ -478,32 +505,6 @@ public class MyClass {
       System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
-}
-```
-``` go
-/*
-Run :
-*/
-package main
-import (
-	"fmt"
-	"log"
-	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Message
-	mr := &Request{
-	  Resource: "message",
-	  ID: RESOURCE_ID,
-	}
-	err := mailjetClient.Get(mr, &data)
-	if err != nil {
-	  fmt.Println(err)
-	}
-	fmt.Printf("Data array: %+v\n", data)
 }
 ```
 ```csharp
@@ -807,20 +808,6 @@ end
 variable = Mailjet::Messagehistory.find($MESSAGE_ID)
 p variable.attributes['Data']
 ```
-```python
-"""
-Run :
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret))
-id = '$MESSAGE_ID'
-result = mailjet.messagehistory.get(id=id)
-print result.status_code
-print result.json()
-```
 ``` go
 /*
 Run :
@@ -846,6 +833,20 @@ func main () {
 	}
 	fmt.Printf("Data array: %+v\n", data)
 }
+```
+```python
+"""
+Run :
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$MESSAGE_ID'
+result = mailjet.messagehistory.get(id=id)
+print result.status_code
+print result.json()
 ```
 ```java
 package com.my.project;
@@ -975,13 +976,6 @@ $response = $mj->get(Resources::$Statcounters, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```shell
-# Run :
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/statcounters?CounterSource=APIKey\&CounterTiming=Message\&CounterResolution=Lifetime 
-```
 ```javascript
 /**
  *
@@ -1004,6 +998,13 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
+```
+```shell
+# Run :
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/statcounters?CounterSource=APIKey\&CounterTiming=Message\&CounterResolution=Lifetime 
 ```
 ```ruby
 # Run :

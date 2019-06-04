@@ -12,7 +12,7 @@ Google App Engine :
 
  - Python : <a href="https://cloud.google.com/appengine/docs/python/mail/mailjet" target="_blank">standard</a> or <a href="https://cloud.google.com/appengine/docs/flexible/python/sending-emails-with-mailjet" target="_blank">flexible</a> environment
  - PHP : <a href="https://cloud.google.com/appengine/docs/php/mail/mailjet" target="_blank">standard</a> or <a href="https://cloud.google.com/appengine/docs/flexible/php/sending-emails-with-mailjet" target="_blank">flexible</a> environment
-  - Go : <a href="https://cloud.google.com/appengine/docs/go/mail/mailjet" target="_blank">standard</a> or <a href="https://cloud.google.com/appengine/docs/flexible/go/sending-emails-with-mailjet" target="_blank">flexible</a> environment
+ - Go : <a href="https://cloud.google.com/appengine/docs/go/mail/mailjet" target="_blank">standard</a> or <a href="https://cloud.google.com/appengine/docs/flexible/go/sending-emails-with-mailjet" target="_blank">flexible</a> environment
  - Java : <a href="https://cloud.google.com/appengine/docs/java/mail/mailjet" target="_blank">standard</a> or <a href="https://cloud.google.com/appengine/docs/flexible/java/sending-emails-with-mailjet" target="_blank">flexible</a> environment
  - Node.js : <a href="https://cloud.google.com/appengine/docs/flexible/nodejs/sending-emails-with-mailjet" target="_blank">flexible</a> environment
 

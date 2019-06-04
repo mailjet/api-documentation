@@ -115,6 +115,33 @@ func main () {
 	}
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Contact;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Call to add contact to exclusion list
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Contact.resource, ID)
+			.property(Contact.ISEXCLUDEDFROMCAMPAIGNS, "true");
+      response = client.put(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 ```csharp
 using Mailjet.Client;
 using Mailjet.Client.Resources;
@@ -155,33 +182,6 @@ namespace Mailjet.ConsoleApplication
          }
       }
    }
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contact;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Call to add contact to exclusion list
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Contact.resource, ID)
-			.property(Contact.ISEXCLUDEDFROMCAMPAIGNS, "true");
-      response = client.put(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
 }
 ```
 
@@ -529,6 +529,22 @@ The same way, you can upload contacts asynchronously in one or more list with <c
 
 ### Manage Contacts exclusion through CSV upload
 
+```php
+<?php
+/*
+Create: A wrapper for the CSV importer
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$body = [
+    'DataID' => "$ID_DATA",
+    'Method' => "excludemarketing"
+];
+$response = $mj->post(Resources::$Csvimport, ['body' => $body]);
+$response->success() && var_dump($response->getData());
+?>
+```
 ```shell
 # Create: A wrapper for the CSV importer
 curl -s \
@@ -562,22 +578,6 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
-```
-```php
-<?php
-/*
-Create: A wrapper for the CSV importer
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$body = [
-    'DataID' => "$ID_DATA",
-    'Method' => "excludemarketing"
-];
-$response = $mj->post(Resources::$Csvimport, ['body' => $body]);
-$response->success() && var_dump($response->getData());
-?>
 ```
 ```ruby
 # Create: A wrapper for the CSV importer

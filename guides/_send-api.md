@@ -2,11 +2,11 @@
 
 ## Choose sending method
 
-Mailjet offers two ways to send transactional emails : SMTP Relay or Send API
+Mailjet offers two ways to send transactional emails : SMTP Relay or Send API.
 
 ### SMTP Relay
 
-Wtih the Mailjet <a href="https://www.mailjet.com/feature/smtp-relay/" target="_blank">SMTP Relay</a> you can send emails in an easy way, requiring minimum integration effort on your side.
+With the Mailjet <a href="https://www.mailjet.com/feature/smtp-relay/" target="_blank">SMTP Relay</a> you can send emails in an easy way, requiring minimum integration effort on your side.
 
 The SMTP Relay is useful if you have an existing solution for transactional emailing by SMTP or if you cannot use the Send API. Using the SMTP relay, you have to take care of email headers, MIME type handling and completely format and personalize your message content.
 
@@ -36,21 +36,10 @@ The API will return a simple response indicating if the message is ready to be p
 #### Choose Send API V3
 [Send API v3](#send-api-v3) is Mailjet’s traditional transactional Send API. Designed for advanced developers looking for performance and scalability, we mainly advise this version to larger players.
 
-## Prerequisites
+## Requirements
 
 ### Verify a Sender
 
-```shell
-# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/sender \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Email":"anothersender@example.com"
-	}'
-```
 ```php
 <?php
 /*
@@ -65,6 +54,17 @@ $body = [
 $response = $mj->post(Resources::$Sender, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# Create : Manage an email sender for a single API key. An e-mail address or a complete domain (*) has to be registered and validated before being used to send e-mails. In order to manage a sender available across multiple API keys, see the related MetaSender resource.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/sender \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Email":"anothersender@example.com"
+	}'
 ```
 ```javascript
 /**
@@ -572,9 +572,9 @@ Important: The recipients listed in <code>To</code> will receive a common messag
 Send API will send a response containing an array of <code>Messages</code>. Each instance of the message object will include the <code>Status</code> and the list of message UUIDs for each recipient in <code>To</code>, <code>Cc</code> and <code>Bcc</code>.
 
 
-<code>MessageUUID</code> is the internal Mailjet ID of your message. You will be able to use this id to get more information about your message. refer to our [Message Statistics Guide](#messages) for more information.
+<code>MessageUUID</code> is the internal Mailjet ID of your message.
 
-<code>MessageID</code> is the unique ID of the message (legacy format).
+<code>MessageID</code> is the unique ID of the message (legacy format). You will be able to use this ID to get more information about your message.
 
 <code>MessageHref</code> is a URL, pointing to the API URL, where the message metadata can be retrieved. It is made of the API Base URL, the message resource path and the message ID (not UUID).
 
@@ -771,6 +771,54 @@ variable = Mailjet::Send.create(messages: [{
 )
 p variable.attributes['Messages']
 ```
+```python
+"""
+This call sends a message to one recipient.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+data = {
+  'Messages': [
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								},
+								{
+										"Email": "passenger2@mailjet.com",
+										"Name": "passenger 2"
+								}
+						],
+						"Cc": [
+								{
+										"Email": "copilot@mailjet.com",
+										"Name": "Copilot"
+								}
+						],
+						"Bcc": [
+								{
+										"Email": "air-traffic-control@mailjet.com",
+										"Name": "Air traffic control"
+								}
+						],
+						"Subject": "Your email flight plan!",
+						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
+				}
+		]
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
+```
 ``` go
 /*
 This call sends a message to one recipient.
@@ -824,54 +872,6 @@ func main () {
 	}
 	fmt.Printf("Data: %+v\n", res)
 }
-```
-```python
-"""
-This call sends a message to one recipient.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret), version='v3.1')
-data = {
-  'Messages': [
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								},
-								{
-										"Email": "passenger2@mailjet.com",
-										"Name": "passenger 2"
-								}
-						],
-						"Cc": [
-								{
-										"Email": "copilot@mailjet.com",
-										"Name": "Copilot"
-								}
-						],
-						"Bcc": [
-								{
-										"Email": "air-traffic-control@mailjet.com",
-										"Name": "Air traffic control"
-								}
-						],
-						"Subject": "Your email flight plan!",
-						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
-				}
-		]
-}
-result = mailjet.send.create(data=data)
-print result.status_code
-print result.json()
 ```
 ```java
 package com.my.project;
@@ -1050,40 +1050,6 @@ namespace Mailjet.ConsoleApplication
 
 ## Send with attached files
 
-```shell
-# This call sends a message to the given recipient with attachment.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3.1/send \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Messages":[
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"Subject": "Your email flight plan!",
-						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
-						"Attachments": [
-								{
-										"ContentType": "text/plain",
-										"Filename": "test.txt",
-										"Base64Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"
-								}
-						]
-				}
-		]
-	}'
-```
 ```php
 <?php
 /*
@@ -1121,6 +1087,40 @@ $body = [
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# This call sends a message to the given recipient with attachment.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3.1/send \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Messages":[
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"Subject": "Your email flight plan!",
+						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!",
+						"Attachments": [
+								{
+										"ContentType": "text/plain",
+										"Filename": "test.txt",
+										"Base64Content": "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"
+								}
+						]
+				}
+		]
+	}'
 ```
 ```javascript
 /**
@@ -1478,40 +1478,6 @@ curl -s \
 		]
 	}'
 ```
-```ruby
-# This call sends a message to the given recipient with inline attachment.
-require 'mailjet'
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
-  config.api_version = "v3.1"
-end
-variable = Mailjet::Send.create(messages: [{
-    'From'=> {
-        'Email'=> 'pilot@mailjet.com',
-        'Name'=> 'Mailjet Pilot'
-    },
-    'To'=> [
-        {
-            'Email'=> 'passenger1@mailjet.com',
-            'Name'=> 'passenger 1'
-        }
-    ],
-    'Subject'=> 'Your email flight plan!',
-    'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <img src=\'cid:id1\'> <a href=\'https://www.mailjet.com/\'>Mailjet</a>!</h3><br />May the delivery force be with you!',
-    'InlinedAttachments'=> [
-        {
-            'ContentType'=> 'image/png',
-            'Filename'=> 'logo.png',
-            'ContentID'=> 'id1',
-            'Base64Content'=> 'iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wIIChcxurq5eQAAAAd0RVh0QXV0aG9yAKmuzEgAAAAMdEVYdERlc2NyaXB0aW9uABMJISMAAAAKdEVYdENvcHlyaWdodACsD8w6AAAADnRFWHRDcmVhdGlvbiB0aW1lADX3DwkAAAAJdEVYdFNvZnR3YXJlAF1w/zoAAAALdEVYdERpc2NsYWltZXIAt8C0jwAAAAh0RVh0V2FybmluZwDAG+aHAAAAB3RFWHRTb3VyY2UA9f+D6wAAAAh0RVh0Q29tbWVudAD2zJa/AAAABnRFWHRUaXRsZQCo7tInAAABV0lEQVQokaXSPWtTYRTA8d9N7k1zm6a+RG2x+FItgpu66uDQxbFurrr5OQQHR9FZnARB3PwSFqooddAStCBoqmLtS9omx+ESUXuDon94tnP+5+1JYm057GyQjZFP+l+S6G2FzlNe3WHtHc2TNI8zOlUUGLxsD1kDyR+EEQE2P/L8Jm/uk6RUc6oZaYM0JxtnpEX9AGPTtM6w7yzVEb61EaSNn4QD3j5m4QabH6hkVFLSUeqHyCeot0ib6BdNVGscPM/hWWr7S4Tw9TUvbpFUitHTnF6XrS+sL7O6VBSausT0FZonSkb+nZUFFm+z8Z5up5Btr1Lby7E5Zq4yPrMrLR263ZV52g+LvfW3iy6PXubUNVrnhqYNF3bmiZ1i1MmLnL7OxIWh4T+IMpYeRNyrRzyZjWg/ioh+aVgZu4WfXxaixbsRve5fiwb8epTo8+kZjSPFf/sHvgNC0/mbjJbxPAAAAABJRU5ErkJggg=='
-        }
-    ]
-}]
-)
-p variable.attributes['Messages']
-```
 ```javascript
 /**
  *
@@ -1556,6 +1522,40 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
+```
+```ruby
+# This call sends a message to the given recipient with inline attachment.
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+  config.api_version = "v3.1"
+end
+variable = Mailjet::Send.create(messages: [{
+    'From'=> {
+        'Email'=> 'pilot@mailjet.com',
+        'Name'=> 'Mailjet Pilot'
+    },
+    'To'=> [
+        {
+            'Email'=> 'passenger1@mailjet.com',
+            'Name'=> 'passenger 1'
+        }
+    ],
+    'Subject'=> 'Your email flight plan!',
+    'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <img src=\'cid:id1\'> <a href=\'https://www.mailjet.com/\'>Mailjet</a>!</h3><br />May the delivery force be with you!',
+    'InlinedAttachments'=> [
+        {
+            'ContentType'=> 'image/png',
+            'Filename'=> 'logo.png',
+            'ContentID'=> 'id1',
+            'Base64Content'=> 'iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wIIChcxurq5eQAAAAd0RVh0QXV0aG9yAKmuzEgAAAAMdEVYdERlc2NyaXB0aW9uABMJISMAAAAKdEVYdENvcHlyaWdodACsD8w6AAAADnRFWHRDcmVhdGlvbiB0aW1lADX3DwkAAAAJdEVYdFNvZnR3YXJlAF1w/zoAAAALdEVYdERpc2NsYWltZXIAt8C0jwAAAAh0RVh0V2FybmluZwDAG+aHAAAAB3RFWHRTb3VyY2UA9f+D6wAAAAh0RVh0Q29tbWVudAD2zJa/AAAABnRFWHRUaXRsZQCo7tInAAABV0lEQVQokaXSPWtTYRTA8d9N7k1zm6a+RG2x+FItgpu66uDQxbFurrr5OQQHR9FZnARB3PwSFqooddAStCBoqmLtS9omx+ESUXuDon94tnP+5+1JYm057GyQjZFP+l+S6G2FzlNe3WHtHc2TNI8zOlUUGLxsD1kDyR+EEQE2P/L8Jm/uk6RUc6oZaYM0JxtnpEX9AGPTtM6w7yzVEb61EaSNn4QD3j5m4QabH6hkVFLSUeqHyCeot0ib6BdNVGscPM/hWWr7S4Tw9TUvbpFUitHTnF6XrS+sL7O6VBSausT0FZonSkb+nZUFFm+z8Z5up5Btr1Lby7E5Zq4yPrMrLR263ZV52g+LvfW3iy6PXubUNVrnhqYNF3bmiZ1i1MmLnL7OxIWh4T+IMpYeRNyrRzyZjWg/ioh+aVgZu4WfXxaixbsRve5fiwb8epTo8+kZjSPFf/sHvgNC0/mbjJbxPAAAAABJRU5ErkJggg=='
+        }
+    ]
+}]
+)
+p variable.attributes['Messages']
 ```
 ```python
 """
@@ -2411,42 +2411,6 @@ variable = Mailjet::Send.create(messages: [{
 )
 p variable.attributes['Messages']
 ```
-```python
-"""
-This call sends a message to a recipient with global personalisation.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret), version='v3.1')
-data = {
-  'Messages': [
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"Variables": {
-								"day": "Monday"
-						},
-						"TemplateLanguage": True,
-						"Subject": "Your email flight plan!",
-						"TextPart": "Dear passenger, welcome to Mailjet! On this {{var:day}}, may the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />On this {{var:day}}, may the delivery force be with you!"
-				}
-		]
-}
-result = mailjet.send.create(data=data)
-print result.status_code
-print result.json()
-```
 ``` go
 /*
 This call sends a message to a recipient with global personalisation.
@@ -2487,6 +2451,42 @@ func main () {
 	}
 	fmt.Printf("Data: %+v\n", res)
 }
+```
+```python
+"""
+This call sends a message to a recipient with global personalisation.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+data = {
+  'Messages': [
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"Variables": {
+								"day": "Monday"
+						},
+						"TemplateLanguage": True,
+						"Subject": "Your email flight plan!",
+						"TextPart": "Dear passenger, welcome to Mailjet! On this {{var:day}}, may the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />On this {{var:day}}, may the delivery force be with you!"
+				}
+		]
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
 ```
 ```java
 package com.my.project;
@@ -2636,34 +2636,6 @@ $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```shell
-# This call sends a message to the a recipient with contact property personalisation.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3.1/send \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Messages":[
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"TemplateLanguage": true,
-						"Subject": "Your email flight plan!",
-						"TextPart": "Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> May the delivery force be with you!"
-				}
-		]
-	}'
-```
 ```javascript
 /**
  *
@@ -2762,6 +2734,45 @@ result = mailjet.send.create(data=data)
 print result.status_code
 print result.json()
 ```
+``` go
+/*
+This call sends a message to the a recipient with contact property personalisation.
+*/
+package main
+import (
+	"fmt"
+	"log"
+	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	messagesInfo := []mailjet.InfoMessagesV31 {
+      mailjet.InfoMessagesV31{
+        From: &mailjet.RecipientV31{
+          Email: "pilot@mailjet.com",
+          Name: "Mailjet Pilot",
+        },
+        To: &mailjet.RecipientsV31{
+          mailjet.RecipientV31 {
+            Email: "passenger1@mailjet.com",
+            Name: "passenger 1",
+          },
+        },
+        TemplateLanguage: true,
+        Subject: "Your email flight plan!",
+      TextPart: "Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet! May the delivery force be with you!",
+      HTMLPart: "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> May the delivery force be with you!",
+      },
+    }
+	messages := mailjet.MessagesV31{Info: messagesInfo }
+	res, err := m.SendMailV31(&messages)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Data: %+v\n", res)
+}
+```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
@@ -2800,45 +2811,6 @@ public class MyClass {
       System.out.println(response.getStatus());
       System.out.println(response.getData());
     }
-}
-```
-``` go
-/*
-This call sends a message to the a recipient with contact property personalisation.
-*/
-package main
-import (
-	"fmt"
-	"log"
-	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	messagesInfo := []mailjet.InfoMessagesV31 {
-      mailjet.InfoMessagesV31{
-        From: &mailjet.RecipientV31{
-          Email: "pilot@mailjet.com",
-          Name: "Mailjet Pilot",
-        },
-        To: &mailjet.RecipientsV31{
-          mailjet.RecipientV31 {
-            Email: "passenger1@mailjet.com",
-            Name: "passenger 1",
-          },
-        },
-        TemplateLanguage: true,
-        Subject: "Your email flight plan!",
-      TextPart: "Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet! May the delivery force be with you!",
-      HTMLPart: "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> May the delivery force be with you!",
-      },
-    }
-	messages := mailjet.MessagesV31{Info: messagesInfo }
-	res, err := m.SendMailV31(&messages)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Data: %+v\n", res)
 }
 ```
 ```csharp
@@ -2902,21 +2874,8 @@ namespace Mailjet.ConsoleApplication
    }
 }
 ```
-
-
-If the contact you are sending an email to is already existing in the Mailjet system with some contact data, you can leverage this information to personalize your email.
-
-Use <code>{{data:METADATA_NAME}}</code> or <code>{{data:METADATA_NAME:DEFAULT_VALUE}}</code> to insert data in your content.
-
-<code>DEFAULT_VALUE</code> is the default value that will be used if no data is found.
-
-Refer to the [Personalization section](/guides/#personalization-add-contact-properties) for more information on how to add contact properties.
-
-<div id="using-a-template"></div>
-## Use a Template
-
 ```shell
-# This call sends a message based on a template.
+# This call sends a message to the a recipient with contact property personalisation.
 curl -s \
 	-X POST \
 	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
@@ -2935,13 +2894,27 @@ curl -s \
 										"Name": "passenger 1"
 								}
 						],
-						"TemplateID": 1,
 						"TemplateLanguage": true,
-						"Subject": "Your email flight plan!"
+						"Subject": "Your email flight plan!",
+						"TextPart": "Dear {{data:firstname:\"passenger\"}}, welcome to Mailjet! May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear {{data:firstname:\"passenger\"}}, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> May the delivery force be with you!"
 				}
 		]
 	}'
 ```
+
+
+If the contact you are sending an email to is already existing in the Mailjet system with some contact data, you can leverage this information to personalize your email.
+
+Use <code>{{data:METADATA_NAME}}</code> or <code>{{data:METADATA_NAME:DEFAULT_VALUE}}</code> to insert data in your content.
+
+<code>DEFAULT_VALUE</code> is the default value that will be used if no data is found.
+
+Refer to the [Personalization section](/guides/#personalization-add-contact-properties) for more information on how to add contact properties.
+
+<div id="using-a-template"></div>
+## Use a Template
+
 ```php
 <?php
 /*
@@ -2972,6 +2945,33 @@ $body = [
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# This call sends a message based on a template.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3.1/send \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Messages":[
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"TemplateID": 1,
+						"TemplateLanguage": true,
+						"Subject": "Your email flight plan!"
+				}
+		]
+	}'
 ```
 ```javascript
 /**
@@ -3743,46 +3743,6 @@ result = mailjet.send.create(data=data)
 print result.status_code
 print result.json()
 ```
-``` go
-/*
-This call sends an email to one recipient with an additional SMTP header
-*/
-package main
-import (
-	"fmt"
-	"log"
-	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-)
-func main () {
-	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	messagesInfo := []mailjet.InfoMessagesV31 {
-      mailjet.InfoMessagesV31{
-        From: &mailjet.RecipientV31{
-          Email: "pilot@mailjet.com",
-          Name: "Mailjet Pilot",
-        },
-        To: &mailjet.RecipientsV31{
-          mailjet.RecipientV31 {
-            Email: "passenger1@mailjet.com",
-            Name: "passenger 1",
-          },
-        },
-        Subject: "Your email flight plan!",
-        TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-        HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-      Headers: map[string]interface{}{
-      "X-My-header": "X2332X-324-432-534"},
-    },
-  },
-	messages := mailjet.MessagesV31{Info: messagesInfo }
-	res, err := m.SendMailV31(&messages)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Data: %+v\n", res)
-}
-```
 ```java
 package com.my.project;
 import com.mailjet.client.errors.MailjetException;
@@ -3887,6 +3847,46 @@ namespace Mailjet.ConsoleApplication
    }
 }
 ```
+``` go
+/*
+This call sends an email to one recipient with an additional SMTP header
+*/
+package main
+import (
+	"fmt"
+	"log"
+	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	messagesInfo := []mailjet.InfoMessagesV31 {
+      mailjet.InfoMessagesV31{
+        From: &mailjet.RecipientV31{
+          Email: "pilot@mailjet.com",
+          Name: "Mailjet Pilot",
+        },
+        To: &mailjet.RecipientsV31{
+          mailjet.RecipientV31 {
+            Email: "passenger1@mailjet.com",
+            Name: "passenger 1",
+          },
+        },
+        Subject: "Your email flight plan!",
+        TextPart: "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+        HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
+      Headers: map[string]interface{}{
+      "X-My-header": "X2332X-324-432-534"},
+    },
+  },
+	messages := mailjet.MessagesV31{Info: messagesInfo }
+	res, err := m.SendMailV31(&messages)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Data: %+v\n", res)
+}
+```
 
 
 In every message, you can specify your own Email headers using the <code>Headers</code> property. These headers will be added to the SMTP headers of the message, delivered to the recipient.  
@@ -3921,6 +3921,38 @@ These custom tags are included in the events triggered by our [Event API](#event
 
 ### Send an email with a custom ID
 
+```php
+<?php
+/*
+This call sends a message to one recipient with a CustomID
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'),true,['version' => 'v3.1']);
+$body = [
+    'Messages' => [
+        [
+            'From' => [
+                'Email' => "pilot@mailjet.com",
+                'Name' => "Mailjet Pilot"
+            ],
+            'To' => [
+                [
+                    'Email' => "passenger1@mailjet.com",
+                    'Name' => "passenger 1"
+                ]
+            ],
+            'Subject' => "Your email flight plan!",
+            'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+            'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
+            'CustomID' => "PassengerEticket1234"
+        ]
+    ]
+];
+$response = $mj->post(Resources::$Email, ['body' => $body]);
+$response->success() && var_dump($response->getData());
+?>
+```
 ```shell
 # This call sends a message to one recipient with a CustomID
 curl -s \
@@ -3986,38 +4018,6 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
-```
-```php
-<?php
-/*
-This call sends a message to one recipient with a CustomID
-*/
-require 'vendor/autoload.php';
-use \Mailjet\Resources;
-$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'),true,['version' => 'v3.1']);
-$body = [
-    'Messages' => [
-        [
-            'From' => [
-                'Email' => "pilot@mailjet.com",
-                'Name' => "Mailjet Pilot"
-            ],
-            'To' => [
-                [
-                    'Email' => "passenger1@mailjet.com",
-                    'Name' => "passenger 1"
-                ]
-            ],
-            'Subject' => "Your email flight plan!",
-            'TextPart' => "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-            'HTMLPart' => "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-            'CustomID' => "PassengerEticket1234"
-        ]
-    ]
-];
-$response = $mj->post(Resources::$Email, ['body' => $body]);
-$response->success() && var_dump($response->getData());
-?>
 ```
 ```ruby
 # This call sends a message to one recipient with a CustomID
@@ -4246,17 +4246,6 @@ $response = $mj->get(Resources::$Message, ['filters' => $filters]);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```ruby
-# View : API Key Statistical campaign/message data.
-require 'mailjet'
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
-end
-variable = Mailjet::Message.all(custom_id: "PassengerEticket1234"
-)
-p variable.attributes['Data']
-```
 ```javascript
 /**
  *
@@ -4277,6 +4266,17 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
+```
+```ruby
+# View : API Key Statistical campaign/message data.
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Message.all(custom_id: "PassengerEticket1234"
+)
+p variable.attributes['Data']
 ```
 ```python
 """
@@ -4392,34 +4392,6 @@ Your <code>CustomID</code> will be linked to our own UUID. You can also retrieve
 
 ### Send an email with a payload
 
-```shell
-# This call sends a message to one recipient with an EventPayload.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3.1/send \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Messages":[
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"Subject": "Your email flight plan!",
-						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-						"EventPayload": "Eticket,1234,row,15,seat,B"
-				}
-		]
-	}'
-```
 ```php
 <?php
 /*
@@ -4451,6 +4423,61 @@ $body = [
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# This call sends a message to one recipient with an EventPayload.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3.1/send \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Messages":[
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"Subject": "Your email flight plan!",
+						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
+						"EventPayload": "Eticket,1234,row,15,seat,B"
+				}
+		]
+	}'
+```
+```ruby
+# This call sends a message to one recipient with an EventPayload.
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+  config.api_version = "v3.1"
+end
+variable = Mailjet::Send.create(messages: [{
+    'From'=> {
+        'Email'=> 'pilot@mailjet.com',
+        'Name'=> 'Mailjet Pilot'
+    },
+    'To'=> [
+        {
+            'Email'=> 'passenger1@mailjet.com',
+            'Name'=> 'passenger 1'
+        }
+    ],
+    'Subject'=> 'Your email flight plan!',
+    'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
+    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!<br />May the delivery force be with you!',
+    'EventPayload'=> 'Eticket,1234,row,15,seat,B'
+}]
+)
+p variable.attributes['Messages']
 ```
 ```javascript
 /**
@@ -4489,33 +4516,6 @@ request
 	.catch((err) => {
 		console.log(err.statusCode)
 	})
-```
-```ruby
-# This call sends a message to one recipient with an EventPayload.
-require 'mailjet'
-Mailjet.configure do |config|
-  config.api_key = ENV['MJ_APIKEY_PUBLIC']
-  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
-  config.api_version = "v3.1"
-end
-variable = Mailjet::Send.create(messages: [{
-    'From'=> {
-        'Email'=> 'pilot@mailjet.com',
-        'Name'=> 'Mailjet Pilot'
-    },
-    'To'=> [
-        {
-            'Email'=> 'passenger1@mailjet.com',
-            'Name'=> 'passenger 1'
-        }
-    ],
-    'Subject'=> 'Your email flight plan!',
-    'TextPart'=> 'Dear passenger 1, welcome to Mailjet! May the delivery force be with you!',
-    'HTMLPart'=> '<h3>Dear passenger 1, welcome to <a href=\'https://www.mailjet.com/\'>Mailjet</a>!<br />May the delivery force be with you!',
-    'EventPayload'=> 'Eticket,1234,row,15,seat,B'
-}]
-)
-p variable.attributes['Messages']
 ```
 ```python
 """
@@ -4902,6 +4902,47 @@ func main () {
 	fmt.Printf("Data: %+v\n", res)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.ClientOptions;
+import com.mailjet.client.resource.Emailv31;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * This call sends a message to one recipient within a campaign blocking multiple messages to same recipient
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"), new ClientOptions("v3.1"));
+      request = new MailjetRequest(Emailv31.resource)
+			.property(Emailv31.MESSAGES, new JSONArray()
+                .put(new JSONObject()
+                    .put(Emailv31.Message.FROM, new JSONObject()
+                        .put("Email", "pilot@mailjet.com")
+                        .put("Name", "Mailjet Pilot"))
+                    .put(Emailv31.Message.TO, new JSONArray()
+                        .put(new JSONObject()
+                            .put("Email", "passenger1@mailjet.com")
+                            .put("Name", "passenger 1")))
+                    .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
+                    .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
+                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!")
+                    .put(Emailv31.Message.CUSTOMCAMPAIGN, "SendAPI_campaign")
+                    .put(Emailv31.Message.DEDUPLICATECAMPAIGN, true)));
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 ```csharp
 using Mailjet.Client;
 using Mailjet.Client.Resources;
@@ -4962,47 +5003,6 @@ namespace Mailjet.ConsoleApplication
          }
       }
    }
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.ClientOptions;
-import com.mailjet.client.resource.Emailv31;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * This call sends a message to one recipient within a campaign blocking multiple messages to same recipient
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"), new ClientOptions("v3.1"));
-      request = new MailjetRequest(Emailv31.resource)
-			.property(Emailv31.MESSAGES, new JSONArray()
-                .put(new JSONObject()
-                    .put(Emailv31.Message.FROM, new JSONObject()
-                        .put("Email", "pilot@mailjet.com")
-                        .put("Name", "Mailjet Pilot"))
-                    .put(Emailv31.Message.TO, new JSONArray()
-                        .put(new JSONObject()
-                            .put("Email", "passenger1@mailjet.com")
-                            .put("Name", "passenger 1")))
-                    .put(Emailv31.Message.SUBJECT, "Your email flight plan!")
-                    .put(Emailv31.Message.TEXTPART, "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!")
-                    .put(Emailv31.Message.HTMLPART, "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!")
-                    .put(Emailv31.Message.CUSTOMCAMPAIGN, "SendAPI_campaign")
-                    .put(Emailv31.Message.DEDUPLICATECAMPAIGN, true)));
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
 }
 ```
 
@@ -5460,6 +5460,39 @@ sandbox_mode: true
 )
 p variable.attributes['Messages']
 ```
+```python
+"""
+This call sends a message to one recipient in sandbox mode.
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret), version='v3.1')
+data = {
+  'Messages': [
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"Subject": "Your email flight plan!",
+						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"
+				}
+		],
+  'SandboxMode': True
+}
+result = mailjet.send.create(data=data)
+print result.status_code
+print result.json()
+```
 ``` go
 /*
 This call sends a message to one recipient in sandbox mode.
@@ -5497,39 +5530,6 @@ func main () {
 	}
 	fmt.Printf("Data: %+v\n", res)
 }
-```
-```python
-"""
-This call sends a message to one recipient in sandbox mode.
-"""
-from mailjet_rest import Client
-import os
-api_key = os.environ['MJ_APIKEY_PUBLIC']
-api_secret = os.environ['MJ_APIKEY_PRIVATE']
-mailjet = Client(auth=(api_key, api_secret), version='v3.1')
-data = {
-  'Messages': [
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"Subject": "Your email flight plan!",
-						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"
-				}
-		],
-  'SandboxMode': True
-}
-result = mailjet.send.create(data=data)
-print result.status_code
-print result.json()
 ```
 ```java
 package com.my.project;
@@ -5668,34 +5668,6 @@ NOTICE: The <code>SandboxMode</code> property is a Send API JSON payload root pr
 
 ## Real-time Monitoring
 
-```shell
-# This call sends a message to one recipient with Real-time Monitoring.
-curl -s \
-	-X POST \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3.1/send \
-	-H 'Content-Type: application/json' \
-	-d '{
-		"Messages":[
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"Subject": "Your email flight plan!",
-						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-						"MonitoringCategory": "Category1"
-				}
-		]
-	}'
-```
 ```php
 <?php
 /*
@@ -5727,6 +5699,34 @@ $body = [
 $response = $mj->post(Resources::$Email, ['body' => $body]);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# This call sends a message to one recipient with Real-time Monitoring.
+curl -s \
+	-X POST \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3.1/send \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"Messages":[
+				{
+						"From": {
+								"Email": "pilot@mailjet.com",
+								"Name": "Mailjet Pilot"
+						},
+						"To": [
+								{
+										"Email": "passenger1@mailjet.com",
+										"Name": "passenger 1"
+								}
+						],
+						"Subject": "Your email flight plan!",
+						"TextPart": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
+						"MonitoringCategory": "Category1"
+				}
+		]
+	}'
 ```
 ```javascript
 /**
@@ -6077,22 +6077,18 @@ For a single message, Send API can return multiple errors, each related to diffe
 
 Status Code | Error Code | Description | Related To
   ----------|------------|------------|------------
-400 | send-0001 | when an unexpected property is provided. |
-400 | send-0002 | when a property is set more than once in the input payload. |
 400 | send-0003 | when none of the <code>HTML</code>, <code>Text</code>, <code>TemplateID</code> properties are provided. | HTMLPart, TextPart, TemplateID
 400 | send-0004 | when providing <code>HTML</code> property, as well as a template also containing an HTML part - i.e. Duplicated content | HTMLPart, TemplateID
-403 | send-0005 | when providing <code>Text</code> property, as well as a template containing a text part - i.e. Duplicated content | TextPart, TemplateID
 403 | send-0006 | when the API key doesn’t have permission to use a Sender header. Please contact our support team to be granted permission. | SenderID
 403 | send-0007 | when <code>SenderID</code> is provided but not validated. | SenderID
-400 | send-0008 | when the sender email address provided in the From property is not authorized. The validation can be done on the <a href="https://app.mailjet.com/account/sender" target="_blank">Sender domains & addresses</a> page or through the <a href="https://dev.mailjet.com/guides/#verify-a-sender" target="_blank">API</a>. | From
+403 | send-0008 | when the sender email address provided in the From property is not authorized. The validation can be done on the <a href="https://app.mailjet.com/account/sender" target="_blank">Sender domains & addresses</a> page or through the <a href="https://dev.mailjet.com/guides/#verify-a-sender" target="_blank">API</a>. | From
 400 | send-0010 | when the API key can’t send the provided template. Please verify the owner of the template.  | TemplateID
 400 | send-0011 | when one of the forbidden headers (headers that have a property alternative) is set in the Headers collection. Please use the dedicated message property to set this header. | Headers["headerName"]
 400 | send-0012 | when <code>DeduplicateCampaign</code> is set to true while no <code>CustomCampaign</code> is defined. | CustomCampaign, DeduplicateCampaign
 400 | send-0013 | when <code>MonitoringCategory</code> does not exist for the API key. | MonitoringCategory
-400 | send-0014 | when <code>MonitoringCategory</code> was deleted. | MonitoringCategory
 400 | send-0015 | when the total number of recipients is over the limit. | To,CC,Bcc
 400 | send-0016 | when <code>TemplateLanguage</code> value is missing but <code>TemplateErrorReporting</code> or <code>TemplateErrorDeliver</code> are present. | TemplateLanguage
-400 | mj-0001 | when API key is suspended. |
+401 | mj-0001 | when API key is suspended. |
 400 | mj-0002 | when the API call contains payload with an invalid JSON syntax. |
 400 | mj-0003 | when mandatory property is missing or with null value. See <code>ErrorRelatedTo</code> for a list |
 400 | mj-0005 | when a property value is not an allowed values. | Priority<br>TrackClicks<br>TrackOpens
@@ -6100,7 +6096,7 @@ Status Code | Error Code | Description | Related To
 400 | mj-0007 | when an empty array is provided that cannot be empty. | Messages<br>To
 400 | mj-0008 | when an array property contains more than the maximum allowed number of elements. | Messages<br>Attachments<br>InlineAttachments<br>Headers<br>Variables<br>
 400 | mj-0011 | when the payload size is over the limit. |
-400 | mj-0012 | when an empty string value is provided. | Email<br>Base64Content<br>ContentType
+400 | mj-0012 | when an empty string value is provided. | Email<br>FileName<br>Base64Content<br>ContentType
 400 | mj-0013 | when the email address format is invalid. | Email
 401 | mj-0015 | when the user did not provide valid authorization credentials. |
 

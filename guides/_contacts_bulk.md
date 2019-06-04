@@ -353,6 +353,192 @@ For this API call, there is one specific <code>HTTP 400 status</code> error cond
 		<li>action missing or not valid</li>
 	</ul>
 
+### Retrieve the lists a contact is part of
+
+```shell
+# View : Lists a contact belong to
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contact/$ID/getcontactslists 
+```
+```php
+<?php
+/*
+View : Lists a contact belong to
+*/
+require 'vendor/autoload.php';
+use \Mailjet\Resources;
+$mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
+$response = $mj->get(Resources::$ContactGetcontactslists, ['id' => $id]);
+$response->success() && var_dump($response->getData());
+?>
+```
+```javascript
+/**
+ *
+ * View : Lists a contact belong to
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("contact")
+	.id($ID)
+	.action("getcontactslists")
+	.request()
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
+```ruby
+# View : Lists a contact belong to
+require 'mailjet'
+Mailjet.configure do |config|
+  config.api_key = ENV['MJ_APIKEY_PUBLIC']
+  config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
+end
+variable = Mailjet::Contact_getcontactslists.find($ID)
+p variable.attributes['Data']
+```
+```python
+"""
+View : Lists a contact belong to
+"""
+from mailjet_rest import Client
+import os
+api_key = os.environ['MJ_APIKEY_PUBLIC']
+api_secret = os.environ['MJ_APIKEY_PRIVATE']
+mailjet = Client(auth=(api_key, api_secret))
+id = '$ID'
+result = mailjet.contact_getcontactslists.get(id=id)
+print result.status_code
+print result.json()
+```
+``` go
+/*
+View : Lists a contact belong to
+*/
+package main
+import (
+	"fmt"
+	"log"
+	"os"
+	mailjet "github.com/mailjet/mailjet-apiv3-go"
+	"github.com/mailjet/mailjet-apiv3-go/resources"
+)
+func main () {
+	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
+	var data []resources.ContactGetcontactslists
+	mr := &Request{
+	  Resource: "contact",
+	  ID: RESOURCE_ID,
+	  Action: "getcontactslists",
+	}
+	err := mailjetClient.Get(mr, &data)
+	if err != nil {
+	  fmt.Println(err)
+	}
+	fmt.Printf("Data array: %+v\n", data)
+}
+```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.ContactGetcontactslists;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : Lists a contact belong to
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(ContactGetcontactslists.resource, ID);
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
+```csharp
+using Mailjet.Client;
+using Mailjet.Client.Resources;
+using System;
+using Newtonsoft.Json.Linq;
+namespace Mailjet.ConsoleApplication
+{
+   class Program
+   {
+      /// <summary>
+      /// View : Lists a contact belong to
+      /// </summary>
+      static void Main(string[] args)
+      {
+         RunAsync().Wait();
+      }
+      static async Task RunAsync()
+      {
+         MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
+         MailjetRequest request = new MailjetRequest
+         {
+            Resource = ContactGetcontactslists.Resource,
+            ResourceId = ResourceId.Numeric(ID)
+         }
+         MailjetResponse response = await client.GetAsync(request);
+         if (response.IsSuccessStatusCode)
+         {
+            Console.WriteLine(string.Format("Total: {0}, Count: {1}\n", response.GetTotal(), response.GetCount()));
+            Console.WriteLine(response.GetData());
+         }
+         else
+         {
+            Console.WriteLine(string.Format("StatusCode: {0}\n", response.StatusCode));
+            Console.WriteLine(string.Format("ErrorInfo: {0}\n", response.GetErrorInfo()));
+            Console.WriteLine(response.GetData());
+            Console.WriteLine(string.Format("ErrorMessage: {0}\n", response.GetErrorMessage()));
+         }
+      }
+   }
+}
+```
+
+
+To get information on all lists a specific contact belongs to, do a `GET` on <code>[/contact/{contact_ID}/getcontactslists](https://dev.mailjet.com/reference/email/contacts/subscriptions/#v3_get_contact_contact_ID_getcontactslists)</code>. You can use either the `ContactID` or the email address.
+
+<div></div>
+
+> API Response
+
+```json
+{
+	"Count": 1,
+	"Data": [
+		{
+			"IsActive": "true",
+			"IsUnsub": "false",
+			"ListID": "1",
+			"SubscribedAt": "2019-01-01T00:00:00Z"
+		}
+	],
+	"Total": 1
+}
+```
+
+
+The response will include the List ID, the contact's subscription status, as well as the time when this contact was subscribed to this list.
+
 <h2 id="contact_managemanycontacts">Manage multiple contacts</h2>
 
 ```php
@@ -1547,7 +1733,8 @@ The email should be unique in the file and will be the key to reconcile this lis
 "bar@example.com",2016/10/12
 "sam@ple.co.uk",2017/10/12
 ```
-When creating a CSV file, which contains contact properties with type <code>datetime</code>, you have to omit the first row of the csv, which defines the names of the contact properties in the CSV file. These contact properties are added in dedicated field - <code>ImportOptions</code>. [See here for details.](##adding-contacts-with-contact-data-of-type-datetime).
+
+When creating a CSV file, which contains contact properties with type <code>datetime</code>, you have to omit the first row of the csv, which defines the names of the contact properties in the CSV file. These contact properties are added in dedicated field - <code>ImportOptions</code>. [See here for details](#add-contacts-with-contact-data-of-type-datetime).
 
 <div></div>
 
@@ -1607,13 +1794,15 @@ $response->success() && var_dump($response->getData());
 ```
 ```shell
 # Import the CSV file through the DATA API
-curl --user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+curl -s \
+-X POST \
+--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
 https://api.mailjet.com/v3/DATA/contactslist/$ID_CONTACTLIST/CSVData/text:plain \
 -H "Content-Type: text/plain" \
 --data-binary "@./test.csv"
 ```
 ``` ruby
-# unsupported for now
+# unsupported at the moment, please refer to cURL
 ```
 ``` javascript
 const fs = require ('fs')
@@ -1671,6 +1860,9 @@ func main () {
     }
     fmt.Printf("Data array: %+v\n", data)
 }
+```
+``` csharp
+# unsupported at the moment, please refer to cURL
 ```
 
 

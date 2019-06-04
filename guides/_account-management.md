@@ -2,7 +2,7 @@
 
 The Mailjet REST API lets you manage multiple API keys. Each API key will have its own dedicated database for contacts, lists, newsletters and statistics. The contacts and lists will not be shared between API keys (including the main API key).
 
-This functionality can be used to create a test or preprod environment and/or seperate your mailing use under seperate environments (transactional/marketing, per websites...).
+This functionality can be used to create a test or preprod environment and/or separate your mailing use under separate environments (transactional/marketing, per websites...).
 
 Be aware that all messaging under these sub API keys will be accounted under your main account payment plan.
 
@@ -114,6 +114,33 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Apikey;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Apikey.resource)
+			.property(Apikey.NAME, "MynewKEY");
+      response = client.post(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 ```csharp
 using Mailjet.Client;
 using Mailjet.Client.Resources;
@@ -153,33 +180,6 @@ namespace Mailjet.ConsoleApplication
          }
       }
    }
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Apikey;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Apikey.resource)
-			.property(Apikey.NAME, "MynewKEY");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
 }
 ```
 
@@ -234,24 +234,12 @@ $response = $mj->get(Resources::$Apikey);
 $response->success() && var_dump($response->getData());
 ?>
 ```
-```javascript
-/**
- *
- * View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
- *
- */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-const request = mailjet
-	.get("apikey")
-	.request()
-request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+```shell
+# View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/apikey 
 ```
 ```ruby
 # View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
@@ -324,6 +312,25 @@ public class MyClass {
     }
 }
 ```
+```javascript
+/**
+ *
+ * View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
+ *
+ */
+const mailjet = require ('node-mailjet')
+	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const request = mailjet
+	.get("apikey")
+	.request()
+request
+	.then((result) => {
+		console.log(result.body)
+	})
+	.catch((err) => {
+		console.log(err.statusCode)
+	})
+```
 ```csharp
 using Mailjet.Client;
 using Mailjet.Client.Resources;
@@ -363,13 +370,6 @@ namespace Mailjet.ConsoleApplication
       }
    }
 }
-```
-```shell
-# View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/apikey 
 ```
 
 

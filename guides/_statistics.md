@@ -750,6 +750,38 @@ func main () {
 	fmt.Printf("Data array: %+v\n", data)
 }
 ```
+```java
+package com.my.project;
+import com.mailjet.client.errors.MailjetException;
+import com.mailjet.client.errors.MailjetSocketTimeoutException;
+import com.mailjet.client.MailjetClient;
+import com.mailjet.client.MailjetRequest;
+import com.mailjet.client.MailjetResponse;
+import com.mailjet.client.resource.Statcounters;
+import org.json.JSONArray;
+import org.json.JSONObject;
+public class MyClass {
+    /**
+     * View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
+     */
+    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
+      MailjetClient client;
+      MailjetRequest request;
+      MailjetResponse response;
+      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
+      request = new MailjetRequest(Statcounters.resource)
+                  .filter(Statcounters.SOURCEID, "$Campaign_ID")
+                  .filter(Statcounters.COUNTERSOURCE, "Campaign")
+                  .filter(Statcounters.COUNTERTIMING, "Event")
+                  .filter(Statcounters.COUNTERRESOLUTION, "Day")
+                  .filter(Statcounters.FROMTS, "123")
+                  .filter(Statcounters.TOTS, "456");
+      response = client.get(request);
+      System.out.println(response.getStatus());
+      System.out.println(response.getData());
+    }
+}
+```
 ```csharp
 using Mailjet.Client;
 using Mailjet.Client.Resources;
@@ -794,38 +826,6 @@ namespace Mailjet.ConsoleApplication
          }
       }
    }
-}
-```
-```java
-package com.my.project;
-import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Statcounters;
-import org.json.JSONArray;
-import org.json.JSONObject;
-public class MyClass {
-    /**
-     * View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Statcounters.resource)
-                  .filter(Statcounters.SOURCEID, "$Campaign_ID")
-                  .filter(Statcounters.COUNTERSOURCE, "Campaign")
-                  .filter(Statcounters.COUNTERTIMING, "Event")
-                  .filter(Statcounters.COUNTERRESOLUTION, "Day")
-                  .filter(Statcounters.FROMTS, "123")
-                  .filter(Statcounters.TOTS, "456");
-      response = client.get(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
 }
 ```
 
@@ -1010,13 +1010,6 @@ The Mailjet API allows you to easily access statistics for a specific recipient.
 
 ![recipient_stats](../images/stats-contact.png)
 
-```shell
-# View : View message statistics for a given contact.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contactstatistics 
-```
 ```php
 <?php
 /*
@@ -1028,6 +1021,13 @@ $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'
 $response = $mj->get(Resources::$Contactstatistics);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# View : View message statistics for a given contact.
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/contactstatistics 
 ```
 ```javascript
 /**
@@ -1651,35 +1651,35 @@ Below you can see how to calculate stats by ESP as displayed in the Email Provid
 
 Geographical stats provide information on email opens and clicks, broken down by country. This helps you identify possible engagement issues with recipients from specific regions. With those details in mind, you can update your sendings to focus on countries that are performing well, or address issues with markets that are underperforming.
 
-```shell
-# View : View message statistics for a given contact.
-curl -s \
-	-X GET \
-	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-	https://api.mailjet.com/v3/REST/contactstatistics 
-```
 ```php
 <?php
 /*
-View : View message statistics for a given contact.
+View : Message click/open statistics grouped per country
 */
 require 'vendor/autoload.php';
 use \Mailjet\Resources;
 $mj = new \Mailjet\Client(getenv('MJ_APIKEY_PUBLIC'), getenv('MJ_APIKEY_PRIVATE'));
-$response = $mj->get(Resources::$Contactstatistics);
+$response = $mj->get(Resources::$Geostatistics);
 $response->success() && var_dump($response->getData());
 ?>
+```
+```shell
+# View : Message click/open statistics grouped per country
+curl -s \
+	-X GET \
+	--user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
+	https://api.mailjet.com/v3/REST/geostatistics 
 ```
 ```javascript
 /**
  *
- * View : View message statistics for a given contact.
+ * View : Message click/open statistics grouped per country
  *
  */
 const mailjet = require ('node-mailjet')
 	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
 const request = mailjet
-	.get("contactstatistics")
+	.get("geostatistics")
 	.request()
 request
 	.then((result) => {
@@ -1690,31 +1690,31 @@ request
 	})
 ```
 ```ruby
-# View : View message statistics for a given contact.
+# View : Message click/open statistics grouped per country
 require 'mailjet'
 Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Contactstatistics.all()
+variable = Mailjet::Geostatistics.all()
 p variable.attributes['Data']
 ```
 ```python
 """
-View : View message statistics for a given contact.
+View : Message click/open statistics grouped per country
 """
 from mailjet_rest import Client
 import os
 api_key = os.environ['MJ_APIKEY_PUBLIC']
 api_secret = os.environ['MJ_APIKEY_PRIVATE']
 mailjet = Client(auth=(api_key, api_secret))
-result = mailjet.contactstatistics.get()
+result = mailjet.geostatistics.get()
 print result.status_code
 print result.json()
 ```
 ``` go
 /*
-View : View message statistics for a given contact.
+View : Message click/open statistics grouped per country
 */
 package main
 import (
@@ -1726,8 +1726,8 @@ import (
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
-	var data []resources.Contactstatistics
-	_, _, err := mailjetClient.List("contactstatistics", &data)
+	var data []resources.Geostatistics
+	_, _, err := mailjetClient.List("geostatistics", &data)
 	if err != nil {
 	  fmt.Println(err)
 	}
@@ -1741,19 +1741,19 @@ import com.mailjet.client.errors.MailjetSocketTimeoutException;
 import com.mailjet.client.MailjetClient;
 import com.mailjet.client.MailjetRequest;
 import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Contactstatistics;
+import com.mailjet.client.resource.Geostatistics;
 import org.json.JSONArray;
 import org.json.JSONObject;
 public class MyClass {
     /**
-     * View : View message statistics for a given contact.
+     * View : Message click/open statistics grouped per country
      */
     public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
       MailjetClient client;
       MailjetRequest request;
       MailjetResponse response;
       client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Contactstatistics.resource);
+      request = new MailjetRequest(Geostatistics.resource);
       response = client.get(request);
       System.out.println(response.getStatus());
       System.out.println(response.getData());
@@ -1770,7 +1770,7 @@ namespace Mailjet.ConsoleApplication
    class Program
    {
       /// <summary>
-      /// View : View message statistics for a given contact.
+      /// View : Message click/open statistics grouped per country
       /// </summary>
       static void Main(string[] args)
       {
@@ -1781,7 +1781,7 @@ namespace Mailjet.ConsoleApplication
          MailjetClient client = new MailjetClient(Environment.GetEnvironmentVariable("MJ_APIKEY_PUBLIC"), Environment.GetEnvironmentVariable("MJ_APIKEY_PRIVATE"));
          MailjetRequest request = new MailjetRequest
          {
-            Resource = Contactstatistics.Resource,
+            Resource = Geostatistics.Resource,
          }
          MailjetResponse response = await client.GetAsync(request);
          if (response.IsSuccessStatusCode)
@@ -1827,6 +1827,6 @@ Use the [/geostatistics](/reference/email/statistics/#v3_get_geostatistics) reso
 
 The following statistic resources will allow you to view information about the events on your messages. They will show a log of events on your messages for a selected time period. By default, the payload response will include the log for the current day, but you can specify a timeframe with the `FromTS` and `ToTS` filters.
 
-- [/openinformation](/reference/email/events/#v3_get_openinformation/) : Will give you details on opens, including useful information like timestamp for each open event, UserAgent, CampaignID and UserID.
-- [/clickstatistics](/reference/email/events/#v3_get_clickstatistics/) : Shows information on click events, including timestamp for the click, URL, UserAgent and delay between sending and the click event.
-- [/bouncestatistics](/reference/email/events/#v3_get_bouncestatistics) : Displays details for bounces, including bounce timestamp, campaign ID and contact ID, whether bounce is permanent or not.
+- [/openinformation](/reference/email/webhook/#v3_get_openinformation/) : Will give you details on opens, including useful information like timestamp for each open event, UserAgent, CampaignID and UserID.
+- [/clickstatistics](/reference/email/webhook/#v3_get_clickstatistics/) : Shows information on click events, including timestamp for the click, URL, UserAgent and delay between sending and the click event.
+- [/bouncestatistics](/reference/email/webhook/#v3_get_bouncestatistics) : Displays details for bounces, including bounce timestamp, campaign ID and contact ID, whether bounce is permanent or not.

@@ -235,11 +235,20 @@ Important: <code>Recipients</code> and <code>To</code> have a different behavior
 	"Sent": [
 		{
 			"Email": "passenger@mailjet.com",
-			"MessageID": 111111111111111
+			"MessageID": 111111111111111,
+			"MessageUUID": "1ab23cd4-e567-8901-2345-6789f0gh1i2j"
+
 		}
 	]
 }
 ```
+
+After a successful `POST` request the response will include the recipient email, `MessageID` and `MessageUUID`.
+
+<code>MessageUUID</code> is the internal Mailjet ID of your message.
+
+<code>MessageID</code> is the unique ID of the message (legacy format). You will be able to use this ID to get more information about your message.
+
 <div></div>
 ```php
 <?php
@@ -446,14 +455,9 @@ namespace Mailjet.ConsoleApplication
 
 
 When using  <code>To</code>, <code>Cc</code> and <code>Bcc</code> instead of <code>Recipients</code>, the email addresses need to be presented as SMTP headers in a string and not as an array.
-<div></div>
-
-
-<code>MessageID</code> is the internal Mailjet ID of your message. You will be able to use this id to get more information about your message. You can find more information in our [Message Statistics Guide](/guides/#messages)
-
 
 <aside class="notice">
-NOTICE: If a recipient does not exist in any of your contact list it will be created from scratch, keep that in mind if you are planning on sending a welcome email and then you're trying to add the email to a list as the contact effectively exists already.
+NOTICE: If a recipient does not exist in any of your contact list it will be created from scratch. Keep that in mind if you are planning on sending a welcome email and then you're trying to add the email to a list, as the contact effectively exists already.
 </aside>
 
 <div id="sending-to-multiple-recipients"></div>
@@ -711,11 +715,13 @@ namespace Mailjet.ConsoleApplication
 	"Sent": [
 		{
 			"Email": "passenger1@mailjet.com",
-			"MessageID": 20547681647433000
+			"MessageID": 20547681647433000,
+			"MessageUUID": "1ab23cd4-e567-8901-2345-6789f0gh1i2j"
 		},
 		{
 			"Email": "passenger2@mailjet.com",
-			"MessageID": 20547681647433001
+			"MessageID": 20547681647433001,
+			"MessageUUID": "j2i1hg0f-9876-5432-1098-765e4dc32ba1"
 		}
 	]
 }
@@ -1580,11 +1586,13 @@ namespace Mailjet.ConsoleApplication
 	"Sent": [
 		{
 			"Email": "passenger1@mailjet.com",
-			"MessageID": 20547681647433000
+			"MessageID": 20547681647433000,
+			"MessageUUID": "1ab23cd4-e567-8901-2345-6789f0gh1i2j"
 		},
 		{
 			"Email": "passenger2@mailjet.com",
-			"MessageID": 20547681647433001
+			"MessageID": 20547681647433001,
+			"MessageUUID": "j2i1hg0f-9876-5432-1098-765e4dc32ba1"
 		}
 	]
 }
