@@ -3136,7 +3136,7 @@ public class MyClass {
                         .put(new JSONObject()
                             .put("Email", "passenger1@mailjet.com")
                             .put("Name", "passenger 1")))
-                    .put(Emailv31.Message.TEMPLATEID, "1")
+                    .put(Emailv31.Message.TEMPLATEID, 1)
                     .put(Emailv31.Message.TEMPLATELANGUAGE, true)
                     .put(Emailv31.Message.SUBJECT, "Your email flight plan!")));
       response = client.post(request);
