@@ -57,20 +57,22 @@ $response->success() && var_dump($response->getData());
  * Create : 
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("template")
-	.request({
-		"Name":"First Template"
-	})
+  .post('template')
+  .request({
+    Name: "First Template"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : 
@@ -271,23 +273,25 @@ curl -s \
  * Create : Template content
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("template")
-	.id($ID_TEMPLATE)
-	.action("detailcontent")
-	.request({
-		"Html-part":"<html><body><p>Hello {{var:name}}</p></body></html>",
-		"Text-part":"Hello {{var:name}}"
-	})
+  .post('template')
+  .id($ID_TEMPLATE)
+  .action('detailcontent')
+  .request({
+    'Html-part': '<html><body><p>Hello {{var:name}}</p></body></html>',
+    'Text-part': "Hello {{var:name}}"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : Template content
@@ -542,36 +546,38 @@ curl -s \
  * This call sends a message based on a template.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send", {'version': 'v3.1'})
-	.request({
-		"Messages":[
-				{
-						"From": {
-								"Email": "pilot@mailjet.com",
-								"Name": "Mailjet Pilot"
-						},
-						"To": [
-								{
-										"Email": "passenger1@mailjet.com",
-										"Name": "passenger 1"
-								}
-						],
-						"TemplateID": 1,
-						"TemplateLanguage": true,
-						"Subject": "Your email flight plan!"
-				}
-		]
-	})
+  .post('send', { version: 'v3.1' })
+  .request({
+    Messages: [
+      {
+        From: {
+          Email: "pilot@mailjet.com",
+          Name: "Mailjet Pilot"
+        },
+        To: [
+          {
+            Email: "passenger1@mailjet.com",
+            Name: "passenger 1"
+          }
+        ],
+        TemplateID: 1,
+        TemplateLanguage: true,
+        Subject: "Your email flight plan!"
+      }
+    ]
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # This call sends a message based on a template.
@@ -807,21 +813,23 @@ $response->success() && var_dump($response->getData());
  * View : Find your personal templates
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("template")
-	.request({
-		"OwnerType":"user",
-		"Limit":100
-	})
+  .get('template')
+  .request({}, {
+    OwnerType: "user",
+    Limit: 100
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # View : Find your personal templates
@@ -975,22 +983,24 @@ $response->success() && var_dump($response->getData());
  * View : Find your templates, created in Passport
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("template")
-	.request({
-		"EditMode":"tool",
-		"Limit":100,
-		"OwnerType":"user"
-	})
+  .get('template')
+  .request({}, {
+    EditMode: "tool",
+    Limit: 100,
+    OwnerType: "user"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # View : Find your templates, created in Passport

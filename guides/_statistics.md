@@ -109,23 +109,25 @@ curl -s \
  * View : Retrieve Key Delivery statistics for a Specific Campaign
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("statcounters")
-	.request({
-		"SourceId":"$Campaign_ID",
-		"CounterSource":"Campaign",
-		"CounterTiming":"Message",
-		"CounterResolution":"Lifetime"
-	})
+  .get('statcounters')
+  .request({}, {
+    SourceId: "$Campaign_ID",
+    CounterSource: "Campaign",
+    CounterTiming: "Message",
+    CounterResolution: "Lifetime"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # View : Retrieve Key Delivery statistics for a Specific Campaign
@@ -382,23 +384,25 @@ curl -s \
  * View : Retrieve Key Delivery statistics for a Specific Campaign
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("statcounters")
-	.request({
-		"SourceId":"$Campaign_ID",
-		"CounterSource":"Campaign",
-		"CounterTiming":"Message",
-		"CounterResolution":"Lifetime"
-	})
+  .get('statcounters')
+  .request({}, {
+    SourceId: "$Campaign_ID",
+    CounterSource: "Campaign",
+    CounterTiming: "Message",
+    CounterResolution: "Lifetime"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # View : Retrieve Key Delivery statistics for a Specific Campaign
@@ -671,25 +675,27 @@ curl -s \
  * View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("statcounters")
-	.request({
-		"SourceId":"$Campaign_ID",
-		"CounterSource":"Campaign",
-		"CounterTiming":"Event",
-		"CounterResolution":"Day",
-		"FromTS":123,
-		"ToTS":456
-	})
+  .get('statcounters')
+  .request({}, {
+    SourceId: "$Campaign_ID",
+    CounterSource: "Campaign",
+    CounterTiming: "Event",
+    CounterResolution: "Day",
+    FromTS: 123,
+    ToTS: 456
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # View : View campaign evolution statistics, based on daily timeslices and with a defined timeframe
@@ -1035,18 +1041,20 @@ curl -s \
  * View : View message statistics for a given contact.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("contactstatistics")
-	.request()
+  .get('contactstatistics')
+  .request()
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # View : View message statistics for a given contact.
@@ -1226,21 +1234,21 @@ curl -s \
  * View : View statistics for total and unique clicks for each clicked URL in a campaign email
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("statistics")
-	.action("link-click")
-	.request({
-		"CampaignId":"$Campaign_ID"
-	})
+  .get('statistics')
+  .action('link-click')
+  .request({}, { CampaignId: "$Campaign_ID" })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # View : View statistics for total and unique clicks for each clicked URL in a campaign email
@@ -1418,21 +1426,21 @@ $response->success() && var_dump($response->getData());
  * View : View delivery and contact engagement statistics for a campaign across different Mailbox providers
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("statistics")
-	.action("recipient-esp")
-	.request({
-		"CampaignId":"$Campaign_ID"
-	})
+  .get('statistics')
+  .action('recipient-esp')
+  .request({}, { CampaignId: "$Campaign_ID" })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # View : View delivery and contact engagement statistics for a campaign across different Mailbox providers
@@ -1676,18 +1684,20 @@ curl -s \
  * View : Message click/open statistics grouped per country
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("geostatistics")
-	.request()
+  .get('geostatistics')
+  .request()
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # View : Message click/open statistics grouped per country

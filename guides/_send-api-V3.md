@@ -144,25 +144,31 @@ curl -s \
  * This calls sends an email to one recipient.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-		"Recipients":[{"Email":"passenger@mailjet.com"}]
-	})
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Recipients: [
+      {
+        Email: "passenger@mailjet.com"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+    'Html-part': '<h3>Dear passenger, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br />May the delivery force be with you!'
+  })
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
-	.catch(err => {
-		console.log(err.statusCode)
-	})
+  .then(result => {
+    console.log(result.body)
+  })
+  .catch(err => {
+    console.log(err.statusCode)
+  })
 ```
 ```csharp
 using Mailjet.Client;
@@ -250,6 +256,7 @@ After a successful `POST` request the response will include the recipient email,
 <code>MessageID</code> is the unique ID of the message (legacy format). You will be able to use this ID to get more information about your message.
 
 <div></div>
+
 ```php
 <?php
 require 'vendor/autoload.php';
@@ -291,26 +298,28 @@ curl -s \
  * This calls sends an email to two recipients in To and one recipient in CC.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-		"To":"Name <passenger@mailjet.com>, Name2 <passenger2@mailjet.com>",
-		"CC":"Name3 <passenger@mailjet.com>"
-	})
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    To: "Name <passenger@mailjet.com>, Name2 <passenger2@mailjet.com>",
+    CC: "Name3 <passenger@mailjet.com>",
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+    'Html-part': '<h3>Dear passenger, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br />May the delivery force be with you!',
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # This calls sends an email to two recipients in To and one recipient in CC.
@@ -632,25 +641,36 @@ func main () {
  * This calls sends an email to one recipient.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-		"Recipients":[{"Email":"passenger1@mailjet.com","Name":"passenger 1"},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]
-	})
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Recipients: [
+      {
+        Email: "passenger1@mailjet.com",
+        Name: "passenger 1"
+      },
+      {
+        Email: "passenger2@mailjet.com",
+        Name: "passenger 2"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+    'Html-part': '<h3>Dear passenger, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br />May the delivery force be with you!',
+  })
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
-	.catch(err => {
-		console.log(err.statusCode)
-	})
+  .then(result => {
+    console.log(result.body)
+  })
+  .catch(err => {
+    console.log(err.statusCode)
+  })
 ```
 ```csharp
 using Mailjet.Client;
@@ -905,26 +925,38 @@ curl -s \
  * This calls sends an email to one recipient.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-		"Recipients":[{"Email":"passenger@mailjet.com"}],
-		"Attachments":[{"Content-type":"text/plain","Filename":"test.txt","content":"VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"}]
-	})
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Recipients: [
+      {
+        Email: "passenger@mailjet.com"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+    'Html-part': '<h3>Dear passenger, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br />May the delivery force be with you!',
+    Attachments: [
+      {
+        'Content-type': "text/plain",
+        Filename: "test.txt",
+        content: "VGhpcyBpcyB5b3VyIGF0dGFjaGVkIGZpbGUhISEK"
+      }
+    ]
+  })
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
-	.catch(err => {
-		console.log (err.statusCode)
-	})
+  .then(result => {
+    console.log(result.body)
+  })
+  .catch(err => {
+    console.log(err.statusCode)
+  })
 ```
 ```csharp
 using Mailjet.Client;
@@ -1124,26 +1156,36 @@ curl -s \
  * This calls sends an email to one recipient.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to <img src=\"cid:logo.png\"> <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-		"Recipients":[{"Email":"passenger@mailjet.com"}],
-		"Inline_attachments":[{"Content-type":"image/png","Filename":"logo.png","content":"iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wIIChcxurq5eQAAAAd0RVh0QXV0aG9yAKmuzEgAAAAMdEVYdERlc2NyaXB0aW9uABMJISMAAAAKdEVYdENvcHlyaWdodACsD8w6AAAADnRFWHRDcmVhdGlvbiB0aW1lADX3DwkAAAAJdEVYdFNvZnR3YXJlAF1w/zoAAAALdEVYdERpc2NsYWltZXIAt8C0jwAAAAh0RVh0V2FybmluZwDAG+aHAAAAB3RFWHRTb3VyY2UA9f+D6wAAAAh0RVh0Q29tbWVudAD2zJa/AAAABnRFWHRUaXRsZQCo7tInAAABV0lEQVQokaXSPWtTYRTA8d9N7k1zm6a+RG2x+FItgpu66uDQxbFurrr5OQQHR9FZnARB3PwSFqooddAStCBoqmLtS9omx+ESUXuDon94tnP+5+1JYm057GyQjZFP+l+S6G2FzlNe3WHtHc2TNI8zOlUUGLxsD1kDyR+EEQE2P/L8Jm/uk6RUc6oZaYM0JxtnpEX9AGPTtM6w7yzVEb61EaSNn4QD3j5m4QabH6hkVFLSUeqHyCeot0ib6BdNVGscPM/hWWr7S4Tw9TUvbpFUitHTnF6XrS+sL7O6VBSausT0FZonSkb+nZUFFm+z8Z5up5Btr1Lby7E5Zq4yPrMrLR263ZV52g+LvfW3iy6PXubUNVrnhqYNF3bmiZ1i1MmLnL7OxIWh4T+IMpYeRNyrRzyZjWg/ioh+aVgZu4WfXxaixbsRve5fiwb8epTo8+kZjSPFf/sHvgNC0/mbjJbxPAAAAABJRU5ErkJggg=="}]
-	})
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Recipients: [
+      {
+        Email: "passenger@mailjet.com"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+    'Html-part': '<h3>Dear passenger, welcome to <img src="cid:logo.png"> <a href="https://www.mailjet.com/">Mailjet</a>!<br />May the delivery force be with you!',
+    Inline_attachments: [{
+      'Content-type': "image/png",
+      Filename: "logo.png",
+      content: "iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAB3RJTUUH4wIIChcxurq5eQAAAAd0RVh0QXV0aG9yAKmuzEgAAAAMdEVYdERlc2NyaXB0aW9uABMJISMAAAAKdEVYdENvcHlyaWdodACsD8w6AAAADnRFWHRDcmVhdGlvbiB0aW1lADX3DwkAAAAJdEVYdFNvZnR3YXJlAF1w/zoAAAALdEVYdERpc2NsYWltZXIAt8C0jwAAAAh0RVh0V2FybmluZwDAG+aHAAAAB3RFWHRTb3VyY2UA9f+D6wAAAAh0RVh0Q29tbWVudAD2zJa/AAAABnRFWHRUaXRsZQCo7tInAAABV0lEQVQokaXSPWtTYRTA8d9N7k1zm6a+RG2x+FItgpu66uDQxbFurrr5OQQHR9FZnARB3PwSFqooddAStCBoqmLtS9omx+ESUXuDon94tnP+5+1JYm057GyQjZFP+l+S6G2FzlNe3WHtHc2TNI8zOlUUGLxsD1kDyR+EEQE2P/L8Jm/uk6RUc6oZaYM0JxtnpEX9AGPTtM6w7yzVEb61EaSNn4QD3j5m4QabH6hkVFLSUeqHyCeot0ib6BdNVGscPM/hWWr7S4Tw9TUvbpFUitHTnF6XrS+sL7O6VBSausT0FZonSkb+nZUFFm+z8Z5up5Btr1Lby7E5Zq4yPrMrLR263ZV52g+LvfW3iy6PXubUNVrnhqYNF3bmiZ1i1MmLnL7OxIWh4T+IMpYeRNyrRzyZjWg/ioh+aVgZu4WfXxaixbsRve5fiwb8epTo8+kZjSPFf/sHvgNC0/mbjJbxPAAAAABJRU5ErkJggg=="
+    }]
+  })
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
-	.catch(error => {
+  .then(result => {
+    console.log(result.body)
+  })
+  .catch(error => {
     console.log(error.statusCode)
-	})
+  })
 ```
 ``` go
 /*
@@ -1427,37 +1469,49 @@ curl -s \
  * This calls sends an email to one recipient.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"Messages":[
-			{
-			"FromEmail":"pilot@mailjet.com",
-			"FromName":"Mailjet Pilot",
-			"Recipients":[{"Email":"passenger1@mailjet.com","Name":"passenger 1"}],
-			"Subject":"Your email flight plan!",
-			"Text-part":"Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
-			"Html-part":"<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"
-			},
-			{
-			"FromEmail":"pilot@mailjet.com",
-			"FromName":"Mailjet Pilot",
-			"Recipients":[{"Email":"passenger2@mailjet.com","Name":"passenger 2"}],
-			"Subject":"Your email flight plan!",
-			"Text-part":"Dear passenger 2, welcome to Mailjet! May the delivery force be with you!",
-			"Html-part":"<h3>Dear passenger 2, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!"
-			}
-		]
-	})
+  .post('send')
+  .request({
+    Messages: [
+      {
+        FromEmail: "pilot@mailjet.com",
+        FromName: "Mailjet Pilot",
+        Recipients: [
+          {
+            Email: "passenger1@mailjet.com",
+            Name: "passenger 1"
+          }
+        ],
+        Subject: "Your email flight plan!",
+        'Text-part': "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+        'Html-part': '<h3>Dear passenger 1, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br />May the delivery force be with you!'
+      },
+      {
+        FromEmail: "pilot@mailjet.com",
+        FromName: "Mailjet Pilot",
+        Recipients: [
+          {
+            Email: "passenger2@mailjet.com",
+            Name: "passenger 2"
+          }
+        ],
+        Subject: "Your email flight plan!",
+        'Text-part': "Dear passenger 2, welcome to Mailjet! May the delivery force be with you!",
+        'Html-part': '<h3>Dear passenger 2, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br />May the delivery force be with you!'
+      }
+    ]
+  })
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
-	.catch(error => {
-		console.log (error.statusCode);
-	})
+  .then(result => {
+    console.log(result.body)
+  })
+  .catch(error => {
+    console.log(error.statusCode);
+  })
 ```
 ``` go
 /*
@@ -1761,26 +1815,39 @@ curl -s \
  * This calls sends an email to 2 given recipient with global personalization.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> On this [[var:day]], may the delivery force be with you!",
-		"Vars":{"day":"Monday"},
-		"Recipients":[{"Email":"passenger1@mailjet.com","Name":"passenger 1"},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]
-	})
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Vars: {
+      day: "Monday"
+    },
+    Recipients: [
+      {
+        Email: "passenger1@mailjet.com",
+        Name: "passenger 1"
+      },
+      {
+        Email: "passenger2@mailjet.com",
+        Name: "passenger 2"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you!",
+    'Html-part': '<h3>Dear passenger, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br /> On this [[var:day]], may the delivery force be with you!',
+  })
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
+  .then(result => {
+    console.log(result.body)
+  })
   .catch(e => {
-		console.log(e.statusCode)
-	})
+    console.log(e.statusCode)
+  })
 ```
 ``` go
 /*
@@ -2046,26 +2113,43 @@ curl -s \
  * This calls sends an email to 2 recipients with global and contact personalization.
  *
  */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
-		"Html-part":"<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
-		"Vars":{"day":"Monday"},
-		"Recipients":[{"Email":"passenger1@mailjet.com","Name":"passenger 1","Vars":{"day":"Tuesday","personalmessage":"Happy birthday!"}},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]
-	})
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
+const request = mailjet
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Vars: {
+      day: "Monday"
+    },
+    Recipients: [
+      {
+        Email: "passenger1@mailjet.com",
+        Name: "passenger 1",
+        Vars: {
+          day: "Tuesday",
+          personalmessage: "Happy birthday!"
+        }
+      },
+      {
+        Email: "passenger2@mailjet.com",
+        Name: "passenger 2"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]",
+    'Html-part': '<h3>Dear passenger, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br /> On this [[var:day]], may the delivery force be with you! [[var:personalmessage]]',
+  })
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
+  .then(result => {
+    console.log(result.body)
+  })
   .catch(error => {
-		console.log(error.statusCode)
-	})
+    console.log(error.statusCode)
+  })
 ```
 ``` go
 /*
@@ -2308,25 +2392,36 @@ curl -s \
  * This calls sends an email to one recipient.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear [[data:firstname:\"passenger\"]], welcome to Mailjet! May the delivery force be with you!",
-		"Html-part":"<h3>Dear [[data:firstname:\"passenger\"]], welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> May the delivery force be with you!",
-		"Recipients":[{"Email":"passenger1@mailjet.com","Name":"passenger 1"},{"Email":"passenger2@mailjet.com","Name":"passenger 2"}]
-	})
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Recipients: [
+      {
+        Email: "passenger1@mailjet.com",
+        Name: "passenger 1"
+      },
+      {
+        Email: "passenger2@mailjet.com",
+        Name: "passenger 2"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear [[data:firstname:\"passenger\"]], welcome to Mailjet! May the delivery force be with you!",
+    'Html-part': '<h3>Dear [[data:firstname:"passenger"]], welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br /> May the delivery force be with you!',
+  })
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
-	.catch(err => {
-		console.log(err.statusCode)
-	})
+  .then(result => {
+    console.log(result.body)
+  })
+  .catch(err => {
+    console.log(err.statusCode)
+  })
 ```
 ``` go
 /*
@@ -2520,29 +2615,31 @@ curl -s \
  * This call sends a message based on a template.
  *
  */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Mj-TemplateID":"1",
-		"Mj-TemplateLanguage":"true",
-		"Recipients":[
-				{
-						"Email": "passenger@mailjet.com"
-				}
-		]
-	});
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
+const request = mailjet
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Recipients: [
+      {
+        Email: "passenger@mailjet.com"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Mj-TemplateID': 1,
+    'Mj-TemplateLanguage': true,
+  });
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
-	.catch(err => {
-		console.log(err.statusCode)
-	})
+  .then(result => {
+    console.log(result.body)
+  })
+  .catch(err => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # This call sends a message based on a template.
@@ -2786,42 +2883,44 @@ curl -s \
  * This calls sends an email to the given recipient with vars and custom vars.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Mj-TemplateLanguage":"true",
-		"Text-part":"Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
-		"Html-part":"<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br /> On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
-		"Vars":{
-				"day": "Monday"
-		},
-		"Recipients":[
-				{
-						"Email": "passenger1@mailjet.com",
-						"Name": "passenger 1",
-						"Vars": {
-								"day": "Tuesday",
-								"personalmessage": "Happy birthday!"
-						}
-				},
-				{
-						"Email": "passenger2@mailjet.com",
-						"Name": "passenger 2"
-				}
-		]
-	})
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Vars: {
+      day: "Monday"
+    },
+    Recipients: [
+      {
+        Email: "passenger1@mailjet.com",
+        Name: "passenger 1",
+        Vars: {
+          day: "Tuesday",
+          personalmessage: "Happy birthday!"
+        }
+      },
+      {
+        Email: "passenger2@mailjet.com",
+        Name: "passenger 2"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! On this {{var:day:\"monday\"}}, may the delivery force be with you! {{var:personalmessage:\"\"}}",
+    'Html-part': '<h3>Dear passenger, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br /> On this {{var:day:"monday"}}, may the delivery force be with you! {{var:personalmessage:""}}',
+    'Mj-TemplateLanguage': true
+  })
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
-	.catch(err => {
-		console.log(err.statusCode)
-	})
+  .then(result => {
+    console.log(result.body)
+  })
+  .catch(err => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # This calls sends an email to the given recipient with vars and custom vars.
@@ -3133,26 +3232,34 @@ curl -s \
  * This calls sends an email to one recipient with a Reply-To address.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-		"Recipients":[{"Email":"passenger@mailjet.com"}],
-		"Headers": {"Reply-To":"copilot@mailjet.com"}
-	})
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Recipients: [
+      {
+        Email: "passenger@mailjet.com"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+    'Html-part': '<h3>Dear passenger, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br />May the delivery force be with you!',
+    Headers: {
+      'Reply-To': "copilot@mailjet.com"
+    }
+  })
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
-	.catch(error => {
-		console.log(error.statusCode)
-	})
+  .then(result => {
+    console.log(result.body)
+  })
+  .catch(error => {
+    console.log(error.statusCode)
+  })
 ```
 ``` go
 /*
@@ -3365,26 +3472,32 @@ curl -s \
  * This calls sends a message to one recipient with a CustomID.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-		"Recipients":[{"Email":"passenger@mailjet.com"}],
-		"Mj-CustomID":"PassengerEticket1234"
-	})
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Recipients: [
+      {
+        Email: "passenger@mailjet.com"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+    'Html-part': '<h3>Dear passenger, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br />May the delivery force be with you!',
+    'Mj-CustomID': "PassengerEticket1234"
+  })
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
+  .then(result => {
+    console.log(result.body)
+  })
   .catch(error => {
     console.log(error.statusCode)
-	})
+  })
 ```
 ``` go
 /*
@@ -3475,6 +3588,7 @@ namespace Mailjet.ConsoleApplication
 Sometimes you need to use your own ID in addition to ours to be able to trace back the message in our system easily. For this purpose we let you insert your own ID in the message. To achieve this, just pass the ID you want to use in the <code>Mj-CustomID</code> property.
 
 <div></div>
+
 ```php
 <?php
 /*
@@ -3503,20 +3617,20 @@ curl -s \
  * View : API Key Statistical campaign/message data.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("message")
-	.request({
-		"CustomID":"PassengerEticket1234"
-	})
+  .get('message')
+  .request({}, { CustomID: "PassengerEticket1234" })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # View : API Key Statistical campaign/message data.
@@ -3751,26 +3865,32 @@ curl -s \
  * This calls sends a message to one recipient with an EventPayload.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-		"Recipients":[{"Email":"passenger@mailjet.com"}],
-		"Mj-EventPayLoad":"Eticket,1234,row,15,seat,B"
-	})
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Recipients: [
+      {
+        Email: "passenger@mailjet.com"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+    'Html-part': '<h3>Dear passenger, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br />May the delivery force be with you!',
+    'Mj-EventPayLoad': "Eticket,1234,row,15,seat,B"
+  })
+
 request
   .then(result => {
-		console.log(result.body)
-	})
+    console.log(result.body)
+  })
   .catch(error => {
     console.log(error.statusCode)
-	})
+  })
 ```
 ``` go
 /*
@@ -3989,27 +4109,33 @@ curl -s \
  * This calls sends an email to one recipient within a campaign blocking multiple email to same recipient
  *
  */
-var mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
-var request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-		"Recipients":[{"Email":"passenger@mailjet.com"}],
-		"Mj-campaign":"SendAPI_campaign",
-		"Mj-deduplicatecampaign":1
-	});
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
+const request = mailjet
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Recipients: [
+      {
+        Email: "passenger@mailjet.com"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+    'Html-part': '<h3>Dear passenger, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br />May the delivery force be with you!',
+    'Mj-campaign': "SendAPI_campaign",
+    'Mj-deduplicatecampaign': 1
+  });
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
-	.catch(err => {
-		console.log(err.statusCode)
-	})
+  .then(result => {
+    console.log(result.body)
+  })
+  .catch(err => {
+    console.log(err.statusCode)
+  })
 ```
 ``` go
 /*
@@ -4259,26 +4385,32 @@ curl -s \
  * This calls sends an email to one recipient with Real-time Monitoring.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send")
-	.request({
-		"FromEmail":"pilot@mailjet.com",
-		"FromName":"Mailjet Pilot",
-		"Subject":"Your email flight plan!",
-		"Text-part":"Dear passenger, welcome to Mailjet! May the delivery force be with you!",
-		"Html-part":"<h3>Dear passenger, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!<br />May the delivery force be with you!",
-		"Recipients":[{"Email":"passenger@mailjet.com"}],
-		"Mj-MonitoringCategory": "Category1"
-	})
+  .post('send')
+  .request({
+    FromEmail: "pilot@mailjet.com",
+    FromName: "Mailjet Pilot",
+    Recipients: [
+      {
+        Email: "passenger@mailjet.com"
+      }
+    ],
+    Subject: "Your email flight plan!",
+    'Text-part': "Dear passenger, welcome to Mailjet! May the delivery force be with you!",
+    'Html-part': '<h3>Dear passenger, welcome to <a href="https://www.mailjet.com/">Mailjet</a>!<br />May the delivery force be with you!',
+    'Mj-MonitoringCategory': "Category1"
+  })
+
 request
-	.then(result => {
-		console.log(result.body)
-	})
-	.catch(err => {
-		console.log(err.statusCode)
-	})
+  .then(result => {
+    console.log(result.body)
+  })
+  .catch(err => {
+    console.log(err.statusCode)
+  })
 ```
 ```csharp
 using Mailjet.Client;

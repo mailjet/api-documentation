@@ -46,20 +46,22 @@ curl -s \
  * Create : ParseRoute description
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("parseroute")
-	.request({
-		"Url":"https://www.mydomain.com/mj_parse.php"
-	})
+  .post('parseroute')
+  .request({
+    Url: "https://www.mydomain.com/mj_parse.php"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : ParseRoute description
@@ -397,21 +399,23 @@ curl -s \
  * Create : ParseRoute description
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("parseroute")
-	.request({
-		"Url":"https://www.mydomain.com/mj_parse.php",
-		"Email":"mjparse@mydomain.com"
-	})
+  .post('parseroute')
+  .request({
+    Url: "https://www.mydomain.com/mj_parse.php",
+    Email: "mjparse@mydomain.com"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : ParseRoute description

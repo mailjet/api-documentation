@@ -39,20 +39,22 @@ curl -s \
  * Create : only need a Name
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("contactslist")
-	.request({
-		"Name":"myList"
-	})
+  .post('contactslist')
+  .request({
+    Name: "myList"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : only need a Name
@@ -244,20 +246,22 @@ curl -s \
  * Create : Manage the details of a Contact.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("contact")
-	.request({
-		"Email":"Mister@mailjet.com"
-	})
+  .post('contact')
+  .request({
+    Email: "Mister@mailjet.com"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : Manage the details of a Contact.
@@ -466,22 +470,24 @@ curl -s \
  * Create : Definition of available extra data items for contacts.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("contactmetadata")
-	.request({
-		"Datatype":"str",
-		"Name":"Age",
-		"NameSpace":"static"
-	})
+  .post('contactmetadata')
+  .request({
+    Datatype: "str",
+    Name: "Age",
+    NameSpace: "static"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : Definition of available extra data items for contacts.
@@ -712,30 +718,32 @@ curl -s \
  * Modify : Modify the static custom contact data
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.put("contactdata")
-	.id($CONTACT_ID)
-	.request({
-		"Data":[
-				{
-						"Name": "Age",
-						"value": 30
-				},
-				{
-						"Name": "Country",
-						"value": "US"
-				}
-		]
-	})
+  .put('contactdata')
+  .id($CONTACT_ID)
+  .request({
+    Data: [
+      {
+        Name: "Age",
+        value: 30
+      },
+      {
+        Name: "Country",
+        value: "US"
+      }
+    ]
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Modify : Modify the static custom contact data
@@ -976,38 +984,40 @@ curl -s \
  * Create : Manage the details of a Contact.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("contact")
-	.action("managemanycontacts")
-	.request({
-		"Contacts":[
-				{
-						"Email": "jimsmith@example.com",
-						"Name": "Jim",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				},
-				{
-						"Email": "janetdoe@example.com",
-						"Name": "Janet",
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				}
-		]
-	})
+  .post('contact')
+  .action('managemanycontacts')
+  .request({
+    Contacts: [
+      {
+        Email: "jimsmith@example.com",
+        Name: "Jim",
+        Properties: {
+          Property1: "value",
+          Property2: "value2"
+        }
+      },
+      {
+        Email: "janetdoe@example.com",
+        Name: "Janet",
+        Properties: {
+          Property1: "value",
+          Property2: "value2"
+        }
+      }
+    ]
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : Manage the details of a Contact.
@@ -1273,31 +1283,33 @@ curl -s \
  * Create : Manage a contact subscription to a list
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("contact")
-	.id($ID)
-	.action("managecontactslists")
-	.request({
-		"ContactsLists":[
-				{
-						"ListID": "$ListID_1",
-						"Action": "addnoforce"
-				},
-				{
-						"ListID": "$ListID_2",
-						"Action": "addforce"
-				}
-		]
-	})
+  .post('contact')
+  .id($ID)
+  .action('managecontactslists')
+  .request({
+    ContactsLists: [
+      {
+        ListID: "$ListID_1",
+        Action: "addnoforce"
+      },
+      {
+        ListID: "$ListID_2",
+        Action: "addforce"
+      }
+    ]
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : Manage a contact subscription to a list
@@ -1525,28 +1537,30 @@ curl -s \
  * Add a contact to the list
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("contactslist")
-	.id($LIST_ID)
-	.action("managecontact")
-	.request({
-		"Email":"mrsmith@mailjet.com",
-		"Name":"MrSmith",
-		"Action":"addnoforce",
-		"Properties":{
-				"property1": "value",
-				"propertyN": "valueN"
-		}
-	})
+  .post('contactslist')
+  .id($LIST_ID)
+  .action('managecontact')
+  .request({
+    Email: "mrsmith@mailjet.com",
+    Name: "MrSmith",
+    Action: "addnoforce",
+    Properties: {
+      property1: "value",
+      propertyN: "valueN"
+    }
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Add a contact to the list
@@ -1851,25 +1865,27 @@ $response->success() && var_dump($response->getData());
  * Create : CampaignDraft data
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("campaigndraft")
-	.request({
-		"Locale":"en_US",
-		"Sender":"MisterMailjet",
-		"SenderEmail":"Mister@mailjet.com",
-		"Subject":"Greetings from Mailjet",
-		"ContactsListID":"$ID_CONTACTSLIST",
-		"Title":"Friday newsletter"
-	})
+  .post('campaigndraft')
+  .request({
+    Locale: "en_US",
+    Sender: "MisterMailjet",
+    SenderEmail: "Mister@mailjet.com",
+    Subject: "Greetings from Mailjet",
+    ContactsListID: "$ID_CONTACTSLIST",
+    Title: "Friday newsletter"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : CampaignDraft data
@@ -2107,23 +2123,25 @@ $response->success() && var_dump($response->getData());
  * Modify : CampaignDraft content data.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("campaigndraft")
-	.id($ID)
-	.action("detailcontent")
-	.request({
-		"Html-part":"Hello <strong>world</strong>!",
-		"Text-part":"Hello world!"
-	})
+  .post('campaigndraft')
+  .id($ID)
+  .action('detailcontent')
+  .request({
+    'Html-part': 'Hello <strong>world</strong>!',
+    'Text-part': "Hello world!"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Modify : CampaignDraft content data.
@@ -2334,27 +2352,29 @@ curl -s \
  * Create : CampaignDraft test
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("campaigndraft")
-	.id($ID)
-	.action("test")
-	.request({
-		"Recipients":[
-				{
-						"Email": "mailjet@example.org",
-						"Name": "Mailjet"
-				}
-		]
-	})
+  .post('campaigndraft')
+  .id($ID)
+  .action('test')
+  .request({
+    Recipients: [
+      {
+        Email: "mailjet@example.org",
+        Name: "Mailjet"
+      }
+    ]
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : CampaignDraft test
@@ -2564,20 +2584,22 @@ curl -s \
  * Send a CampaignDraft
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("campaigndraft")
-	.id($ID)
-	.action("send")
-	.request()
+  .post('campaigndraft')
+  .id($ID)
+  .action('send')
+  .request()
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Send a CampaignDraft
@@ -2771,22 +2793,24 @@ curl -s \
  * Create : CampaignDraft schedule
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("campaigndraft")
-	.id($ID)
-	.action("schedule")
-	.request({
-		"date":"2015-04-22T09:00:00+01:00"
-	})
+  .post('campaigndraft')
+  .id($ID)
+  .action('schedule')
+  .request({
+    Date: "2015-04-22T09:00:00+01:00"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : CampaignDraft schedule
@@ -2982,19 +3006,21 @@ curl -s \
  * View : CampaignDraft data.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("campaigndraft")
-	.id($ID)
-	.request()
+  .get('campaigndraft')
+  .id($ID)
+  .request()
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```python
 """
@@ -3206,22 +3232,24 @@ curl -s \
  * Create : A filter expressions for use in newsletters.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("contactfilter")
-	.request({
-		"Description":"Only contacts aged 40",
-		"Expression":"age=40",
-		"Name":"40 year olds"
-	})
+  .post('contactfilter')
+  .request({
+    Description: "Only contacts aged 40",
+    Expression: "age=40",
+    Name: "40 year olds"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : A filter expressions for use in newsletters.
@@ -3504,26 +3532,28 @@ curl -s \
  * Create : CampaignDraft data
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("campaigndraft")
-	.request({
-		"Locale":"en_US",
-		"Sender":"MisterMailjet",
-		"SenderEmail":"Mister@mailjet.com",
-		"Subject":"Greetings from Mailjet",
-		"ContactsListID":"$ID_CONTACTSLIST",
-		"Title":"Friday newsletter",
-		"SegmentationID":"$ID_CONTACT_FILTER"
-	})
+  .post('campaigndraft')
+  .request({
+    Locale: "en_US",
+    Sender: "MisterMailjet",
+    SenderEmail: "Mister@mailjet.com",
+    Subject: "Greetings from Mailjet",
+    ContactsListID: "$ID_CONTACTSLIST",
+    Title: "Friday newsletter",
+    SegmentationID: "$ID_CONTACT_FILTER"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : CampaignDraft data
@@ -3718,19 +3748,21 @@ $response->success() && var_dump($response->getData());
  * View : Campaign linked to the Newsletter :NEWSLETTER_ID
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("campaign")
-	.id(mj.nl=$NEWSLETTER_ID)
-	.request()
+  .get('campaign')
+  .id($ID)
+  .request()
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # View : Campaign linked to the Newsletter :NEWSLETTER_ID

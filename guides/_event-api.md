@@ -72,22 +72,24 @@ print result.json()
  * Create a grouped handler for the open event
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+  .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
+
 const request = mailjet
-	.post("eventcallbackurl")
-	.request({
-		"EventType":"open",
-		"Url":"https://mydomain.com/event_handler",
-		"Version":2
-	})
+  .post('eventcallbackurl')
+  .request({
+    EventType: 'open',
+    Url: 'https://mydomain.com/event_handler',
+    Version: 2
+  });
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body);
+  })
+  .catch((err) => {
+    console.log(err.statusCode);
+  });
 ```
 ``` go
 /*

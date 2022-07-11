@@ -41,20 +41,22 @@ curl -s \
  * Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("apikey")
-	.request({
-		"Name":"MynewKEY"
-	})
+  .post('apikey')
+  .request({
+    Name: "MynewKEY"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
@@ -318,18 +320,20 @@ public class MyClass {
  * View : Manage your Mailjet API Keys. API keys are used as credentials to access the API and SMTP server.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("apikey")
-	.request()
+  .get('apikey')
+  .request()
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```csharp
 using Mailjet.Client;
