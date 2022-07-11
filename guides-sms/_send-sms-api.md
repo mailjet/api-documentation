@@ -28,6 +28,29 @@ curl -X POST \
     "From": "MJPilot"
   }'
 ```
+```javascript
+/**
+ *  Create : Send SMS Message to a selected recipient.
+ * */
+const mailjet = require('node-mailjet')
+  .smsConnect(process.env.MJ_API_TOKEN)
+
+const request = mailjet
+  .post('sms-send', { version: 'v4' })
+  .request({
+    From: "MJPilot",
+    To: "+33600000000",
+    Text: "Have a nice SMS flight with Mailjet !"
+  })
+
+request
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
+```
 
 In the code sample you can see a `POST` request with an Authorization header that includes the token value.
 

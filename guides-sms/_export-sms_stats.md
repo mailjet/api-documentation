@@ -15,6 +15,29 @@ https://api.mailjet.com/v4/sms/export \
 -H 'Content-Type: application/json' \
 -d '{"FromTS": 1033552800, "ToTS": 1033574400}'
 ```
+```javascript
+/**
+ *  Create : Create a CSV export file with a list of SMS messages for a specific time period
+ * */
+const mailjet = require('node-mailjet')
+  .smsConnect(process.env.MJ_API_TOKEN)
+
+const request = mailjet
+  .post('sms', { version: 'v4' })
+  .action('export')
+  .request({
+    FromTS: 1033552800,
+    ToTS: 1033574400
+  })
+
+request
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
+```
 
 A `POST` on the [`/sms/export`](/sms-api/v4/sms-export/) endpoint gives you the ability to request a CSV export file to be generated. With your request you are required to submit a specific timeframe using the `FromTS` and `ToTS` properties.
 
@@ -55,6 +78,27 @@ The response will include an Request ID under the `ID` property. Make sure to sa
 curl -s -X GET \
 -H "Authorization: Bearer $MJ_TOKEN" \
 https://api.mailjet.com/v4/sms/export/$ID
+```
+```javascript
+/**
+ *  View : Check the status of an export request and retrieve the download URL, if ready
+ * */
+const mailjet = require('node-mailjet')
+  .smsConnect(process.env.MJ_API_TOKEN)
+
+const request = mailjet
+  .get('sms', { version: 'v4' })
+  .action('export')
+  .id($ID)
+  .request()
+
+request
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 
 Use `GET` on [`/sms/export/{RequestID}`](/sms-api/v4/sms-export/) to check the status of your export request, and to retrieve the download URL, once the export file is ready.

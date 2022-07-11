@@ -41,6 +41,26 @@ curl -X POST \
   "Text": "Hello World!"
 }'
 ```
+```javascript
+const mailjet = require('node-mailjet')
+  .smsConnect(process.env.MJ_API_TOKEN)
+
+const request = mailjet
+  .post('sms-send', { version: 'v4' })
+  .request({
+    From: "InfoSMS",
+    To: "+33600000000",
+    Text: "Hello World!"
+  })
+
+request
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
+```
 
 Fill your sending information in the payload. Three properties are required:
 
