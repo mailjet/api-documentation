@@ -8,6 +8,25 @@ curl -s -X GET \
 -H "Authorization: Bearer $MJ_TOKEN" \
 https://api.mailjet.com/v4/sms?FromTS=1033552800&ToTS=1033574400
 ```
+```javascript
+/**
+ *  View : Retrieve a list of SMS messages sent during a specific time period
+ * */
+const mailjet = require('node-mailjet')
+  .smsConnect(process.env.MJ_API_TOKEN)
+
+const request = mailjet
+  .get('sms', { version: 'v4' })
+  .request({}, { FromTS: 1033552800, ToTS: 1033574400 })
+
+request
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
+```
 
 With `GET` on the [`/sms`](/sms-api/v4/sms/) endpoint you are able to view details for a list of existing messages - `Status`, `Cost`, `MessageID`, sender and recipient, `CreationTS` and `SentTS` timestamps etc.
 
@@ -70,6 +89,25 @@ curl -s -X GET \
 -H "Authorization: Bearer $MJ_TOKEN" \
 https://api.mailjet.com/v4/sms?To=+33600000000
 ```
+```javascript
+/**
+ *  View : Retrieve a list of SMS messages sent to a specific recipient
+ * */
+const mailjet = require('node-mailjet')
+  .smsConnect(process.env.MJ_API_TOKEN)
+
+const request = mailjet
+  .get('sms', { version: 'v4' })
+  .request({}, { To: '+33600000000' })
+
+request
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
+```
 
 >API Response
 
@@ -127,6 +165,25 @@ Keep in mind that the complete phone number should be entered, as described in t
 curl -s -X GET \
 -H "Authorization: Bearer $MJ_TOKEN" \
 https://api.mailjet.com/v4/sms?StatusCode=1,2
+```
+```javascript
+/**
+ *  View : Retrieve a list of SMS messages that were successfully sent, or are being currently sent
+ * */
+const mailjet = require('node-mailjet')
+  .smsConnect(process.env.MJ_API_TOKEN)
+
+const request = mailjet
+  .get('sms', { version: 'v4' })
+  .request({}, { StatusCode: '1,2' })
+
+request
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 
 >API Response
@@ -208,6 +265,26 @@ curl -s -X GET \
 -H "Authorization: Bearer $MJ_TOKEN" \
 https://api.mailjet.com/v4/sms/744ecf8c-9fed-4ec9-acd0-9b326671f5df
 ```
+```javascript
+/**
+ *  View : Retrieve a specific SMS Message
+ * */
+const mailjet = require('node-mailjet')
+  .smsConnect(process.env.MJ_API_TOKEN)
+
+const request = mailjet
+  .get('sms', { version: 'v4' })
+  .id('744ecf8c-9fed-4ec9-acd0-9b326671f5df') // your id
+  .request()
+
+request
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
+```
 
 >API Response
 
@@ -246,6 +323,26 @@ Use `GET /sms/{id}`, if you need to retrieve a specific SMS message. Substitute 
 curl -s -X GET \
 -H "Authorization: Bearer $MJ_TOKEN" \
 https://api.mailjet.com/v4/sms/count?FromTS=1033552800&ToTS=1033574400
+```
+```javascript
+/**
+ *  View : Retrieve the number of SMS messages that were processed within a specific timeframe
+ * */
+const mailjet = require('node-mailjet')
+  .smsConnect(process.env.MJ_API_TOKEN)
+
+const request = mailjet
+  .get('sms', { version: 'v4' })
+  .action('count')
+  .request({}, { FromTS: 1033552800, ToTS: 1033574400 })
+
+request
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 
 >API Response

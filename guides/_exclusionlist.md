@@ -40,21 +40,23 @@ curl -s \
  * Call to add contact to exclusion list
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.put("contact")
-	.id($ID_OR_EMAIL)
-	.request({
-		"IsExcludedFromCampaigns":"true"
-	})
+  .put('contact')
+  .id($ID_OR_EMAIL)
+  .request({
+    IsExcludedFromCampaigns: true
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Call to add contact to exclusion list
@@ -292,40 +294,42 @@ curl -s \
  * Create : Manage the details of a Contact.
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("contact")
-	.action("managemanycontacts")
-	.request({
-		"Contacts":[
-				{
-						"Email": "jimsmith@example.com",
-						"Name": "Jim",
-						"IsExcludedFromCampaigns": true,
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				},
-				{
-						"Email": "janetdoe@example.com",
-						"Name": "Janet",
-						"IsExcludedFromCampaigns": true,
-						"Properties": {
-								"Property1": "value",
-								"Property2": "value2"
-						}
-				}
-		]
-	})
+  .post('contact')
+  .action('managemanycontacts')
+  .request({
+    Contacts: [
+      {
+        Email: "jimsmith@example.com",
+        Name: "Jim",
+        IsExcludedFromCampaigns: true,
+        Properties: {
+          Property1: "value",
+          Property2: "value2"
+        }
+      },
+      {
+        Email: "janetdoe@example.com",
+        Name: "Janet",
+        IsExcludedFromCampaigns: true,
+        Properties: {
+          Property1: "value",
+          Property2: "value2"
+        }
+      }
+    ]
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create : Manage the details of a Contact.
@@ -563,21 +567,23 @@ curl -s \
  * Create: A wrapper for the CSV importer
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+    .apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("csvimport")
-	.request({
-		"DataID":"$ID_DATA",
-		"Method":"excludemarketing"
-	})
+  .post('csvimport')
+  .request({
+    DataID: "$ID_DATA",
+    Method: "excludemarketing"
+  })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+  .then((result) => {
+    console.log(result.body)
+  })
+  .catch((err) => {
+    console.log(err.statusCode)
+  })
 ```
 ```ruby
 # Create: A wrapper for the CSV importer

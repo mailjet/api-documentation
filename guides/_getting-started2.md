@@ -132,36 +132,38 @@ $response->success() && var_dump($response->getData());
  * Run:
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+	.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.post("send", {'version': 'v3.1'})
-	.request({
-		"Messages":[
-				{
-						"From": {
-								"Email": "$SENDER_EMAIL",
-								"Name": "Me"
-						},
-						"To": [
-								{
-										"Email": "$RECIPIENT_EMAIL",
-										"Name": "You"
-								}
-						],
-						"Subject": "My first Mailjet Email!",
-						"TextPart": "Greetings from Mailjet!",
-						"HTMLPart": "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
-				}
-		]
-	})
+        .post('send', { version: 'v3.1' })
+        .request({
+           Messages: [
+              {
+                 From: {
+                    Email: process.env.SENDER_EMAIL,
+                    Name: "Me"
+                 },
+                 To: [
+                    {
+                       Email: process.env.RECIPIENT_EMAIL,
+                       Name: "You"
+                    }
+                 ],
+                 Subject: "My first Mailjet Email!",
+                 TextPart: "Greetings from Mailjet!",
+                 HTMLPart: "<h3>Dear passenger 1, welcome to <a href=\"https://www.mailjet.com/\">Mailjet</a>!</h3><br />May the delivery force be with you!"
+              }
+           ]
+        })
+
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+        .then((result) => {
+           console.log(result.body)
+        })
+        .catch((err) => {
+           console.log(err.statusCode)
+        })
 ```
 ```ruby
 # Run:
@@ -417,12 +419,14 @@ $response->success() && var_dump($response->getData());
  * Run :
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+	.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("message")
+	.get('message')
 	.id($MESSAGE_ID)
 	.request()
+
 request
 	.then((result) => {
 		console.log(result.body)
@@ -619,13 +623,13 @@ $response->success() && var_dump($response->getData());
  * Run :
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+	.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("message")
-	.request({
-		"ContactAlt":"$RECIPIENT_EMAIL"
-	})
+	.get('message')
+	.request({}, { ContactAlt: process.env.RECIPIENT_EMAIL });
+
 request
 	.then((result) => {
 		console.log(result.body)
@@ -784,12 +788,14 @@ $response->success() && var_dump($response->getData());
  * Run :
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+	.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("messagehistory")
+	.get('messagehistory')
 	.id($MESSAGE_ID)
 	.request()
+
 request
 	.then((result) => {
 		console.log(result.body)
@@ -982,15 +988,17 @@ $response->success() && var_dump($response->getData());
  * Run :
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet')
+	.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+
 const request = mailjet
-	.get("statcounters")
-	.request({
-		"CounterSource":"APIKey",
-		"CounterTiming":"Message",
-		"CounterResolution":"Lifetime"
-	})
+	.get('statcounters')
+	.request({}, {
+       CounterSource: "APIKey",
+       CounterTiming: "Message",
+       CounterResolution: "Lifetime"
+    })
+
 request
 	.then((result) => {
 		console.log(result.body)
