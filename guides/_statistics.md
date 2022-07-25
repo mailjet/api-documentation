@@ -1265,7 +1265,7 @@ mailjet = Client(auth=(api_key, api_secret))
 filters = {
   'CampaignId': '$Campaign_ID'
 }
-result = mailjet.statistics_link-click.get(filters=filters)
+result = mailjet.statistics_linkClick.get(filters=filters)
 print result.status_code
 print result.json()
 ```
@@ -1457,7 +1457,7 @@ mailjet = Client(auth=(api_key, api_secret))
 filters = {
   'CampaignId': '$Campaign_ID'
 }
-result = mailjet.statistics_recipient-esp.get(filters=filters)
+result = mailjet.statistics_recipientEsp.get(filters=filters)
 print result.status_code
 print result.json()
 ```
