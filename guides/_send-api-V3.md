@@ -27,7 +27,7 @@ This calls sends an email to one recipient.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {
@@ -350,7 +350,7 @@ This calls sends an email to two recipients in To and one recipient in CC.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {
@@ -595,7 +595,7 @@ This calls sends an email to 2 recipients.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {
@@ -805,7 +805,7 @@ This calls sends an email to the given recipient.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {
@@ -1152,7 +1152,7 @@ This calls sends an email to the given recipient.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {
@@ -1466,7 +1466,7 @@ This calls sends an email to the given recipient.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {
@@ -1789,7 +1789,7 @@ This calls sends an email to 2 given recipient with global personalization.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 type  MyVarsStruct  struct {
@@ -2074,7 +2074,7 @@ This calls sends an email to 2 recipients with global and contact personalizatio
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 type  MyVarsStruct  struct {
@@ -2335,7 +2335,7 @@ This calls sends an email to the given recipient.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {
@@ -2592,7 +2592,7 @@ This call sends a message based on a template.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {
@@ -2889,7 +2889,7 @@ This calls sends an email to the given recipient with vars and custom vars.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 type  MyVarsStruct  struct {
@@ -3161,7 +3161,7 @@ This calls sends an email to one recipient with a Reply-To address.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {
@@ -3393,7 +3393,7 @@ This calls sends a message to one recipient with a CustomID.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {
@@ -3550,8 +3550,8 @@ View : API Key Statistical campaign/message data.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
+	"github.com/mailjet/mailjet-apiv3-go/v4/resources"
 	"os"
 )
 func main () {
@@ -3779,7 +3779,7 @@ This calls sends a message to one recipient with an EventPayload.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {
@@ -4018,7 +4018,7 @@ This calls sends an email to one recipient within a campaign blocking multiple e
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {
@@ -4133,7 +4133,7 @@ This calls sends an email to one recipient with Real-time Monitoring.
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
 	"os"
 )
 func main () {

@@ -163,8 +163,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	mailjet "github.com/mailjet/mailjet-apiv3-go/v4"
+	"github.com/mailjet/mailjet-apiv3-go/v4/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -428,8 +428,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	mailjet "github.com/mailjet/mailjet-apiv3-go/v4"
+	"github.com/mailjet/mailjet-apiv3-go/v4/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -754,8 +754,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	mailjet "github.com/mailjet/mailjet-apiv3-go/v4"
+	"github.com/mailjet/mailjet-apiv3-go/v4/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -1319,8 +1319,8 @@ Create : Manage your contact lists. One Contact might be associated to one or mo
 package main
 import (
 	"fmt"
-	. "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	. "github.com/mailjet/mailjet-apiv3-go/v4"
+	"github.com/mailjet/mailjet-apiv3-go/v4/resources"
 	"os"
 )
 func main () {
@@ -1828,7 +1828,7 @@ package main
 import (
     "fmt"
     "io/ioutil"
-    . "github.com/mailjet/mailjet-apiv3-go"
+    . "github.com/mailjet/mailjet-apiv3-go/v4"
     "os"
 )
 func check(e error) {
@@ -1974,8 +1974,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	mailjet "github.com/mailjet/mailjet-apiv3-go/v4"
+	"github.com/mailjet/mailjet-apiv3-go/v4/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -2213,8 +2213,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	mailjet "github.com/mailjet/mailjet-apiv3-go/v4"
+	"github.com/mailjet/mailjet-apiv3-go/v4/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
@@ -2426,8 +2426,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	mailjet "github.com/mailjet/mailjet-apiv3-go"
-	"github.com/mailjet/mailjet-apiv3-go/resources"
+	mailjet "github.com/mailjet/mailjet-apiv3-go/v4"
+	"github.com/mailjet/mailjet-apiv3-go/v4/resources"
 )
 func main () {
 	mailjetClient := NewMailjetClient(os.Getenv("MJ_APIKEY_PUBLIC"), os.Getenv("MJ_APIKEY_PRIVATE"))
