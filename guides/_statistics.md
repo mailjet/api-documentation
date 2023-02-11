@@ -1226,21 +1226,23 @@ curl -s \
  * View : View statistics for total and unique clicks for each clicked URL in a campaign email
  *
  */
-const mailjet = require ('node-mailjet')
-	.connect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE)
+const mailjet = require('node-mailjet').connect(
+        process.env.MJ_APIKEY_PUBLIC,
+        process.env.MJ_APIKEY_PRIVATE
+    )
 const request = mailjet
-	.get("statistics")
-	.action("link-click")
-	.request({
-		"CampaignId":"$Campaign_ID"
-	})
+    .get('statistics')
+    .action('link-click')
+    .request({
+        CampaignId: '$Campaign_ID',
+    })
 request
-	.then((result) => {
-		console.log(result.body)
-	})
-	.catch((err) => {
-		console.log(err.statusCode)
-	})
+    .then(result => {
+        console.log(result.body)
+    })
+    .catch(err => {
+        console.log(err.statusCode)
+    })
 ```
 ```ruby
 # View : View statistics for total and unique clicks for each clicked URL in a campaign email
