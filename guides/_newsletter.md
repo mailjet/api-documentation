@@ -114,29 +114,32 @@ func main () {
 ```
 ```java
 package com.my.project;
+
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Contactslist;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 public class MyClass {
-    /**
-     * Create : only need a Name
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Contactslist.resource)
-			.property(Contactslist.NAME, "myList");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
+	/**
+	 * Create : only need a Name
+	 */
+	public static void main(String[] args) throws MailjetException {
+		ClientOptions clientOptions;
+		MailjetClient client;
+		MailjetRequest request;
+		MailjetResponse response;
+
+		clientOptions = ClientOptions
+				.builder()
+				.apiKey(System.getenv("MJ_APIKEY_PUBLIC"))
+				.apiSecretKey(System.getenv("MJ_APIKEY_PRIVATE"))
+				.build();
+		client = new MailjetClient(clientOptions);
+		request = new MailjetRequest(Contactslist.resource)
+				.property(Contactslist.NAME, "myList");
+		response = client.post(request);
+		System.out.println(response.getStatus());
+		System.out.println(response.getData());
+	}
 }
 ```
 ```csharp

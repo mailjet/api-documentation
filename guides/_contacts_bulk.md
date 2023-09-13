@@ -1756,29 +1756,35 @@ print result.json()
 ```
 ```java
 package com.my.project;
+
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
-import com.mailjet.client.resource.Csvimport;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import com.mailjet.client.resource.Contactslist;
+
+import java.io.File;
+
 public class MyClass {
-    /**
-     * Modify : A wrapper for the CSV importer
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Csvimport.resource, ID)
-        .property(Csvimport.DATA, MYFILE);
-      response = client.put(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
+	/**
+	 * A wrapper for the CSV upload
+	 */
+	public static void main(String[] args) throws MailjetException {
+		ClientOptions clientOptions;
+		MailjetClient client;
+		MailjetRequest request;
+		MailjetResponse response;
+
+		clientOptions = ClientOptions
+				.builder()
+				.apiKey(System.getenv("MJ_APIKEY_PUBLIC"))
+				.apiSecretKey(System.getenv("MJ_APIKEY_PRIVATE"))
+				.build();
+		client = new MailjetClient(clientOptions);
+		request = new MailjetRequest(Contactslist.csvDataResource, CONTACT_LIST_ID)
+				.attachFile(new File("/test.csv"));
+		response = client.post(request);
+
+		System.out.println(response.getStatus());
+		System.out.println(response.getData());
+	}
 }
 ```
 ```php
@@ -1793,7 +1799,7 @@ $response->success() && var_dump($response->getData());
 ?>
 ```
 ```shell
-# Import the CSV file through the DATA API
+# Upload the CSV file through the DATA API
 curl -s \
 -X POST \
 --user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
@@ -2000,31 +2006,34 @@ func main () {
 ```
 ```java
 package com.my.project;
+
 import com.mailjet.client.errors.MailjetException;
-import com.mailjet.client.errors.MailjetSocketTimeoutException;
-import com.mailjet.client.MailjetClient;
-import com.mailjet.client.MailjetRequest;
-import com.mailjet.client.MailjetResponse;
 import com.mailjet.client.resource.Csvimport;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 public class MyClass {
-    /**
-     * Create: A wrapper for the CSV importer
-     */
-    public static void main(String[] args) throws MailjetException, MailjetSocketTimeoutException {
-      MailjetClient client;
-      MailjetRequest request;
-      MailjetResponse response;
-      client = new MailjetClient(System.getenv("MJ_APIKEY_PUBLIC"), System.getenv("MJ_APIKEY_PRIVATE"));
-      request = new MailjetRequest(Csvimport.resource)
-			.property(Csvimport.CONTACTSLISTID, "$ID_CONTACTLIST")
-			.property(Csvimport.DATAID, "$ID_DATA")
-			.property(Csvimport.METHOD, "addnoforce");
-      response = client.post(request);
-      System.out.println(response.getStatus());
-      System.out.println(response.getData());
-    }
+	/**
+	 * Create: A wrapper for the CSV importer
+	 */
+	public static void main(String[] args) throws MailjetException {
+		ClientOptions clientOptions;
+		MailjetClient client;
+		MailjetRequest request;
+		MailjetResponse response;
+
+		clientOptions = ClientOptions
+				.builder()
+				.apiKey(System.getenv("MJ_APIKEY_PUBLIC"))
+				.apiSecretKey(System.getenv("MJ_APIKEY_PRIVATE"))
+				.build();
+		client = new MailjetClient(clientOptions);
+		request = new MailjetRequest(Csvimport.resource)
+				.property(Csvimport.CONTACTSLISTID, CONTACT_LIST_ID)
+				.property(Csvimport.DATAID, DATA_ID)
+				.property(Csvimport.METHOD, "addnoforce");
+		response = client.post(request);
+		System.out.println(response.getStatus());
+		System.out.println(response.getData());
+	}
 }
 ```
 ```csharp
