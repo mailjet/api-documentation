@@ -28,7 +28,7 @@ Depending on your request and the endpoint, the results in the response may be p
 | --- | --- | --- |
 | `Limit` | integer | The number of results returned per page. The default value is 10, the maximum is 1000. |
 | `Offset` | integer | The index of the first object in the page. For example, if you have set a limit of 100 and want to see objects 101 through 200, then `Offset=100` |
-| `Sort` | string | Sort the results by a property and select ascending (`ASC`) or descending (`DESC`) order. The default order is ascending. Keep in mind that this is not available for all properties. Example: `Sort=ArrivedAt+DESC` |
+| `Sort` | string | Sort the results by a property and select ascending (`ASC`) or descending (`DESC`) order. The default order is ascending. Keep in mind that this is not available for all properties. Example: `Sort=ArrivedAt+' DESC'` |
 
 ## Status Codes
 
