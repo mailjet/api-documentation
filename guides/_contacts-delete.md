@@ -217,7 +217,7 @@ Save the contact ID - you need it to complete the deletion process.
 curl -s \
 -X DELETE \
 --user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-https://api.mailjet.com/v4/contacts/{contact_ID} \
+https://api.mailjet.com/v4/contacts/{contact_ID}
 ```
 
 Use the `{contact_ID}` you retrieved to `DELETE` the contact with the `/v4/contacts/{contact_ID}` endpoint.  When the deletion is successful, the API will return a `200 OK` status. Any other response will indicate that the deletion was not successfully processed.
@@ -229,7 +229,7 @@ Use the `{contact_ID}` you retrieved to `DELETE` the contact with the `/v4/conta
 curl -s \
 -X GET \
 --user "$MJ_APIKEY_PUBLIC:$MJ_APIKEY_PRIVATE" \
-https://api.mailjet.com/v3/REST/contact/{contact_ID} \
+https://api.mailjet.com/v3/REST/contact/{contact_ID}
 ```
 
 > API Response
