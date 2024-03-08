@@ -134,7 +134,7 @@ Mailjet.configure do |config|
   config.api_key = ENV['MJ_APIKEY_PUBLIC']
   config.secret_key = ENV['MJ_APIKEY_PRIVATE']  
 end
-variable = Mailjet::Statcounters.all(source_id: "$Campaign_ID",
+variable = Mailjet::Statcounter.all(source_id: "$Campaign_ID",
 counter_source: "Campaign",
 counter_timing: "Message",
 counter_resolution: "Lifetime"
